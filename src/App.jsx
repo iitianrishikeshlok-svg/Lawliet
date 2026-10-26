@@ -520,41 +520,19 @@ export default function App() {
   // C. Render Full Assistant Productivity Panel
   return (
     <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col font-sans text-xs text-[#f1f2f4]">
-      {/* Real Background Video */}
-      <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none -z-10 select-none">
-        <div
-          className="absolute pointer-events-none select-none"
-          style={{
-            top: '50%',
-            left: '50%',
-            width: '180vw',
-            height: '180vh',
-            minWidth: '200vh',
-            minHeight: '62vw',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <iframe
-            src={`https://www.youtube.com/embed/UMLhx2ExDm8?autoplay=1&mute=1&controls=0&playsinline=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&loop=1&playlist=UMLhx2ExDm8&enablejsapi=1&origin=${encodeURIComponent(
-              typeof window !== 'undefined' ? window.location.origin : ''
-            )}`}
-            title="Cinematic Live Background Video"
-            className="w-full h-full object-cover pointer-events-none opacity-30 blur-[0.5px] select-none"
-            style={{ pointerEvents: 'none' }}
-            allow="autoplay; encrypted-media"
-            tabIndex={-1}
-          />
-        </div>
+      {/* Real Background Video (Native Hardware-Accelerated Local Video) */}
+      <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none -z-10 select-none bg-black">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none"
-          onError={(e) => { e.target.style.display = 'none'; }}
+          className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none select-none"
+          style={{
+            filter: 'brightness(110%) contrast(110%) saturate(105%)',
+          }}
         >
           <source src="/videos/l-intro.mp4" type="video/mp4" />
-          <source src="/videos/l-intro.webm" type="video/webm" />
         </video>
         {/* Subtle Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/75 pointer-events-none" />
