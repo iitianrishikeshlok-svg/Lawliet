@@ -459,46 +459,24 @@ export default function App() {
   if (!window.electronAPI && isInitialized && !standaloneExpanded) {
     return (
       <div className="relative w-screen h-screen overflow-hidden bg-[#07080a] select-none">
-        {/* Real Video or Atmospheric Backdrop */}
-        <div className="fixed inset-0 w-full h-full pointer-events-none -z-10 select-none overflow-hidden">
-          <div
-            className="absolute pointer-events-none select-none"
-            style={{
-              top: '50%',
-              left: '50%',
-              width: '180vw',
-              height: '180vh',
-              minWidth: '200vh',
-              minHeight: '62vw',
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            <iframe
-              src={`https://www.youtube.com/embed/UMLhx2ExDm8?autoplay=1&mute=1&controls=0&playsinline=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&loop=1&playlist=UMLhx2ExDm8&enablejsapi=1&origin=${encodeURIComponent(
-                typeof window !== 'undefined' ? window.location.origin : ''
-              )}`}
-              title="Cinematic Live Background Video"
-              className="w-full h-full object-cover pointer-events-none opacity-40 select-none"
-              style={{ pointerEvents: 'none' }}
-              allow="autoplay; encrypted-media"
-              tabIndex={-1}
-            />
-          </div>
+        {/* Real Native Video Backdrop */}
+        <div className="fixed inset-0 w-full h-full pointer-events-none -z-10 select-none overflow-hidden bg-black">
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none"
-            onError={(e) => { e.target.style.display = 'none'; }}
+            className="absolute inset-0 w-full h-full object-cover opacity-40 select-none pointer-events-none"
+            style={{
+              filter: 'brightness(110%) contrast(110%) saturate(105%)',
+            }}
           >
             <source src="/videos/l-intro.mp4" type="video/mp4" />
-            <source src="/videos/l-intro.webm" type="video/webm" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/80 pointer-events-none" />
         </div>
 
-        {/* Persistent Floating Draggable L Icon Widget */}
+        {/* Persistent Floating Draggable L Icon Widget with Circular Action Layout */}
         <DraggableWebIcon
           theme={activeTheme}
           iconSize={iconSize}
@@ -507,11 +485,27 @@ export default function App() {
           iconBackground={iconBackground}
           isThinking={isThinking}
           isWatching={isWatching}
-          onClick={() => setStandaloneExpanded(true)}
+          selectedModel={selectedModel}
+          onSelectModel={(m) => {
+            setSelectedModel(m);
+            storageService.set('model', m);
+          }}
+          thinkingLevel={thinkingLevel}
+          onThinkingLevelChange={(lvl) => {
+            setThinkingLevel(lvl);
+            storageService.set('thinkingLevel', lvl);
+          }}
+          onSelectTab={(tab) => {
+            setActiveTab(tab);
+            setStandaloneExpanded(true);
+          }}
+          onTriggerSnip={handleTriggerSnip}
+          onExpand={() => setStandaloneExpanded(true)}
           onReopenIntro={() => {
             setIsInitialized(false);
             setStandaloneExpanded(false);
           }}
+          initialRadialOpen={true}
         />
       </div>
     );
@@ -550,6 +544,10 @@ export default function App() {
         }}
         isPinned={isPinned}
         onTogglePin={handleTogglePin}
+        onFloatPiP={() => {
+          setStandaloneExpanded(false);
+          audio.playExpand();
+        }}
         onClose={() => {
           if (window.electronAPI?.closeAssistant) {
             window.electronAPI.closeAssistant();

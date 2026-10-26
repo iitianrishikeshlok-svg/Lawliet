@@ -11,11 +11,21 @@ export default function Header({
   onClose,
   lastLatency = null,
   theme,
+  onFloatPiP,
 }) {
   const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [pipActive, setPipActive] = useState(false);
   const isSecure = typeof window !== 'undefined' ? window.isSecureContext : true;
   const isElectron = typeof window !== 'undefined' ? !!window.electronAPI : false;
+
+  const handleFloatPiPClick = () => {
+    audio.playClick();
+    if (onFloatPiP) {
+      onFloatPiP();
+    } else {
+      launchFloatingDesktopPiP();
+    }
+  };
 
   // Launch Always-on-top Floating Desktop Icon via Document Picture-in-Picture
   const launchFloatingDesktopPiP = async () => {
@@ -114,12 +124,8 @@ export default function Header({
 
           {/* Desktop Always-On-Top Floating Icon (Picture-in-Picture) */}
           <button
-            onClick={launchFloatingDesktopPiP}
-            title={
-              pipActive
-                ? 'Desktop Floating Icon: Active on screen'
-                : 'Pop out Floating Icon over ALL tabs & apps (Picture-in-Picture)'
-            }
+            onClick={handleFloatPiPClick}
+            title="Pop out Floating Icon & Circular Menu on Real Home Page"
             className={`brutal-btn rounded-none text-[10px] px-2.5 py-1 border-2 border-[#ff1e2e] shadow-[2px_2px_0px_#ff1e2e] active:translate-x-[1px] active:translate-y-[1px] cursor-pointer ${
               pipActive
                 ? 'bg-[#ff1e2e] text-black font-black'
