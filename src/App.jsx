@@ -62,7 +62,11 @@ export default function App() {
   // Load persistent configurations on mount
   useEffect(() => {
     async function loadConfig() {
-      const envKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || '';
+      const envKey =
+        (typeof import.meta !== 'undefined' &&
+          (import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.GEMINI_API_KEY)) ||
+        (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ||
+        '';
       const savedTheme = await storageService.get('theme', 'graphite');
       const savedAccent = await storageService.get('accent', 'cobalt');
       const savedKey = await storageService.get('apiKey', envKey);
@@ -80,7 +84,7 @@ export default function App() {
       setThemeId(savedTheme);
       setAccentId(savedAccent);
       setSelectedModel(savedModel);
-      setApiKey(savedKey);
+      setApiKey(savedKey || envKey);
       setAudioEnabled(savedAudio);
       setThinkingLevel(savedLevel);
       setIconSize(savedSize);
