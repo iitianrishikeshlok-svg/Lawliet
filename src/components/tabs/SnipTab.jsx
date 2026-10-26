@@ -96,73 +96,74 @@ export default function SnipTab({
       />
 
       {/* Insecure Origin Guidance Pill */}
+      {/* Insecure Origin Guidance Pill */}
       {!isSecure && !isElectron && (
-        <div className="flex items-center space-x-2 p-3 rounded-none bg-black border-2 border-amber-400 text-amber-300 text-xs shadow-[3px_3px_0px_#ffe600] font-mono">
+        <div className="flex items-center space-x-2.5 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs shadow-sm">
           <span className="text-base shrink-0">⚠️</span>
           <div className="flex-1 text-[11px] leading-relaxed">
-            <strong className="text-amber-300 font-bold">[ NETWORK IP (HTTP) ]:</strong> Chrome locks screen sharing on raw IP origins. For instant desktop screen capture, open at <a href="http://localhost:5173/" className="underline font-mono font-black text-white">localhost:5173</a>, or use <strong>[ UPLOAD ] / [ PASTE SCREENSHOT ]</strong> below!
+            <strong className="text-amber-200">Network IP (HTTP):</strong> Chrome locks screen sharing on raw IP origins. For instant desktop screen capture, open at <a href="http://localhost:5173/" className="underline font-medium text-white">localhost:5173</a>, or use <strong>Upload Image</strong> / <strong>Paste Screenshot</strong> below!
           </div>
         </div>
       )}
 
       {/* Primary Action Hero */}
-      <div className="flex flex-col items-center justify-center p-6 rounded-none bg-[#090a0d] border-[3px] border-[#ff1e2e] text-center relative overflow-hidden group shadow-[6px_6px_0px_#000,6px_6px_0px_#ff1e2e]">
-        <div className="w-14 h-14 rounded-none flex items-center justify-center mb-3 shadow-[3px_3px_0px_#ff1e2e] border-2 border-[#ff1e2e] bg-black">
-          <Scissors size={26} className="text-rose-400 drop-shadow-[0_0_8px_#ff1e2e]" />
+      <div className="flex flex-col items-center justify-center p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl text-center relative overflow-hidden group shadow-xl">
+        <div className="w-14 h-14 rounded-full flex items-center justify-center mb-3 bg-gradient-to-br from-rose-500/20 to-purple-600/10 border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.25)]">
+          <Scissors size={24} className="text-rose-400" />
         </div>
 
-        <h3 className="text-sm sm:text-base font-black text-white tracking-widest mb-1 font-mono uppercase">
-          [ INSTANT SCREEN SNIP & OCR ]
+        <h3 className="text-sm sm:text-base font-semibold text-white tracking-wide mb-1">
+          Instant Screen Snip & Vision OCR
         </h3>
-        <p className="text-xs text-stone-400 max-w-sm mb-4 leading-relaxed font-mono">
-          Freeze your screen, upload any image, or paste from clipboard to draw callouts and ask L questions.
+        <p className="text-xs text-white/50 max-w-sm mb-5 leading-relaxed">
+          Freeze your display, upload any screenshot, or paste from clipboard to draw callouts and query L.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-2.5">
           <button
             onClick={handleLaunchSnip}
-            className="brutal-btn-solid flex items-center space-x-2 px-5 py-2.5 rounded-none text-xs font-black text-black border-2 border-black shadow-[3px_3px_0px_#ffffff] transition-all cursor-pointer font-mono uppercase tracking-wider"
+            className="flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_4px_20px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
-            <Crosshair size={14} className="text-black stroke-[2.5]" />
-            <span>[ FREEZE & SNIP (ALT+S) ]</span>
+            <Crosshair size={14} className="text-white" />
+            <span>Freeze & Snip (Alt+S)</span>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="brutal-btn flex items-center space-x-1.5 px-4 py-2.5 rounded-none text-xs font-bold text-white border-2 border-[#ff1e2e] bg-black shadow-[3px_3px_0px_#ff1e2e] transition-all cursor-pointer font-mono uppercase tracking-wider"
+            className="flex items-center space-x-1.5 px-4 py-2.5 rounded-full text-xs font-medium text-white/80 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] transition-all cursor-pointer shadow-sm"
             title="Upload image or screenshot file"
           >
             <Paperclip size={13} className="text-rose-400" />
-            <span>[ UPLOAD IMAGE ]</span>
+            <span>Upload Image</span>
           </button>
 
           <button
             onClick={handlePasteClipboard}
-            className="brutal-btn flex items-center space-x-1.5 px-4 py-2.5 rounded-none text-xs font-bold text-white border-2 border-[#ff1e2e] bg-black shadow-[3px_3px_0px_#ff1e2e] transition-all cursor-pointer font-mono uppercase tracking-wider"
+            className="flex items-center space-x-1.5 px-4 py-2.5 rounded-full text-xs font-medium text-white/80 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] transition-all cursor-pointer shadow-sm"
             title="Paste image from clipboard"
           >
-            <span>[ 📋 PASTE SCREENSHOT ]</span>
+            <span>📋 Paste Screenshot</span>
           </button>
         </div>
       </div>
 
       {/* Embedded Annotation Preview / Editor */}
       {lastSnipUrl ? (
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center justify-between text-xs text-white/70 px-1 font-mono">
-            <span className="font-bold uppercase tracking-wider text-white">
-              [ ACTIVE SNIP BUFFER ]
+        <div className="flex flex-col space-y-2.5">
+          <div className="flex items-center justify-between text-xs text-white/70 px-1">
+            <span className="font-semibold text-white">
+              Active Snip Buffer
             </span>
             <button
               onClick={() => onSendToChat(lastSnipUrl, 'Explain what is shown in this snip.')}
-              className="brutal-btn !py-1 !px-2.5 text-[10px] text-cyan-300 border-2 border-cyan-400 bg-black shadow-[2px_2px_0px_#06b6d4] font-bold uppercase cursor-pointer"
+              className="flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
             >
               <Sparkles size={11} />
-              <span>[ ASK AI ABOUT SNIP ]</span>
+              <span>Ask AI About Snip</span>
             </button>
           </div>
 
-          <div className="rounded-none border-2 border-[#ff1e2e] overflow-hidden bg-black shadow-[4px_4px_0px_#000]">
+          <div className="rounded-2xl border border-white/[0.1] overflow-hidden bg-black/50 shadow-xl">
             <AnnotationCanvas
               imageSrc={lastSnipUrl}
               theme={theme}
@@ -173,17 +174,17 @@ export default function SnipTab({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center p-8 rounded-none border-2 border-dashed border-stone-700 bg-black/40 text-center shadow-[3px_3px_0px_#000]">
-          <Scissors size={28} className="text-stone-600 mb-2" />
-          <p className="text-xs text-stone-400 font-mono uppercase font-bold tracking-wider">
-            [ NO ACTIVE SNIP IN BUFFER // PRESS ALT + S OR CLICK ABOVE ]
+        <div className="flex flex-col items-center justify-center p-8 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] text-center">
+          <Scissors size={26} className="text-white/30 mb-2" />
+          <p className="text-xs text-white/40">
+            No active snip in buffer • Press Alt + S or click button above
           </p>
         </div>
       )}
 
       {/* Snipping Pro Tips */}
-      <div className="p-3.5 rounded-none bg-black border-2 border-stone-800 text-xs text-stone-300 space-y-1.5 font-mono shadow-[3px_3px_0px_#000]">
-        <div className="font-black text-rose-400 uppercase tracking-widest">[ PRO TIPS: ]</div>
+      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-white/60 space-y-1.5">
+        <div className="font-semibold text-rose-400">Pro Tips</div>
         <p>• Use the <strong>Arrow tool</strong> to point directly at code errors or bugs before sending to L.</p>
         <p>• Use the <strong>Highlighter tool</strong> to mark specific lines or math symbols.</p>
         <p>• Your selection bypasses DRM and video overlays automatically.</p>

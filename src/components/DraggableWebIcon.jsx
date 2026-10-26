@@ -284,21 +284,22 @@ export default function DraggableWebIcon({
                     top: `${y}px`,
                   }}
                 >
+                  {/* Action Icon Circular Button */}
                   <button
                     type="button"
                     onClick={() => launchTab(act.id)}
-                    className="brutal-btn rounded-none w-11 h-11 sm:w-12 sm:h-12 border-2 border-[#ff1e2e] bg-black text-white shadow-[3px_3px_0px_#ff1e2e] hover:shadow-[4px_4px_0px_#ffffff] hover:scale-110 active:translate-x-[1px] active:translate-y-[1px] cursor-pointer flex flex-col items-center justify-center p-0 transition-transform"
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/[0.12] bg-black/60 backdrop-blur-xl text-white/80 hover:text-white hover:border-rose-500/50 hover:bg-rose-500/20 shadow-[0_6px_20px_rgba(0,0,0,0.6)] hover:scale-110 active:scale-95 cursor-pointer flex flex-col items-center justify-center p-0 transition-all duration-200"
                     title={`${act.label} — ${act.desc}`}
                   >
-                    <Icon size={16} className="text-white group-hover:text-rose-400 stroke-[2.5]" />
-                    <span className="text-[7.5px] font-mono font-black tracking-tighter text-stone-300 mt-0.5 leading-none">
+                    <Icon size={16} className="text-white group-hover:text-rose-400" />
+                    <span className="text-[8px] font-medium text-white/60 group-hover:text-white mt-0.5 leading-none">
                       {act.label.split(' ')[0]}
                     </span>
                   </button>
 
                   {/* Tooltip Tag on Hover */}
-                  <div className="absolute left-1/2 -translate-x-1/2 -bottom-6 bg-black border border-[#ff1e2e] px-1.5 py-0.5 rounded-none text-[8.5px] font-mono font-black text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-[2px_2px_0px_#000] z-50">
-                    [ {act.label} ]
+                  <div className="absolute left-1/2 -translate-x-1/2 -bottom-6 bg-black/80 backdrop-blur-md border border-white/10 px-2 py-0.5 rounded-full text-[9px] font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-50">
+                    {act.label}
                   </div>
                 </div>
               );
@@ -315,20 +316,20 @@ export default function DraggableWebIcon({
                   setShowModelPicker((prev) => !prev);
                   setShowSpeedPicker(false);
                 }}
-                className="brutal-btn rounded-none text-[10px] font-mono font-black px-3 py-1.5 border-2 border-[#ff1e2e] bg-black text-white shadow-[3px_3px_0px_#ff1e2e] hover:shadow-[4px_4px_0px_#ffffff] flex items-center justify-between w-full cursor-pointer"
+                className="rounded-full text-[11px] font-medium px-3.5 py-1.5 border border-white/[0.12] bg-black/60 backdrop-blur-xl text-white shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:bg-white/[0.08] hover:border-rose-500/40 flex items-center justify-between w-full cursor-pointer transition-all"
                 title="Select Gemini AI Model"
               >
                 <div className="flex items-center space-x-1.5 truncate">
                   <Brain size={12} className="text-rose-400 shrink-0" />
-                  <span className="text-stone-400">AI:</span>
-                  <span className="text-white truncate font-bold">{selectedModel}</span>
+                  <span className="text-white/40">Model:</span>
+                  <span className="text-white truncate font-medium">{selectedModel}</span>
                 </div>
-                <ChevronDown size={11} className="text-rose-400 shrink-0 ml-1" />
+                <ChevronDown size={11} className="text-white/50 shrink-0 ml-1" />
               </button>
 
               {/* Model Picker Dropdown Menu */}
               {showModelPicker && (
-                <div className="mt-1 w-full bg-black border-2 border-[#ff1e2e] shadow-[4px_4px_0px_#000] p-1 flex flex-col space-y-1 text-left z-50">
+                <div className="mt-1.5 w-full bg-[#0d0e15]/95 border border-white/[0.12] backdrop-blur-2xl rounded-2xl shadow-2xl p-1.5 flex flex-col space-y-1 text-left z-50">
                   {Object.entries(SAFE_MODELS).map(([mId, mInfo]) => (
                     <button
                       key={mId}
@@ -338,14 +339,14 @@ export default function DraggableWebIcon({
                         onSelectModel?.(mId);
                         setShowModelPicker(false);
                       }}
-                      className={`px-2 py-1 text-[9.5px] font-mono flex items-center justify-between transition-colors text-left cursor-pointer ${
+                      className={`px-3 py-1.5 text-[10px] rounded-xl flex items-center justify-between transition-colors text-left cursor-pointer ${
                         selectedModel === mId
-                          ? 'bg-[#ff1e2e] text-black font-black'
-                          : 'text-stone-300 hover:bg-neutral-900 hover:text-white font-bold'
+                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold'
+                          : 'text-white/70 hover:bg-white/[0.06] hover:text-white'
                       }`}
                     >
                       <span className="truncate">{mInfo.label}</span>
-                      {selectedModel === mId && <span className="ml-1 text-[8px]">✓</span>}
+                      {selectedModel === mId && <span className="ml-1 text-[9px]">✓</span>}
                     </button>
                   ))}
                 </div>
@@ -356,15 +357,15 @@ export default function DraggableWebIcon({
             {/* BOTTOM DOCK: SPEED OF ANSWERING (THINKING LEVEL)         */}
             {/* ======================================================== */}
             <div className="absolute top-[148px] left-1/2 -translate-x-1/2 flex flex-col items-center z-50 w-64">
-              <div className="flex items-center space-x-1 p-1 bg-black border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#ff1e2e] w-full justify-between">
-                <span className="text-[9px] font-mono font-black text-stone-400 pl-1 shrink-0">
-                  ⚡ SPEED:
+              <div className="flex items-center space-x-1 p-1 bg-black/60 backdrop-blur-xl border border-white/[0.12] rounded-full shadow-[0_6px_20px_rgba(0,0,0,0.5)] w-full justify-between">
+                <span className="text-[10px] font-medium text-white/40 pl-2 shrink-0">
+                  Speed:
                 </span>
                 <div className="flex items-center space-x-1">
                   {[
-                    { lvl: 1, label: 'FAST', icon: Zap },
-                    { lvl: 2, label: 'BALANCED', icon: Scale },
-                    { lvl: 3, label: 'DEEP', icon: Brain },
+                    { lvl: 1, label: 'Fast', icon: Zap },
+                    { lvl: 2, label: 'Balanced', icon: Scale },
+                    { lvl: 3, label: 'Deep', icon: Brain },
                   ].map((s) => {
                     const SIcon = s.icon;
                     const isActive = thinkingLevel === s.lvl;
@@ -376,10 +377,10 @@ export default function DraggableWebIcon({
                           audio.playClick();
                           onThinkingLevelChange?.(s.lvl);
                         }}
-                        className={`px-2 py-1 text-[9px] font-mono font-black rounded-none transition-all cursor-pointer flex items-center space-x-1 ${
+                        className={`px-2.5 py-1 text-[10px] font-medium rounded-full transition-all cursor-pointer flex items-center space-x-1 ${
                           isActive
-                            ? 'bg-[#ff1e2e] text-black border border-black shadow-[1px_1px_0px_#fff]'
-                            : 'bg-neutral-900 text-stone-400 hover:text-white hover:bg-neutral-800'
+                            ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-sm'
+                            : 'text-white/50 hover:text-white hover:bg-white/[0.05]'
                         }`}
                         title={`Answering Speed: ${s.label}`}
                       >
@@ -398,11 +399,11 @@ export default function DraggableWebIcon({
                   audio.playClick();
                   onExpand?.();
                 }}
-                className="mt-1.5 brutal-btn-solid text-[9.5px] font-mono font-black px-3 py-1 border-2 border-black shadow-[2px_2px_0px_#ffffff] flex items-center space-x-1.5 cursor-pointer uppercase"
+                className="mt-2 text-[10px] font-medium px-4 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white flex items-center space-x-1.5 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95"
                 title="Expand Full Assistant Window"
               >
                 <Maximize2 size={10} />
-                <span>[ ⛶ EXPAND FULL HUD ]</span>
+                <span>Expand Full HUD</span>
               </button>
             </div>
           </div>
@@ -419,18 +420,18 @@ export default function DraggableWebIcon({
         >
           <button
             type="button"
-            className={`relative w-full h-full flex items-center justify-center p-0 rounded-none bg-black border-2 border-[#ff1e2e] shadow-[4px_4px_0px_#000,4px_4px_0px_#ff1e2e] hover:shadow-[6px_6px_0px_#ff1e2e] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer group ${
-              radialOpen ? 'ring-2 ring-rose-500' : ''
+            className={`relative w-full h-full flex items-center justify-center p-0 rounded-full bg-gradient-to-br from-black/80 via-[#181922]/90 to-black/80 border border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.8),0_0_25px_rgba(244,63,94,0.35)] hover:scale-105 active:scale-95 transition-all cursor-pointer group backdrop-blur-2xl ${
+              radialOpen ? 'ring-2 ring-rose-500/60 shadow-[0_0_35px_rgba(244,63,94,0.5)]' : ''
             }`}
             style={{ opacity: iconOpacity }}
             title={radialOpen ? 'Click to close Circular Menu' : 'Click to open Circular Menu'}
           >
             {/* Iconic Capital L Triangle Logo */}
-            <div className="relative flex items-center justify-center w-full h-full p-2">
+            <div className="relative flex items-center justify-center w-full h-full p-2.5">
               <img
                 src="/l-triangle-logo.svg"
                 alt="L"
-                className="w-full h-full object-contain pointer-events-none transition-transform duration-200 group-hover:scale-110 drop-shadow-[0_0_10px_rgba(255,30,46,0.6)]"
+                className="w-full h-full object-contain pointer-events-none transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_12px_rgba(255,30,46,0.6)]"
                 style={{ mixBlendMode: 'screen', background: 'transparent' }}
               />
             </div>
@@ -438,13 +439,13 @@ export default function DraggableWebIcon({
             {/* Status Ping Dot */}
             <div className="absolute top-1 right-1 flex items-center justify-center">
               {isThinking ? (
-                <span className="w-2 h-2 rounded-none bg-rose-500 animate-ping shadow-[0_0_6px_#ff1e2e]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping shadow-[0_0_8px_#ff1e2e]" />
               ) : isWatching ? (
-                <span className="w-2 h-2 rounded-none bg-emerald-400 animate-pulse shadow-[0_0_6px_#00ff66]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#00ff66]" />
               ) : (
                 <span
-                  className={`w-1.5 h-1.5 rounded-none transition-colors duration-150 ${
-                    radialOpen ? 'bg-[#ff1e2e] shadow-[0_0_6px_#ff1e2e]' : 'bg-rose-600'
+                  className={`w-2 h-2 rounded-full transition-colors duration-150 ${
+                    radialOpen ? 'bg-rose-500 shadow-[0_0_8px_#ff1e2e]' : 'bg-rose-500/80'
                   }`}
                 />
               )}

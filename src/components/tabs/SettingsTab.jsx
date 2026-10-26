@@ -277,9 +277,9 @@ export default function SettingsTab({
             href="https://aistudio.google.com/app/apikey"
             target="_blank"
             rel="noreferrer"
-            className="text-[10px] text-cyan-400 hover:underline uppercase font-bold"
+            className="text-[10px] text-rose-400 hover:underline font-medium"
           >
-            [ GET FREE API KEY ↗ ]
+            Get Free API Key ↗
           </a>
         </div>
 
@@ -289,38 +289,38 @@ export default function SettingsTab({
               type={showKey ? 'text' : 'password'}
               value={keyInput}
               onChange={(e) => setKeyInput(e.target.value)}
-              placeholder="Paste AI Studio API Key..."
-              className="w-full brutal-input px-3 py-1.5 text-xs text-white placeholder-stone-600 font-mono rounded-none border-2 border-neutral-700 focus:border-[#ff1e2e] shadow-[2px_2px_0px_#000]"
+              placeholder="Paste Gemini API Key..."
+              className="w-full bg-white/[0.04] px-4 py-1.5 text-xs text-white placeholder-white/35 rounded-full border border-white/[0.08] focus:border-rose-500/40 outline-none"
             />
             <button
               onClick={() => setShowKey(!showKey)}
-              className="absolute right-2 top-2 text-stone-400 hover:text-white"
+              className="absolute right-3 top-2 text-white/40 hover:text-white"
             >
               {showKey ? <EyeOff size={13} /> : <Eye size={13} />}
             </button>
           </div>
           <button
             onClick={handleSaveKey}
-            className="brutal-btn-solid rounded-none !text-xs !py-1.5 !px-3.5 border-2 border-black shadow-[2px_2px_0px_#ffffff] font-mono font-black uppercase cursor-pointer shrink-0"
+            className="rounded-full text-xs py-1.5 px-4 font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_2px_15px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
           >
-            {savedSuccess ? '[ SAVED! ]' : '[ SAVE ]'}
+            {savedSuccess ? 'Saved!' : 'Save'}
           </button>
           <button
             onClick={handleTestKey}
             disabled={testingKey}
-            className="brutal-btn rounded-none !text-xs !py-1.5 !px-3.5 border-2 border-[#ff1e2e] bg-black text-white shadow-[2px_2px_0px_#ff1e2e] font-mono font-bold uppercase cursor-pointer shrink-0"
+            className="rounded-full text-xs py-1.5 px-3.5 bg-white/[0.04] hover:bg-white/[0.08] text-white/80 hover:text-white border border-white/10 transition-all cursor-pointer shrink-0"
             title="Test Connection"
           >
-            {testingKey ? <RefreshCw size={12} className="animate-spin" /> : '[ PING ]'}
+            {testingKey ? <RefreshCw size={12} className="animate-spin" /> : 'Ping'}
           </button>
         </div>
 
         {testResult && (
           <div
-            className={`text-[10px] px-2.5 py-1.5 rounded-none border-2 font-mono uppercase font-bold shadow-[2px_2px_0px_#000] ${
+            className={`text-[10px] px-3 py-1.5 rounded-xl border font-medium ${
               testResult.success
-                ? 'bg-black text-emerald-400 border-emerald-500'
-                : 'bg-black text-rose-400 border-rose-500'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                : 'bg-rose-500/10 text-rose-300 border-rose-500/30'
             }`}
           >
             {testResult.message}
@@ -329,17 +329,17 @@ export default function SettingsTab({
 
         {/* Model Selection */}
         <div className="flex items-center justify-between pt-1">
-          <span className="text-stone-300 font-bold uppercase">[ AI MODEL ]</span>
+          <span className="text-white/60 font-medium text-xs">AI Reasoning Model</span>
           <select
             value={selectedModel}
             onChange={(e) => onSelectModel?.(e.target.value)}
-            className="brutal-input px-2 py-1 text-xs text-white bg-black border-2 border-neutral-700 rounded-none shadow-[2px_2px_0px_#000] outline-none"
+            className="bg-black/60 text-xs text-white border border-white/10 rounded-full px-3 py-1 outline-none"
           >
-            <option value="gemini-3.5-flash">gemini-3.5-flash (Fast & Live Reasoning)</option>
+            <option value="gemini-3.5-flash">gemini-3.5-flash (Fast & Live)</option>
             <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Ultra Fast)</option>
-            <option value="gemini-3.8-flash">gemini-3.8-flash (High Performance)</option>
-            <option value="gemini-flash-latest">gemini-flash-latest</option>
-            <option value="gemini-pro-latest">gemini-pro-latest</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash (Balanced)</option>
+            <option value="gemini-2.5-pro">gemini-2.5-pro (Deep Reasoning)</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash (Standard)</option>
           </select>
         </div>
       </div>

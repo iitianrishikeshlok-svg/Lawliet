@@ -177,36 +177,36 @@ export default function CameraTab({ onSendToChat, theme }) {
           />
         )}
 
-        {/* HUD Crosshairs and Framing Brackets */}
-        <div className="absolute inset-4 pointer-events-none border-2 border-white/20 rounded-none flex flex-col justify-between p-2 font-mono">
+        {/* HUD Framing & Status */}
+        <div className="absolute inset-4 pointer-events-none flex flex-col justify-between p-2">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono text-cyan-400 bg-black px-2 py-0.5 rounded-none border border-cyan-400 font-bold uppercase">
-              [ LENS // OPTICAL 01 ]
+            <span className="text-[10px] text-cyan-300 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-cyan-500/30 font-medium">
+              Optical Lens
             </span>
-            <span className="text-[10px] font-mono text-white bg-black px-2 py-0.5 rounded-none border border-neutral-700 font-bold">
-              [ 720p // 30 FPS ]
+            <span className="text-[10px] text-white/70 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/10">
+              720p • 30 FPS
             </span>
           </div>
 
           {/* Center Targeting Reticle */}
-          <div className="self-center flex items-center justify-center w-8 h-8 rounded-none border-2 border-[#ff1e2e] bg-black/40">
-            <div className="w-1.5 h-1.5 rounded-none bg-rose-500 shadow-[0_0_6px_#ff1e2e]" />
+          <div className="self-center flex items-center justify-center w-8 h-8 rounded-full border border-rose-500/40 bg-black/30 backdrop-blur-sm">
+            <div className="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_8px_#ff1e2e]" />
           </div>
 
           <div className="flex justify-between items-end">
-            <span className="text-[9px] font-mono text-white/60 bg-black px-1.5 py-0.5 border border-neutral-800">
-              ISO AUTO • WB AUTO
+            <span className="text-[9px] text-white/50 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/10">
+              ISO Auto • WB Auto
             </span>
-            <span className="text-[9px] font-mono text-emerald-400 bg-black px-1.5 py-0.5 border border-emerald-500 font-bold">
-              [ LIVE SENSOR ]
+            <span className="text-[9px] text-emerald-400 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-emerald-500/30 font-medium">
+              Live Sensor Active
             </span>
           </div>
         </div>
 
         {/* Countdown Overlay */}
         {countdown !== null && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/75 z-30 font-mono">
-            <span className="text-6xl font-black font-mono text-white animate-ping">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/75 z-30">
+            <span className="text-6xl font-bold text-white animate-ping">
               {countdown}
             </span>
           </div>
@@ -214,13 +214,13 @@ export default function CameraTab({ onSendToChat, theme }) {
 
         {/* Error Notification with Direct Native Camera Bypass */}
         {errorMsg && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-black/95 text-center text-xs space-y-3 z-30 font-mono">
-            <div className="w-12 h-12 rounded-none bg-black border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#ff1e2e] flex items-center justify-center text-rose-400">
-              <Camera size={24} />
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-black/90 backdrop-blur-xl text-center text-xs space-y-3 z-30">
+            <div className="w-12 h-12 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center text-rose-400">
+              <Camera size={22} />
             </div>
             <div className="space-y-1 max-w-xs">
-              <p className="font-black text-white text-sm uppercase">[ LIVE VIDEO BLOCKED BY BROWSER ]</p>
-              <p className="text-stone-400 text-[11px] leading-relaxed">
+              <p className="font-semibold text-white text-sm">Live Video Blocked by Browser</p>
+              <p className="text-white/50 text-[11px] leading-relaxed">
                 Chrome strictly blocks live WebRTC video streams on HTTP network IP addresses (<code className="text-rose-400 font-mono">172.21.16.52</code>).
               </p>
             </div>
@@ -229,21 +229,21 @@ export default function CameraTab({ onSendToChat, theme }) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="brutal-btn-solid w-full py-2.5 rounded-none text-black font-mono font-black text-xs border-2 border-black shadow-[3px_3px_0px_#ffffff] transition-all cursor-pointer flex items-center justify-center space-x-2 uppercase"
+                className="w-full py-2.5 rounded-full text-white font-semibold text-xs bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_4px_16px_rgba(244,63,94,0.4)] transition-all cursor-pointer flex items-center justify-center space-x-2"
               >
-                <span>[ 📸 SNAP PHOTO WITH CAMERA ]</span>
+                <span>📸 Snap Photo with Camera</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="brutal-btn w-full py-2 rounded-none bg-black text-white font-mono font-bold text-xs border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#ff1e2e] transition-all cursor-pointer flex items-center justify-center space-x-2 uppercase"
+                className="w-full py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-white/80 hover:text-white border border-white/[0.1] text-xs font-medium transition-all cursor-pointer flex items-center justify-center space-x-2"
               >
-                <span>[ 📁 UPLOAD IMAGE FROM DEVICE ]</span>
+                <span>📁 Upload Image from Device</span>
               </button>
             </div>
 
-            <p className="text-[10px] text-stone-500 font-mono pt-1">
+            <p className="text-[10px] text-white/40 pt-1">
               For continuous live streaming, open at <strong className="text-white">http://localhost:5173/</strong> on PC.
             </p>
           </div>
@@ -261,31 +261,31 @@ export default function CameraTab({ onSendToChat, theme }) {
       />
 
       {/* Camera Controls Bar */}
-      <div className="flex items-center justify-between p-2.5 rounded-none bg-[#090a0d] border-2 border-stone-800 shadow-[3px_3px_0px_#000]">
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-lg">
         {snapshot ? (
           <div className="flex items-center space-x-2 w-full justify-between">
             <button
               onClick={handleRetake}
-              className="brutal-btn rounded-none text-xs text-white bg-black border-2 border-neutral-700 shadow-[2px_2px_0px_#000] cursor-pointer font-mono font-bold uppercase"
+              className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs text-white/70 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors cursor-pointer"
             >
               <RotateCcw size={13} />
-              <span>[ RETAKE ]</span>
+              <span>Retake</span>
             </button>
 
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setIsAnnotating(true)}
-                className="brutal-btn rounded-none text-xs text-cyan-300 bg-black border-2 border-cyan-400 shadow-[2px_2px_0px_#06b6d4] font-mono font-bold uppercase cursor-pointer"
+                className="px-3.5 py-1.5 rounded-full text-xs text-cyan-300 bg-cyan-950/30 border border-cyan-500/30 font-medium hover:bg-cyan-900/40 transition-colors cursor-pointer"
               >
-                [ ANNOTATE ]
+                Annotate
               </button>
 
               <button
                 onClick={() => handleSendToAI()}
-                className="brutal-btn-solid rounded-none text-xs font-black text-black border-2 border-black shadow-[3px_3px_0px_#ffffff] flex items-center space-x-1.5 uppercase font-mono cursor-pointer"
+                className="px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_2px_15px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95 flex items-center space-x-1.5 cursor-pointer"
               >
                 <Sparkles size={13} />
-                <span>[ ASK L ]</span>
+                <span>Ask L</span>
               </button>
             </div>
           </div>
@@ -294,39 +294,40 @@ export default function CameraTab({ onSendToChat, theme }) {
             {/* Mirror Toggle */}
             <button
               onClick={() => setIsMirror(!isMirror)}
-              className={`px-3 py-1.5 rounded-none text-xs font-mono font-bold uppercase border-2 transition-colors cursor-pointer shadow-[2px_2px_0px_#000] ${
-                isMirror ? 'text-cyan-300 bg-black border-cyan-400' : 'text-white/60 bg-black border-neutral-800 hover:text-white'
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+                isMirror ? 'text-cyan-300 bg-cyan-950/30 border-cyan-500/40' : 'text-white/60 bg-white/[0.03] border-white/10 hover:text-white'
               }`}
               title="Mirror Camera Feed"
             >
-              [ FLIP ]
+              Flip
             </button>
 
             {/* Shutter Button & Direct Native Snap */}
-            <div className="flex items-center space-x-2.5">
+            <div className="flex items-center space-x-3">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 title="Open Native Phone Camera / File Picker"
-                className="brutal-btn rounded-none !text-[10px] !py-1.5 !px-3 border-2 border-[#ff1e2e] bg-black text-white shadow-[2px_2px_0px_#ff1e2e] font-mono font-bold uppercase flex items-center space-x-1 cursor-pointer"
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium bg-white/[0.04] hover:bg-white/[0.08] text-white/80 hover:text-white border border-white/10 transition-all cursor-pointer"
               >
-                <span>[ 📸 SNAP PHOTO ]</span>
+                <span>📸 Snap</span>
               </button>
 
               <button
                 onClick={handleCountdownCapture}
                 title="3-Second Timer Shutter"
-                className="brutal-btn rounded-none !text-[10px] !py-1.5 !px-2.5 border-2 border-neutral-700 bg-black text-white/70 shadow-[2px_2px_0px_#000] font-mono font-bold uppercase cursor-pointer"
+                className="px-2.5 py-1.5 rounded-full text-[11px] font-medium bg-white/[0.04] hover:bg-white/[0.08] text-white/60 hover:text-white border border-white/10 transition-all cursor-pointer"
               >
-                [ 3S TIMER ]
+                3s Timer
               </button>
 
+              {/* Minimal Circular Shutter Button */}
               <button
                 onClick={handleCapture}
                 title="Capture Frame from Live Video"
-                className="w-10 h-10 rounded-none border-2 border-black bg-[#ff1e2e] shadow-[3px_3px_0px_#ffffff] flex items-center justify-center cursor-pointer active:translate-x-[1px] active:translate-y-[1px]"
+                className="w-10 h-10 rounded-full border-2 border-white/30 bg-gradient-to-tr from-rose-500 to-rose-600 shadow-[0_0_16px_rgba(244,63,94,0.4)] flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all"
               >
-                <div className="w-3.5 h-3.5 rounded-none bg-black" />
+                <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm" />
               </button>
             </div>
 
@@ -335,7 +336,7 @@ export default function CameraTab({ onSendToChat, theme }) {
               <select
                 value={selectedDeviceId}
                 onChange={(e) => setSelectedDeviceId(e.target.value)}
-                className="bg-black text-[10px] font-mono text-white border-2 border-neutral-800 rounded-none px-1.5 py-1 outline-none max-w-[90px] shadow-[2px_2px_0px_#000]"
+                className="bg-black/60 text-xs text-white border border-white/10 rounded-full px-2.5 py-1 outline-none max-w-[100px]"
               >
                 {devices.map((d, i) => (
                   <option key={d.deviceId || i} value={d.deviceId}>
@@ -344,32 +345,32 @@ export default function CameraTab({ onSendToChat, theme }) {
                 ))}
               </select>
             ) : (
-              <span className="text-[10px] font-mono text-white/60 font-bold uppercase">[ READY ]</span>
+              <span className="text-[10px] text-white/40">Ready</span>
             )}
           </div>
         )}
       </div>
 
       {/* Suggested Queries */}
-      <div className="p-3.5 rounded-none bg-black border-2 border-stone-800 text-xs space-y-1.5 font-mono shadow-[3px_3px_0px_#000]">
-        <span className="font-black text-rose-400 block mb-1 uppercase tracking-wider">
-          [ REAL-WORLD VISUAL QUERIES: ]
+      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs space-y-2">
+        <span className="font-semibold text-rose-400 block mb-1">
+          Real-World Visual Queries
         </span>
         <button
           onClick={() => handleSendToAI('Transcribe and format the handwritten notes in this image.')}
-          className="text-left text-[11px] text-stone-300 hover:text-rose-400 block w-full truncate font-mono"
+          className="text-left text-[11px] text-white/60 hover:text-white block w-full truncate transition-colors"
         >
           • "Transcribe handwritten notebook page into markdown"
         </button>
         <button
           onClick={() => handleSendToAI('Identify this electronic hardware component and explain pinouts.')}
-          className="text-left text-[11px] text-stone-300 hover:text-rose-400 block w-full truncate font-mono"
+          className="text-left text-[11px] text-white/60 hover:text-white block w-full truncate transition-colors"
         >
           • "Identify hardware component / PCB schematic"
         </button>
         <button
           onClick={() => handleSendToAI('Solve the math equation written on the whiteboard/paper.')}
-          className="text-left text-[11px] text-stone-300 hover:text-rose-400 block w-full truncate font-mono"
+          className="text-left text-[11px] text-white/60 hover:text-white block w-full truncate transition-colors"
         >
           • "Solve the equation shown on paper step-by-step"
         </button>

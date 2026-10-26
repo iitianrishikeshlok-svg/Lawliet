@@ -357,116 +357,86 @@ export default function OpeningScreen({ onInitialize, theme }) {
       {/* ================================================================ */}
       {/* LAYER 4: MAXIMALIST CYBER-GOTHIC TOP COMMAND TELEMETRY DOCK      */}
       {/* ================================================================ */}
-      <header className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-3 py-2.5 bg-black/85 backdrop-blur-md border-b-2 border-[#ff1e2e] shadow-[0_4px_15px_rgba(255,30,46,0.3)] pointer-events-auto">
+      {/* ================================================================ */}
+      {/* LAYER 4: SLEEK MINIMALIST FLOATING COMMAND DOCK                   */}
+      {/* ================================================================ */}
+      <header className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-5 py-3 bg-black/40 backdrop-blur-2xl border-b border-white/[0.07] pointer-events-auto">
         {/* Left: Phone Bridge Diagnostic Pill */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           <button
             type="button"
             onClick={copyPhoneUrl}
-            className="brutal-btn rounded-none text-[10px] sm:text-xs px-3 py-1.5 border-2 border-[#ff1e2e] bg-black text-white font-mono font-black tracking-wider shadow-[3px_3px_0px_#ff1e2e] hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-[1px] active:translate-y-[1px] cursor-pointer flex items-center space-x-1.5"
+            className="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.08] text-xs font-medium transition-all cursor-pointer shadow-sm"
             title="Click to copy Wi-Fi address for opening on phone"
           >
-            <span className="text-xs">📱</span>
-            <span className="font-mono text-[10px] sm:text-[11px] font-bold">
-              {copiedPhoneLink ? '[ ✓ COPIED LINK ]' : '[ PHONE: 172.21.16.52:5173 ]'}
-            </span>
+            <span>📱</span>
+            <span>{copiedPhoneLink ? 'Link Copied' : 'Phone: 172.21.16.52:5173'}</span>
           </button>
 
-          {/* Detective Protocol Telemetry Marker (Hidden on small mobile) */}
-          <div className="hidden md:flex items-center space-x-2 px-2.5 py-1 bg-[#0b0c10] border border-neutral-800 text-[10px] font-mono text-stone-300">
-            <span className="w-1.5 h-1.5 bg-rose-500 animate-pulse" />
-            <span className="text-[#ff4b5c] font-black">L-OS</span>
-            <span className="text-stone-500">|</span>
-            <span className="text-stone-400">BUS: 96kHz</span>
-            <span className="text-stone-500">|</span>
-            <span className="text-emerald-400">ENCRYPTED</span>
+          <div className="hidden md:flex items-center space-x-2 px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.06] text-[11px] text-white/40">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>L-OS Active</span>
+            <span>•</span>
+            <span className="text-emerald-400/80">Encrypted</span>
           </div>
         </div>
 
-        {/* Center: Live Real-Time Telemetry Clock */}
-        <div className="hidden lg:flex items-center space-x-3 px-4 py-1 bg-black border-2 border-stone-800 text-[11px] font-mono font-black shadow-[2px_2px_0px_#ff1e2e]">
-          <span className="text-rose-500">✦ [ KIRA INVESTIGATION ARCHIVE ]</span>
-          <span className="text-white tracking-widest">{currentTimeStr || '11:28:00'}</span>
-          <span className="text-amber-400 font-bold">UTC+05:30</span>
+        {/* Center: Real-Time Clock */}
+        <div className="hidden lg:flex items-center space-x-2.5 px-4 py-1 rounded-full bg-white/[0.03] border border-white/[0.07] text-xs text-white/70">
+          <span className="text-rose-400 font-medium">L Intelligence</span>
+          <span className="text-white/30">•</span>
+          <span className="font-mono text-white/90">{currentTimeStr || '11:28:00'}</span>
         </div>
 
-        {/* Right: Sound Station with Live 5-Band Equalizer Visualizer */}
+        {/* Right: Sound Station with Live Equalizer */}
         <div className="flex items-center space-x-2">
           <button
             type="button"
             onClick={toggleSound}
-            className="brutal-btn rounded-none text-[10px] sm:text-xs px-3.5 py-1.5 border-2 border-[#ff1e2e] bg-black text-white font-mono font-black tracking-wider shadow-[3px_3px_0px_#ff1e2e] hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-[1px] active:translate-y-[1px] cursor-pointer flex items-center space-x-2"
+            className="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.08] text-xs font-medium transition-all cursor-pointer shadow-sm"
             title={isAudioMuted ? 'Click to enable audio' : 'Audio active (Click to mute)'}
           >
             <span
-              className={`w-2.5 h-2.5 rounded-none transition-colors ${
+              className={`w-2 h-2 rounded-full transition-colors ${
                 isAudioMuted
                   ? 'bg-amber-400'
-                  : 'bg-rose-500 animate-pulse shadow-[0_0_8px_#ff1e2e]'
+                  : 'bg-rose-500 animate-pulse shadow-[0_0_8px_#f43f5e]'
               }`}
             />
-            <span className="font-mono text-[10px] sm:text-[11px] tracking-wide font-bold">
-              {isAudioMuted ? '[ 🔇 SOUND: MUTED ]' : '[ 🔊 SOUND: ON ]'}
-            </span>
+            <span>{isAudioMuted ? 'Sound Muted' : 'Sound On'}</span>
 
             {/* Live 5-Band Animated Equalizer Visualizer */}
-            {!isAudioMuted ? (
-              <div className="flex items-end space-x-0.5 h-3 ml-1">
-                <span className="w-1 bg-[#ff1e2e] eq-bar-1" />
-                <span className="w-1 bg-[#ff1e2e] eq-bar-2" />
-                <span className="w-1 bg-[#ff1e2e] eq-bar-3" />
-                <span className="w-1 bg-[#ff1e2e] eq-bar-4" />
-                <span className="w-1 bg-[#ff1e2e] eq-bar-5" />
+            {!isAudioMuted && (
+              <div className="flex items-end space-x-0.5 h-2.5 ml-1">
+                <span className="w-0.5 rounded-full bg-rose-400 eq-bar-1" />
+                <span className="w-0.5 rounded-full bg-rose-400 eq-bar-2" />
+                <span className="w-0.5 rounded-full bg-rose-400 eq-bar-3" />
+                <span className="w-0.5 rounded-full bg-rose-400 eq-bar-4" />
+                <span className="w-0.5 rounded-full bg-rose-400 eq-bar-5" />
               </div>
-            ) : (
-              <span className="text-[9px] font-mono text-amber-400 font-bold tracking-tight">
-                (UNMUTE)
-              </span>
             )}
           </button>
         </div>
       </header>
 
       {/* ================================================================ */}
-      {/* LAYER 5: MAXIMALIST CYBER-GOTHIC CORNER ACCENT BRACKETS          */}
-      {/* ================================================================ */}
-      <div className="absolute top-14 left-4 pointer-events-none hidden sm:flex flex-col text-[10px] font-mono text-stone-500 space-y-1">
-        <span className="text-[#ff1e2e] font-black">┌ [ NODE_ID // 0x4C_LAWLIET ]</span>
-        <span>• SECTOR: KANTO_METROPOLITAN</span>
-        <span>• SYNC: 99.8% // SHINIGAMI LINK</span>
-      </div>
-      <div className="absolute top-14 right-4 pointer-events-none hidden sm:flex flex-col text-[10px] font-mono text-stone-500 text-right space-y-1">
-        <span className="text-[#ff1e2e] font-black">[ THREAT_LEVEL // OMEGA ] ┐</span>
-        <span>• KIRA SUSPECTS: DETECTED</span>
-        <span>• ACCESS_KEY: VERIFIED</span>
-      </div>
-      <div className="absolute bottom-4 left-4 pointer-events-none hidden sm:flex flex-col text-[10px] font-mono text-stone-500 space-y-1">
-        <span>• LATENCY: 12ms // HARDWARE ACCEL</span>
-        <span className="text-[#ff1e2e] font-black">└ [ PROTOCOL_EXEC // READY ]</span>
-      </div>
-      <div className="absolute bottom-4 right-4 pointer-events-none hidden sm:flex flex-col text-[10px] font-mono text-stone-500 text-right space-y-1">
-        <span>• RYUK THEME: SYNTHESIZED 432Hz</span>
-        <span className="text-[#ff1e2e] font-black">[ SECURE CHANNEL // ACTIVE ] ┘</span>
-      </div>
-
-      {/* ================================================================ */}
       {/* LAYER 6: CENTERPIECE LOGO & AUTHENTIC 3D DEATH NOTE BOOK         */}
       {/* ================================================================ */}
       <div className="relative z-20 flex flex-col items-center justify-center space-y-4 text-center px-4 max-w-3xl w-full">
         {/* Dynamic Status / Protocol Badge */}
-        <div className="brutal-badge rounded-none border-2 border-[#ff1e2e] bg-black text-white px-4 py-1.5 font-mono text-[9px] sm:text-[10px] uppercase font-bold tracking-widest shadow-[3px_3px_0px_#000,3px_3px_0px_#ff1e2e] z-30 max-w-[92vw]">
+        <div className="flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/[0.04] backdrop-blur-xl border border-white/[0.09] shadow-lg text-xs font-medium text-white/90">
           <span
-            className={`w-2 h-2 rounded-none shrink-0 ${
+            className={`w-2 h-2 rounded-full shrink-0 ${
               isOpeningBook
                 ? 'bg-rose-500 animate-ping shadow-[0_0_8px_#ff1e2e]'
-                : 'animate-pulse shadow-[0_0_6px_#ff1e2e]'
+                : 'bg-rose-500 animate-pulse shadow-[0_0_6px_#ff1e2e]'
             }`}
             style={{ backgroundColor: isOpeningBook ? '#f43f5e' : (theme?.accent || '#e11d48') }}
           />
-          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-white/95 font-semibold truncate">
-            {!isOpeningBook && '[ L-OS // DETECTIVE ASSISTANT READY ]'}
-            {animStage === 1 && '[ 📖 3D DEATH NOTE OPENING // SOUND MUTED... ]'}
-            {animStage >= 2 && '[ ⚡ "THE HUMAN WHOSE NAME IS WRITTEN..." // 100% ]'}
+          <span className="text-xs font-medium tracking-wide text-white/90 truncate">
+            {!isOpeningBook && 'L Intelligence Ready'}
+            {animStage === 1 && 'Opening Death Note Archive...'}
+            {animStage >= 2 && 'Cognitive System Initialized'}
           </span>
         </div>
 
@@ -679,42 +649,38 @@ export default function OpeningScreen({ onInitialize, theme }) {
         )}
 
         {/* Primary Instruction & Subtitle */}
-        <div className="flex flex-col items-center space-y-2.5 z-30 w-full">
+        <div className="flex flex-col items-center space-y-3 z-30 w-full">
           <button
             onClick={isOpeningBook ? () => onInitialize?.() : handleLogoClick}
-            className={`brutal-btn text-xs sm:text-sm uppercase tracking-[0.2em] font-mono font-black transition-all cursor-pointer flex items-center justify-center space-x-2.5 px-8 py-3.5 rounded-none border-2 border-[#ff1e2e] bg-black text-white w-auto max-w-[90vw] ${
+            className={`px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 cursor-pointer flex items-center justify-center space-x-2.5 shadow-xl hover:scale-105 active:scale-95 ${
               isOpeningBook
-                ? 'shadow-[3px_3px_0px_#ff1e2e] bg-[#1a0004] hover:bg-[#ff1e2e] hover:text-black'
-                : 'shadow-[6px_6px_0px_#ff1e2e] hover:shadow-[8px_8px_0px_#ffffff] active:translate-x-1 active:translate-y-1 active:shadow-[1px_1px_0px_#ff1e2e]'
+                ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-[0_4px_25px_rgba(244,63,94,0.4)]'
+                : 'bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/[0.15] backdrop-blur-xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]'
             }`}
             title={isOpeningBook ? 'Click to skip straight to assistant' : 'Click to initialize'}
           >
             {isOpeningBook ? (
               <>
-                <span className="w-2.5 h-2.5 rounded-none bg-rose-500 animate-ping shadow-[0_0_10px_#ff1e2e] shrink-0" />
-                <span className="font-mono text-rose-200 tracking-wider text-[11px] sm:text-xs font-bold">
-                  [ 📖 DEATH NOTE OPENED // CLICK TO ENTER ► ]
-                </span>
+                <span className="w-2 h-2 rounded-full bg-white animate-ping shrink-0" />
+                <span>Enter Assistant Now ►</span>
               </>
             ) : (
               <>
-                <span className="w-2.5 h-2.5 rounded-none bg-rose-500 animate-pulse shadow-[0_0_8px_#ff1e2e] shrink-0" />
-                <span className="font-mono text-xs sm:text-sm font-black tracking-[0.2em] text-white">
-                  [ █ CLICK <strong className="text-rose-400 font-black text-sm sm:text-base underline underline-offset-4 decoration-rose-500">L</strong> TO INITIALIZE ► ]
-                </span>
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_8px_#ff1e2e] shrink-0" />
+                <span>Click <strong className="text-rose-400 font-bold">L</strong> or Tap Here to Begin</span>
               </>
             )}
           </button>
 
-          <p className="text-[10px] sm:text-[11px] text-white/55 tracking-wider font-mono uppercase font-black">
-            [ PERSONAL DESKTOP AI ASSISTANT // DEATH NOTE SYSTEM ]
+          <p className="text-xs text-white/40 tracking-wider">
+            Personal Multimodal Reasoning Assistant
           </p>
 
           {/* Awakening Progress Bar */}
           {isOpeningBook && (
-            <div className="w-60 sm:w-72 h-2.5 bg-black rounded-none overflow-hidden border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#000] mt-1">
+            <div className="w-56 sm:w-64 h-1.5 bg-white/10 rounded-full overflow-hidden mt-1 backdrop-blur-md">
               <div
-                className="h-full bg-gradient-to-r from-rose-600 via-rose-400 to-amber-300 transition-all duration-700 ease-out"
+                className="h-full bg-gradient-to-r from-rose-500 to-rose-400 rounded-full transition-all duration-700 ease-out"
                 style={{
                   width:
                     animStage === 1

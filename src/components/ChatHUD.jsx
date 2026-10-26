@@ -241,17 +241,15 @@ export default function ChatHUD({
       )}
 
       {/* Conversation Stream */}
-      <div className="flex-1 w-full overflow-y-auto px-3.5 py-3 space-y-3.5">
+      <div className="flex-1 w-full overflow-y-auto px-4 py-4 space-y-4">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center py-10 px-4 space-y-4">
-            {/* Centerpiece Monogram Logo */}
-            <div
-              className="w-16 h-16 rounded-none bg-black border-2 border-[#ff1e2e] shadow-[4px_4px_0px_#ff1e2e] p-2 flex items-center justify-center transition-all duration-300"
-            >
+          <div className="flex flex-col items-center justify-center h-full text-center py-12 px-4 space-y-4">
+            {/* Centerpiece Monogram Logo with Ambient Glow */}
+            <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-rose-500/20 via-purple-600/10 to-transparent border border-rose-500/30 shadow-[0_0_35px_rgba(244,63,94,0.3)] p-3 flex items-center justify-center transition-transform hover:scale-105">
               <img
                 src="/l-triangle-logo.svg"
                 alt="L"
-                className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(225,29,72,0.5)]"
+                className="w-full h-full object-contain"
                 style={{ mixBlendMode: 'screen', background: 'transparent' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
@@ -259,23 +257,23 @@ export default function ChatHUD({
                 }}
               />
               <div
-                className="hidden w-10 h-10 rounded-none items-center justify-center font-monogram font-black text-lg text-white"
+                className="hidden w-10 h-10 rounded-full items-center justify-center font-black text-lg text-white"
                 style={{ backgroundColor: theme.accent || '#e11d48' }}
               >
                 L
               </div>
             </div>
-            <div className="space-y-1.5">
-              <h2 className="text-sm sm:text-base font-black text-white font-mono uppercase tracking-widest">
-                [ L // COGNITIVE ASSISTANT ]
+            <div className="space-y-1">
+              <h2 className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                How can I assist your investigation?
               </h2>
-              <p className="text-xs text-stone-400 max-w-[340px] leading-relaxed font-mono">
-                Ask a question, inspect code, analyze an image, or share your screen.
+              <p className="text-xs text-white/50 max-w-[340px] leading-relaxed">
+                Ask reasoning queries, analyze screenshots, debug code, or browse the web.
               </p>
             </div>
 
             {/* Quick Prompt Pills */}
-            <div className="flex flex-wrap gap-2 justify-center max-w-[360px] pt-1">
+            <div className="flex flex-wrap gap-2 justify-center max-w-[380px] pt-2">
               {QUICK_PROMPTS.map((prompt, idx) => (
                 <button
                   key={idx}
@@ -283,9 +281,9 @@ export default function ChatHUD({
                     setInputText(prompt);
                     textareaRef.current?.focus();
                   }}
-                  className="brutal-btn rounded-none !text-[11px] !py-1.5 !px-3 border-2 border-[#ff1e2e] bg-black text-white font-mono font-bold uppercase tracking-wider shadow-[3px_3px_0px_#ff1e2e] hover:shadow-[4px_4px_0px_#ff1e2e] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#ff1e2e] cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-full text-[11px] font-medium bg-white/[0.03] hover:bg-rose-500/15 text-white/70 hover:text-white border border-white/[0.08] hover:border-rose-500/40 shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
                 >
-                  [ {prompt} ]
+                  {prompt}
                 </button>
               ))}
             </div>
@@ -302,29 +300,29 @@ export default function ChatHUD({
               >
                 {/* User Attachment Thumbnail */}
                 {msg.imageDataUrl && (
-                  <div className="relative rounded-none overflow-hidden border-2 border-[#ff1e2e] max-w-[180px] shadow-[3px_3px_0px_#000]">
+                  <div className="relative rounded-2xl overflow-hidden border border-white/10 max-w-[200px] shadow-lg">
                     <img
                       src={msg.imageDataUrl}
                       alt="Attachment context"
-                      className="w-full h-auto object-cover max-h-[120px]"
+                      className="w-full h-auto object-cover max-h-[140px]"
                     />
-                    <div className="absolute top-1 left-1 bg-black px-1.5 py-0.5 border border-rose-500 text-[8px] font-mono font-bold text-white uppercase">
-                      [ VISUAL CONTEXT ]
+                    <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-full text-[9px] font-medium text-white/80">
+                      Visual Context
                     </div>
                   </div>
                 )}
 
                 {/* Message Bubble */}
                 <div
-                  className={`relative px-3.5 py-2.5 rounded-none text-xs max-w-[92%] select-text leading-relaxed border-2 ${
+                  className={`relative px-4 py-3 rounded-2xl text-xs max-w-[90%] select-text leading-relaxed ${
                     isUser
-                      ? 'bg-[#0f1015] text-white border-stone-700 shadow-[3px_3px_0px_#000] font-mono'
-                      : 'bg-[#06070a] text-white/95 border-[#ff1e2e] shadow-[4px_4px_0px_#000,4px_4px_0px_#ff1e2e]'
+                      ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-br-sm shadow-[0_4px_16px_rgba(225,29,72,0.35)] font-sans'
+                      : 'bg-white/[0.04] text-white/95 rounded-bl-sm border border-white/[0.08] backdrop-blur-xl shadow-lg'
                   }`}
                 >
                   {/* Assistant Header Tag */}
                   {!isUser && (
-                    <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-rose-500/20 text-[10px] text-white/50 font-mono">
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] text-[10px] text-white/50">
                       <div className="flex items-center space-x-1.5">
                         <img
                           src="/l-triangle-logo.svg"
@@ -333,22 +331,22 @@ export default function ChatHUD({
                           style={{ mixBlendMode: 'screen', background: 'transparent' }}
                           onError={(e) => { e.target.style.display = 'none'; }}
                         />
-                        <span className="font-bold text-rose-400 uppercase tracking-wider">[ L // DETECTIVE ]</span>
+                        <span className="font-semibold text-rose-400">L Detective</span>
                         {msg.latency && (
-                          <span className="font-mono text-emerald-400 text-[9px] font-bold">
-                            {msg.latency}
+                          <span className="font-mono text-emerald-400 text-[9px]">
+                            • {msg.latency}
                           </span>
                         )}
                       </div>
                       <button
                         onClick={() => copyText(msg.text, msgId)}
-                        className="hover:text-white flex items-center space-x-1 transition-colors uppercase font-mono text-[9px]"
+                        className="hover:text-white flex items-center space-x-1 transition-colors text-[10px] text-white/40 hover:text-white"
                         title="Copy Response"
                       >
                         {copiedIndex === msgId ? (
-                          <span className="text-emerald-400 font-bold">[ COPIED ]</span>
+                          <span className="text-emerald-400 font-medium">Copied</span>
                         ) : (
-                          <span className="text-stone-400 hover:text-white">[ COPY ]</span>
+                          <span>Copy</span>
                         )}
                       </button>
                     </div>
@@ -356,19 +354,19 @@ export default function ChatHUD({
 
                   {/* Collapsible Step-by-Step Reasoning Drawer */}
                   {msg.thought && (
-                    <div className="mb-2 rounded-none border-2 border-indigo-500/40 bg-black shadow-[2px_2px_0px_#000] overflow-hidden text-[11px]">
+                    <div className="mb-2.5 rounded-xl border border-indigo-500/25 bg-indigo-950/20 backdrop-blur-md overflow-hidden text-[11px]">
                       <button
                         onClick={() => toggleThought(idx)}
-                        className="flex items-center justify-between w-full px-2 py-1 text-white/70 hover:text-white bg-white/[0.02] font-mono uppercase tracking-wider font-bold"
+                        className="flex items-center justify-between w-full px-3 py-1.5 text-white/70 hover:text-white bg-white/[0.02] text-[11px] font-medium"
                       >
-                        <div className="flex items-center space-x-1">
-                          <Brain size={11} className="text-indigo-400" />
-                          <span className="text-[10px]">[ REASONING DEDUCTION ]</span>
+                        <div className="flex items-center space-x-1.5">
+                          <Brain size={12} className="text-indigo-400" />
+                          <span>Reasoning Deduction</span>
                         </div>
-                        {expandedThoughts[idx] ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
+                        {expandedThoughts[idx] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                       </button>
                       {expandedThoughts[idx] && (
-                        <div className="p-2 border-t border-white/5 text-white/60 font-mono text-[10px] leading-relaxed whitespace-pre-wrap">
+                        <div className="p-3 border-t border-white/[0.06] text-white/60 font-mono text-[10px] leading-relaxed whitespace-pre-wrap">
                           {msg.thought}
                         </div>
                       )}
@@ -385,17 +383,17 @@ export default function ChatHUD({
 
         {/* Real-time Thinking Indicator */}
         {isThinking && (
-          <div className="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 text-xs text-white/70 animate-pulse">
+          <div className="flex items-center justify-between px-3.5 py-2 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-md text-xs text-white/80 animate-pulse max-w-fit">
             <div className="flex items-center space-x-2">
               <Brain size={13} className="text-indigo-400 animate-spin" />
-              <span className="text-[11px]">Reasoning with Gemini...</span>
+              <span className="text-[11px]">Synthesizing deductive reasoning...</span>
             </div>
             {onCancelGeneration && (
               <button
                 onClick={onCancelGeneration}
-                className="text-[10px] text-white/50 hover:text-white px-1.5 py-0.5 rounded border border-white/10 hover:bg-white/[0.05]"
+                className="text-[10px] text-white/50 hover:text-white ml-3 px-2 py-0.5 rounded-full border border-white/10 hover:bg-white/[0.08]"
               >
-                Cancel
+                Stop
               </button>
             )}
           </div>
@@ -404,41 +402,41 @@ export default function ChatHUD({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Control Area */}
-      <div className="w-full p-2.5 border-t-[3px] border-black bg-[#06070a] shadow-[0_-3px_0px_#000]">
+      {/* Modern Floating Minimalist Input Bar Area */}
+      <div className="w-full px-4 pb-3 pt-1 bg-transparent">
         {/* Active Attachment Preview Chip */}
         {attachedImage && (
-          <div className="flex items-center justify-between px-3 py-1.5 mb-2 rounded-none bg-black border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#000] text-xs">
+          <div className="flex items-center justify-between px-3 py-1.5 mb-2 rounded-2xl bg-white/[0.04] border border-rose-500/30 backdrop-blur-md shadow-md text-xs">
             <div className="flex items-center space-x-2.5 min-w-0">
               <img
                 src={attachedImage}
                 alt="Attachment preview"
-                className="w-7 h-7 rounded-none object-cover border-2 border-[#ff1e2e] shadow-sm"
+                className="w-8 h-8 rounded-xl object-cover border border-rose-500/40 shadow-sm"
               />
               <div className="flex flex-col min-w-0">
-                <span className="text-[11px] font-bold text-white font-mono uppercase truncate">[ SCREENSHOT ATTACHED ]</span>
-                <span className="text-[9px] text-stone-400 font-mono">Ready for visual analysis with Gemini</span>
+                <span className="text-[11px] font-medium text-white truncate">Screenshot Attached</span>
+                <span className="text-[9px] text-white/40">Ready for visual analysis with Gemini</span>
               </div>
             </div>
             <button
               type="button"
               onClick={onClearAttachedImage}
-              className="text-white/60 hover:text-rose-400 p-1 border border-neutral-700 hover:border-rose-500 rounded-none transition-colors"
+              className="w-6 h-6 rounded-full flex items-center justify-center text-white/50 hover:text-rose-400 hover:bg-white/[0.08] transition-colors"
               title="Remove Attachment"
             >
-              <X size={13} />
+              <X size={12} />
             </button>
           </div>
         )}
 
-        {/* Multiline Input Bar */}
-        <form onSubmit={handleSubmit} className="flex items-end space-x-1.5">
+        {/* Modern Capsule Input Bar */}
+        <form onSubmit={handleSubmit} className="flex items-center space-x-1.5 p-1.5 pl-3 rounded-full bg-white/[0.04] backdrop-blur-2xl border border-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.5)] focus-within:border-rose-500/40 focus-within:shadow-[0_0_25px_rgba(244,63,94,0.2)] transition-all">
           {/* File Upload / Attach Screenshot Button */}
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             title="Attach Screenshot or Image File (or press Ctrl+V to paste)"
-            className="p-2 rounded-none border-2 border-neutral-800 hover:border-[#ff1e2e] bg-black text-white/70 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer shrink-0"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer shrink-0"
           >
             <Paperclip size={14} />
           </button>
@@ -449,7 +447,7 @@ export default function ChatHUD({
               type="button"
               onClick={onTriggerSnip}
               title="Take Screenshot Snip (Alt + S)"
-              className="p-2 rounded-none border-2 border-neutral-800 hover:border-[#ff1e2e] bg-black text-white/70 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer shrink-0"
             >
               <Scissors size={14} />
             </button>
@@ -463,8 +461,8 @@ export default function ChatHUD({
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
-            placeholder={attachedImage ? 'Ask about this screenshot (Enter to send)...' : 'Ask L a question, or paste a screenshot (Ctrl+V)...'}
-            className="flex-1 brutal-input px-3 py-2 text-xs text-white placeholder-stone-500 resize-none max-h-[120px] focus:outline-none leading-relaxed rounded-none border-2 border-neutral-700 focus:border-[#ff1e2e] shadow-[2px_2px_0px_#000]"
+            placeholder={attachedImage ? 'Ask about this screenshot (Enter to send)...' : 'Ask L anything, or paste an image (Ctrl+V)...'}
+            className="flex-1 bg-transparent px-2 py-1 text-xs text-white placeholder-white/35 resize-none max-h-[120px] focus:outline-none leading-relaxed border-none"
           />
 
           {/* Send / Stop Button */}
@@ -473,7 +471,7 @@ export default function ChatHUD({
               type="button"
               onClick={onCancelGeneration}
               title="Stop generating"
-              className="p-2 rounded-none bg-black text-white border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#ff1e2e] active:translate-x-[1px] active:translate-y-[1px] transition-all shrink-0 cursor-pointer animate-pulse"
+              className="w-8 h-8 rounded-full bg-rose-600/80 text-white flex items-center justify-center hover:bg-rose-600 transition-all shrink-0 cursor-pointer animate-pulse"
             >
               <X size={14} />
             </button>
@@ -481,10 +479,14 @@ export default function ChatHUD({
             <button
               type="submit"
               disabled={!inputText.trim() && !attachedImage}
-              title="Send (Enter)"
-              className="p-2 rounded-none bg-[#ff1e2e] hover:bg-[#ff3344] disabled:opacity-30 text-black border-2 border-black shadow-[3px_3px_0px_#ffffff] active:translate-x-[1px] active:translate-y-[1px] transition-all shrink-0 cursor-pointer"
+              title="Send query"
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0 ${
+                inputText.trim() || attachedImage
+                  ? 'bg-gradient-to-tr from-rose-500 to-rose-600 text-white shadow-[0_2px_12px_rgba(244,63,94,0.45)] hover:scale-105 active:scale-95 cursor-pointer'
+                  : 'bg-white/[0.06] text-white/20 cursor-not-allowed'
+              }`}
             >
-              <Send size={14} />
+              <Send size={13} />
             </button>
           )}
 
@@ -494,7 +496,7 @@ export default function ChatHUD({
               type="button"
               onClick={onClearChat}
               title="Clear Conversation"
-              className="p-2 rounded-none border-2 border-neutral-800 hover:border-[#ff1e2e] bg-black text-white/50 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white/40 hover:text-rose-400 hover:bg-white/[0.08] transition-all cursor-pointer shrink-0"
             >
               <Trash2 size={13} />
             </button>

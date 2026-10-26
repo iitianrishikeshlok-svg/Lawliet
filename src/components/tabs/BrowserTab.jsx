@@ -352,22 +352,22 @@ export default function BrowserTab({ onSendToChat, theme }) {
   return (
     <div className="flex flex-col w-full h-full flex-1 min-h-0 p-2.5 overflow-hidden select-none space-y-2">
       {/* Top Address & Mode Switcher Header */}
-      <div className="flex flex-col space-y-2 p-2 rounded-xl utility-card border border-white/[0.08]">
+      <div className="flex flex-col space-y-2.5 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-lg">
         {/* Mode Selector Tabs */}
-        <div className="flex items-center justify-between pb-1 border-b border-white/[0.06]">
-          <div className="flex items-center space-x-1.5">
+        <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+          <div className="flex items-center space-x-1.5 p-0.5 rounded-full bg-black/40 border border-white/[0.06]">
             <button
               onClick={() => {
                 audio.playClick();
                 setIsYouTube(true);
               }}
-              className={`px-3 py-1 rounded-none text-xs font-mono uppercase tracking-wider flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-3.5 py-1 rounded-full text-xs font-medium flex items-center space-x-1.5 transition-all cursor-pointer ${
                 isYouTube
-                  ? 'brutal-btn-solid border-2 border-black shadow-[2px_2px_0px_#fff] font-black'
-                  : 'bg-black text-white/70 border-2 border-neutral-800 hover:border-neutral-500 shadow-[2px_2px_0px_#000] font-bold'
+                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-sm font-semibold'
+                  : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
-              <span>[ 🔴 YOUTUBE & VIDEO ]</span>
+              <span>🔴 YouTube & Video</span>
             </button>
 
             <button
@@ -375,18 +375,18 @@ export default function BrowserTab({ onSendToChat, theme }) {
                 audio.playClick();
                 setIsYouTube(false);
               }}
-              className={`px-3 py-1 rounded-none text-xs font-mono uppercase tracking-wider flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-3.5 py-1 rounded-full text-xs font-medium flex items-center space-x-1.5 transition-all cursor-pointer ${
                 !isYouTube
-                  ? 'brutal-btn-solid border-2 border-black shadow-[2px_2px_0px_#fff] font-black'
-                  : 'bg-black text-white/70 border-2 border-neutral-800 hover:border-neutral-500 shadow-[2px_2px_0px_#000] font-bold'
+                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-sm font-semibold'
+                  : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
-              <span>[ 🌐 WEB BROWSER ]</span>
+              <span>🌐 Web Browser</span>
             </button>
           </div>
 
           {/* Quick Action Controls */}
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-2">
             {onSendToChat && (
               <button
                 onClick={() => {
@@ -397,20 +397,20 @@ export default function BrowserTab({ onSendToChat, theme }) {
                   onSendToChat(null, contentDesc);
                 }}
                 title="Ask L about current page/video content"
-                className="brutal-btn rounded-none !text-[10px] !py-1 !px-2.5 border-2 border-[#ff1e2e] bg-black text-white shadow-[2px_2px_0px_#ff1e2e] font-mono font-bold uppercase flex items-center space-x-1 cursor-pointer"
+                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
-                <Sparkles size={11} className="text-rose-400" />
-                <span>[ ASK L ]</span>
+                <Sparkles size={12} />
+                <span>Ask L</span>
               </button>
             )}
 
             <button
               onClick={handleOpenExternal}
               title="Open in full external browser tab"
-              className="brutal-btn rounded-none !text-[10px] !py-1 !px-2.5 border-2 border-neutral-700 bg-black text-white/70 shadow-[2px_2px_0px_#000] font-mono font-bold uppercase flex items-center space-x-1 cursor-pointer"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-all cursor-pointer"
             >
-              <ExternalLink size={11} />
-              <span>[ OPEN TAB ]</span>
+              <ExternalLink size={12} />
+              <span>Open Tab</span>
             </button>
           </div>
         </div>
@@ -418,10 +418,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
         {/* Dynamic Search Bar (YouTube Search Bar OR Web Omnibox) */}
         {isYouTube ? (
           /* Dedicated YouTube Search Bar */
-          <div className="flex flex-col space-y-1.5">
-            <div className="flex items-center space-x-1.5 w-full">
-              <span className="px-2.5 py-1.5 rounded-none bg-black border-2 border-[#ff1e2e] text-white font-mono font-black text-[10px] tracking-wider uppercase shrink-0 shadow-[2px_2px_0px_#ff1e2e]">
-                [ YT ]
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2 w-full">
+              <span className="px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/25 text-rose-300 font-semibold text-[10px] shrink-0">
+                YT
               </span>
 
               <form onSubmit={handleVideoBarSubmit} className="flex-1 relative flex items-center">
@@ -430,7 +430,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
                   value={videoSearchInput}
                   onChange={(e) => setVideoSearchInput(e.target.value)}
                   placeholder="Search YouTube videos or paste video link (e.g. Death Note, Lo-Fi, or URL)..."
-                  className="w-full brutal-input text-xs text-white px-3 py-1.5 rounded-none border-2 border-neutral-700 focus:border-[#ff1e2e] outline-none font-mono tracking-tight bg-black shadow-[2px_2px_0px_#000]"
+                  className="w-full bg-white/[0.04] text-xs text-white px-3.5 py-1.5 rounded-full border border-white/[0.08] focus:border-rose-500/40 outline-none"
                 />
               </form>
 
@@ -438,21 +438,21 @@ export default function BrowserTab({ onSendToChat, theme }) {
               <button
                 type="button"
                 onClick={handlePasteAndPlay}
-                className="brutal-btn px-2.5 py-1.5 rounded-none text-xs font-bold text-white border-2 border-[#ff1e2e] bg-black shadow-[2px_2px_0px_#ff1e2e] shrink-0 uppercase font-mono cursor-pointer flex items-center space-x-1"
+                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] hover:bg-white/[0.08] text-white/80 hover:text-white border border-white/[0.1] shrink-0 transition-all cursor-pointer"
                 title="Paste YouTube link from clipboard and play immediately"
               >
-                <span>[ 📋 PASTE & PLAY ]</span>
+                <span>📋 Paste & Play</span>
               </button>
 
               {/* Search / Play Button */}
               <button
                 type="button"
                 onClick={handleVideoBarSubmit}
-                className="brutal-btn-solid px-3.5 py-1.5 rounded-none text-xs font-black text-black border-2 border-black shadow-[2px_2px_0px_#ffffff] shrink-0 flex items-center space-x-1 uppercase font-mono cursor-pointer"
+                className="flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_2px_15px_rgba(244,63,94,0.4)] shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 title="Search YouTube or Play Video"
               >
-                <Search size={12} className="stroke-[2.5]" />
-                <span>[ SEARCH ]</span>
+                <Search size={12} />
+                <span>Search</span>
               </button>
             </div>
 
@@ -513,7 +513,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
                     iframeRef.current.src = getWebIframeSrc();
                   }
                 }}
-                className="p-1.5 rounded-none border-2 border-neutral-800 hover:border-[#ff1e2e] bg-black text-white/70 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
                 title="Reload Page"
               >
                 <RefreshCw size={12} className={isLoading ? 'animate-spin text-cyan-400' : ''} />
@@ -526,7 +526,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
                   value={inputUrl}
                   onChange={(e) => setInputUrl(e.target.value)}
                   placeholder="Enter website URL or search Google (e.g. google.com, wikipedia.org)..."
-                  className="w-full brutal-input text-xs text-white px-3 py-1.5 rounded-none border-2 border-neutral-700 focus:border-[#ff1e2e] outline-none font-mono tracking-tight bg-black shadow-[2px_2px_0px_#000]"
+                  className="w-full bg-white/[0.04] text-xs text-white px-4 py-1.5 rounded-full border border-white/[0.08] focus:border-rose-500/40 outline-none"
                 />
               </form>
 
@@ -534,10 +534,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
               <button
                 onClick={handleOmniboxSubmit}
                 title="Navigate to URL or Google Search (Enter)"
-                className="brutal-btn-solid px-3.5 py-1.5 rounded-none text-xs font-black text-black border-2 border-black shadow-[2px_2px_0px_#ffffff] shrink-0 flex items-center space-x-1 uppercase font-mono cursor-pointer"
+                className="flex items-center space-x-1 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_2px_15px_rgba(244,63,94,0.4)] shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
-                <Search size={12} className="stroke-[2.5]" />
-                <span>[ GO ]</span>
+                <Search size={12} />
+                <span>Go</span>
               </button>
             </div>
 

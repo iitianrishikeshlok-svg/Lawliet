@@ -545,10 +545,14 @@ export default function App() {
       </div>
 
       <div
-        className="w-full h-screen min-h-screen flex flex-col flex-1 overflow-hidden relative bg-[#07080b]/95 backdrop-blur-xl border-t-0 border-b-0 sm:border-[3px] border-black shadow-[0_0_0_2px_#ff1e2e]"
+        className="w-full h-screen min-h-screen flex flex-col flex-1 overflow-hidden relative bg-[#07080d]/85 backdrop-blur-3xl"
       >
-      {/* Refined Header with Mode Selector and Close Button */}
-      <Header
+        {/* Subtle Ambient Radial Lighting Orbs */}
+        <div className="ambient-glow-orb -top-24 -left-24 w-96 h-96 bg-rose-600/15" />
+        <div className="ambient-glow-orb -bottom-24 -right-24 w-96 h-96 bg-purple-600/12" />
+
+        {/* Refined Header with Mode Selector and Close Button */}
+        <Header
         thinkingLevel={thinkingLevel}
         onThinkingLevelChange={(lvl) => {
           setThinkingLevel(lvl);

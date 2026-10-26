@@ -75,50 +75,49 @@ export default function Header({
   };
 
   return (
-    <header className="draggable relative flex flex-col w-full px-3.5 pt-3 pb-2.5 border-b-[3px] border-black bg-[#0a0b0e] select-none shadow-[0_4px_0px_#ff1e2e]">
+    <header className="draggable relative flex flex-col w-full px-4 pt-3 pb-2.5 border-b border-white/[0.08] bg-black/40 backdrop-blur-2xl select-none">
       {/* Top Utility Row */}
       <div className="flex items-center justify-between w-full">
         {/* L Identity Mark, Status & Latency */}
-        <div className="flex items-center space-x-2.5">
-          <div className="flex items-center justify-center w-7 h-7 rounded-none bg-black border-2 border-[#ff1e2e] shadow-[2px_2px_0px_#ff1e2e] p-0.5">
+        <div className="flex items-center space-x-3">
+          <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-rose-600/25 to-black border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.3)] p-1.5 transition-transform hover:scale-105">
             <img
               src="/l-triangle-logo.svg"
               alt="L"
               className="w-full h-full object-contain pointer-events-none"
               style={{ mixBlendMode: 'screen', background: 'transparent' }}
             />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-black animate-pulse" />
           </div>
 
           <div className="flex flex-col">
-            <div className="flex items-center space-x-1.5">
-              <span className="text-xs font-black tracking-wider text-white font-mono uppercase">
-                [ L // ASSISTANT ]
+            <div className="flex items-center space-x-2">
+              <span className="text-xs font-semibold tracking-wide text-white font-sans">
+                L Intelligence
               </span>
-              <span className="w-2 h-2 rounded-none bg-emerald-400 animate-pulse shadow-[0_0_6px_#00ff66]" />
+              {lastLatency && (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  {lastLatency}
+                </span>
+              )}
             </div>
-            <span className="text-[9px] font-mono text-rose-400 font-bold tracking-wider uppercase">
-              DEATH NOTE COGNITIVE OS
+            <span className="text-[10px] text-white/40 tracking-wider">
+              Reasoning Engine • Multimodal
             </span>
           </div>
-
-          {lastLatency && (
-            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-none bg-black text-[#00ff66] border-2 border-[#00ff66] shadow-[2px_2px_0px_#000]">
-              {lastLatency}
-            </span>
-          )}
         </div>
 
         {/* Window Controls & Floating PiP Button */}
-        <div className="non-draggable flex items-center space-x-1.5">
+        <div className="non-draggable flex items-center space-x-2">
           {/* Insecure Origin HTTP Warning Pill */}
           {!isSecure && !isElectron && (
             <button
               onClick={() => setShowSecurityModal(true)}
-              className="brutal-btn rounded-none !text-[9px] !py-1 !px-2 border-2 border-amber-400 text-amber-300 shadow-[2px_2px_0px_#ffe600] cursor-pointer"
+              className="flex items-center space-x-1.5 px-3 py-1 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer shadow-sm"
               title="Camera & Screen Share blocked on HTTP IP by Chrome. Click for 1-click fix."
             >
-              <ShieldAlert size={11} className="text-amber-400" />
-              <span>[ FIX PERMS ]</span>
+              <ShieldAlert size={12} className="text-amber-400" />
+              <span>Fix Permissions</span>
             </button>
           )}
 
@@ -126,14 +125,14 @@ export default function Header({
           <button
             onClick={handleFloatPiPClick}
             title="Pop out Floating Icon & Circular Menu on Real Home Page"
-            className={`brutal-btn rounded-none text-[10px] px-2.5 py-1 border-2 border-[#ff1e2e] shadow-[2px_2px_0px_#ff1e2e] active:translate-x-[1px] active:translate-y-[1px] cursor-pointer ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${
               pipActive
-                ? 'bg-[#ff1e2e] text-black font-black'
-                : 'bg-black text-white'
+                ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
+                : 'bg-white/[0.04] text-white/80 hover:text-white border-white/[0.1] hover:border-white/[0.2] hover:bg-white/[0.08]'
             }`}
           >
-            <Monitor size={11} className={pipActive ? 'text-black' : 'text-rose-400'} />
-            <span className="hidden sm:inline">[ FLOAT PiP ]</span>
+            <Monitor size={12} className={pipActive ? 'text-white' : 'text-rose-400'} />
+            <span className="hidden sm:inline">Float HUD</span>
           </button>
 
           {/* Always on Top Pin */}
@@ -143,35 +142,36 @@ export default function Header({
               onTogglePin?.();
             }}
             title={isPinned ? 'Always on Top: Active' : 'Always on Top: Inactive'}
-            className={`p-1.5 rounded-none border-2 font-mono shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer ${
+            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer ${
               isPinned
-                ? 'text-black bg-[#ff1e2e] border-black font-black'
-                : 'text-white/60 bg-black border-neutral-700 hover:border-[#ff1e2e]'
+                ? 'bg-rose-500 text-white border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
+                : 'bg-white/[0.04] text-white/60 hover:text-white border-white/[0.08] hover:bg-white/[0.08]'
             }`}
           >
-            <Pin size={13} />
+            <Pin size={12} />
           </button>
 
-          {/* Close Panel Button */}
+          {/* Close / Minimize Panel Button */}
           <button
             onClick={() => {
               audio.playCollapse();
               onClose?.();
             }}
             title="Minimize to Floating Icon (Esc)"
-            className="p-1.5 rounded-none border-2 border-neutral-700 hover:border-[#ff1e2e] bg-black text-white/70 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer"
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] text-white/60 hover:text-white border border-white/[0.08] hover:bg-white/[0.1] transition-all cursor-pointer"
           >
-            <X size={14} />
+            <X size={13} />
           </button>
         </div>
       </div>
 
-      {/* Quick / Deep Reasoning Selector */}
-      <div className="non-draggable mt-2.5 flex items-center justify-between w-full p-1.5 rounded-none bg-black border-2 border-[#ff1e2e] shadow-[3px_3px_0px_#000]">
-        <span className="text-[10px] font-mono text-rose-400 px-2 tracking-widest uppercase font-black">
-          [ COGNITIVE MODE: ]
-        </span>
-        <div className="flex items-center space-x-1.5">
+      {/* Modern Minimalist Segmented Reasoning Selector */}
+      <div className="non-draggable mt-2.5 flex items-center justify-between w-full px-3 py-1.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+        <div className="flex items-center space-x-1.5 text-white/40 text-[11px] font-medium">
+          <Sparkles size={12} className="text-rose-400" />
+          <span>Cognitive Depth:</span>
+        </div>
+        <div className="flex items-center space-x-1 p-0.5 rounded-full bg-black/40 border border-white/[0.06]">
           {[1, 2, 3].map((lvl) => {
             const config = THINKING_LEVELS[lvl];
             const isActive = thinkingLevel === lvl;
@@ -185,15 +185,15 @@ export default function Header({
                   onThinkingLevelChange?.(lvl);
                 }}
                 title={config.desc}
-                className={`px-3 py-1 rounded-none text-xs font-mono uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all duration-200 flex items-center space-x-1.5 cursor-pointer ${
                   isActive
-                    ? 'brutal-btn-solid border-2 border-black shadow-[2px_2px_0px_#fff] font-black'
-                    : 'bg-black text-white/70 border-2 border-neutral-800 hover:border-neutral-500 shadow-[2px_2px_0px_#000]'
+                    ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-[0_2px_12px_rgba(244,63,94,0.35)] font-semibold'
+                    : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                <Icon size={12} className={isActive ? 'text-black' : 'text-rose-400'} />
+                <Icon size={11} className={isActive ? 'text-white' : 'text-stone-400'} />
                 <span>
-                  [ {lvl === 1 ? 'FAST' : lvl === 2 ? 'BALANCED' : 'DEEP'} ]
+                  {lvl === 1 ? 'Fast' : lvl === 2 ? 'Balanced' : 'Deep'}
                 </span>
               </button>
             );
@@ -203,16 +203,16 @@ export default function Header({
 
       {/* Security Context & Permission Unblock Modal */}
       {showSecurityModal && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative w-full max-w-md bg-[#090a0d] border-[3px] border-[#ff1e2e] rounded-none p-5 shadow-[6px_6px_0px_#000,6px_6px_0px_#ff1e2e] text-left space-y-4">
-            <div className="flex items-center justify-between border-b-2 border-neutral-800 pb-3">
-              <div className="flex items-center space-x-2 text-rose-400 font-mono font-black text-sm uppercase">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="relative w-full max-w-md bg-[#0e1017]/95 border border-white/[0.12] rounded-3xl p-6 shadow-2xl text-left space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center space-x-2 text-rose-400 font-semibold text-sm">
                 <ShieldAlert size={16} />
-                <span>[ UNBLOCK CAMERA & SCREEN SHARING ]</span>
+                <span>Permission Configuration</span>
               </div>
               <button
                 onClick={() => setShowSecurityModal(false)}
-                className="brutal-btn rounded-none text-xs px-2 py-0.5 border-2 border-neutral-700 hover:border-rose-500"
+                className="w-7 h-7 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
               >
                 ✕
               </button>

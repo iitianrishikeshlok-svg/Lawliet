@@ -59,19 +59,19 @@ export default function HistoryTab({ onRestoreChat, theme }) {
   });
 
   return (
-    <div className="flex flex-col w-full h-full p-3.5 overflow-hidden select-none space-y-3 font-mono">
+    <div className="flex flex-col w-full h-full p-4 overflow-hidden select-none space-y-3.5">
       {/* Search & Export Header */}
-      <div className="flex flex-col space-y-2 p-3 rounded-none bg-[#090a0d] border-2 border-stone-800 shadow-[3px_3px_0px_#000]">
+      <div className="flex flex-col space-y-2.5 p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-lg">
         <div className="flex items-center space-x-2">
           {/* Search Bar */}
           <div className="relative flex-1 flex items-center">
-            <Search size={13} className="absolute left-2.5 text-stone-500" />
+            <Search size={13} className="absolute left-3 text-white/40" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search past inquiries & code..."
-              className="w-full brutal-input text-xs text-white pl-8 pr-3 py-1.5 rounded-none border-2 border-neutral-700 focus:border-[#ff1e2e] outline-none font-mono"
+              className="w-full bg-white/[0.04] text-xs text-white pl-9 pr-3 py-1.5 rounded-full border border-white/[0.08] focus:border-rose-500/40 outline-none"
             />
           </div>
 
@@ -79,17 +79,17 @@ export default function HistoryTab({ onRestoreChat, theme }) {
           <button
             onClick={() => handleExport('markdown')}
             title="Export as Markdown"
-            className="brutal-btn rounded-none !text-xs !py-1.5 !px-3 border-2 border-neutral-700 bg-black text-white/80 hover:text-white shadow-[2px_2px_0px_#000] cursor-pointer flex items-center space-x-1 uppercase"
+            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] hover:bg-white/[0.08] text-white/80 hover:text-white border border-white/[0.1] transition-all cursor-pointer shadow-sm"
           >
             <Download size={12} />
-            <span>[ EXPORT ]</span>
+            <span>Export</span>
           </button>
 
           {historyItems.length > 0 && (
             <button
               onClick={handleClearAll}
               title="Clear Vault"
-              className="p-1.5 rounded-none border-2 border-neutral-700 hover:border-[#ff1e2e] bg-black text-white/50 hover:text-rose-400 shadow-[2px_2px_0px_#000] transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/40 hover:text-rose-400 border border-white/[0.08] transition-colors cursor-pointer"
             >
               <Trash2 size={13} />
             </button>
@@ -97,61 +97,61 @@ export default function HistoryTab({ onRestoreChat, theme }) {
         </div>
 
         {/* Filter Badges */}
-        <div className="flex items-center justify-between text-[10px] text-white/50 pt-1.5 border-t border-neutral-800">
+        <div className="flex items-center justify-between text-[11px] text-white/50 pt-2 border-t border-white/[0.06]">
           <div className="flex items-center space-x-1.5">
             <button
               onClick={() => setFilterType('all')}
-              className={`px-2.5 py-0.5 rounded-none font-mono uppercase font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                 filterType === 'all'
-                  ? 'bg-[#ff1e2e] text-black border-2 border-black shadow-[2px_2px_0px_#fff]'
-                  : 'bg-black text-stone-400 border border-neutral-800 hover:border-neutral-500 hover:text-white'
+                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-sm'
+                  : 'text-white/50 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
-              [ ALL LOGS ({historyItems.length}) ]
+              All Logs ({historyItems.length})
             </button>
             <button
               onClick={() => setFilterType('images')}
-              className={`px-2.5 py-0.5 rounded-none font-mono uppercase font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                 filterType === 'images'
-                  ? 'bg-[#ff1e2e] text-black border-2 border-black shadow-[2px_2px_0px_#fff]'
-                  : 'bg-black text-stone-400 border border-neutral-800 hover:border-neutral-500 hover:text-white'
+                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-sm'
+                  : 'text-white/50 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
-              [ WITH VISUALS ]
+              With Visuals
             </button>
           </div>
-          <span className="font-mono text-stone-500 uppercase font-bold">[ VAULT STORAGE ]</span>
+          <span className="text-[10px] text-white/40">Vault Storage</span>
         </div>
       </div>
 
       {/* History Items Scroll List */}
-      <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+      <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
         {filteredItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 text-center text-stone-500 space-y-2 border-2 border-dashed border-neutral-800 p-6">
-            <History size={28} className="text-stone-600 mb-1" />
-            <p className="text-xs font-mono uppercase font-bold">[ NO VAULT RECORDS FOUND ]</p>
+          <div className="flex flex-col items-center justify-center h-48 text-center text-white/40 space-y-2 border border-dashed border-white/10 rounded-2xl p-6 bg-white/[0.01]">
+            <History size={26} className="text-white/20 mb-1" />
+            <p className="text-xs">No records found in history vault</p>
           </div>
         ) : (
           filteredItems.map((item) => (
             <div
               key={item.id}
               onClick={() => onRestoreChat(item)}
-              className="p-3.5 rounded-none bg-[#090a0d] border-2 border-neutral-800 hover:border-[#ff1e2e] shadow-[3px_3px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer group space-y-2 font-mono"
+              className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.07] hover:border-rose-500/30 transition-all cursor-pointer group space-y-2 shadow-sm"
             >
               {/* Card Meta Row */}
-              <div className="flex items-center justify-between text-[10px] text-stone-400">
-                <span className="font-mono text-stone-400 font-bold uppercase">
-                  [ {item.timestamp ? new Date(item.timestamp).toLocaleTimeString() : 'JUST NOW'} ]
+              <div className="flex items-center justify-between text-[11px] text-white/40">
+                <span>
+                  {item.timestamp ? new Date(item.timestamp).toLocaleTimeString() : 'Just now'}
                 </span>
                 <div className="flex items-center space-x-1.5">
                   {item.latency && (
-                    <span className="font-mono px-1.5 py-0.5 rounded-none bg-black text-emerald-400 border border-emerald-500 font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
                       {item.latency}
                     </span>
                   )}
                   {item.thinkingLevel && (
-                    <span className="font-mono px-1.5 py-0.5 rounded-none bg-black text-indigo-300 border border-indigo-500 font-bold">
-                      LVL {item.thinkingLevel}
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-[10px]">
+                      Lvl {item.thinkingLevel}
                     </span>
                   )}
                   <button
@@ -160,14 +160,14 @@ export default function HistoryTab({ onRestoreChat, theme }) {
                       handleCopyMarkdown(item);
                     }}
                     title="Copy Markdown"
-                    className="p-1 rounded-none border border-neutral-800 hover:border-white text-stone-400 hover:text-white"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.08]"
                   >
                     {copiedId === item.id ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
                   </button>
                   <button
                     onClick={(e) => handleDeleteItem(item.id, e)}
                     title="Delete Record"
-                    className="p-1 rounded-none border border-neutral-800 hover:border-rose-500 text-stone-400 hover:text-rose-400"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white/40 hover:text-rose-400 hover:bg-white/[0.08]"
                   >
                     <Trash2 size={11} />
                   </button>
@@ -175,19 +175,19 @@ export default function HistoryTab({ onRestoreChat, theme }) {
               </div>
 
               {/* Prompt and Thumbnail */}
-              <div className="flex items-start space-x-2.5">
+              <div className="flex items-start space-x-3">
                 {item.imageDataUrl && (
                   <img
                     src={item.imageDataUrl}
                     alt="Context"
-                    className="w-12 h-12 rounded-none object-cover border-2 border-[#ff1e2e] shadow-sm shrink-0"
+                    className="w-12 h-12 rounded-xl object-cover border border-white/10 shadow-sm shrink-0"
                   />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-white line-clamp-2 uppercase">
-                    {item.prompt || item.query || '[ VISUAL ANALYSIS ]'}
+                  <p className="text-xs font-medium text-white line-clamp-2">
+                    {item.prompt || item.query || 'Visual Analysis'}
                   </p>
-                  <p className="text-[11px] text-stone-400 font-sans line-clamp-2 mt-1">
+                  <p className="text-[11px] text-white/50 line-clamp-2 mt-1">
                     {item.response || item.text || ''}
                   </p>
                 </div>
