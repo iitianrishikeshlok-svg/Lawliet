@@ -50,6 +50,10 @@ class SoundEngine {
     }
   }
 
+  playLaser() {
+    this.playClick();
+  }
+
   playExpand() {
     if (!this.enabled) return;
     try {

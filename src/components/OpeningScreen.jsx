@@ -247,14 +247,17 @@ export default function OpeningScreen({ onInitialize, theme }) {
     if (isOpeningBook) return;
 
     // 1. MUST MUTE background video audio immediately when clicking icon
-    if (bgAudioRef.current) {
-      bgAudioRef.current.pause();
-      setIsAudioMuted(true);
-    }
+    try {
+      if (bgAudioRef.current) {
+        bgAudioRef.current.pause();
+        setIsAudioMuted(true);
+      }
+    } catch {}
 
-    // 2. Play synthesized Ryuk theme bells and authentic Death Note chime
-    audio.playRyukTheme();
-    audio.playLaser();
+    // 2. Play synthesized Ryuk theme bells and authentic Death Note chime safely
+    try {
+      audio.playRyukTheme?.();
+    } catch {}
 
     // 3. Trigger 3D Physical Death Note book opening sequence (NO logo shown over book)
     setIsOpeningBook(true);
