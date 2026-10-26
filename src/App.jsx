@@ -342,6 +342,14 @@ export default function App() {
       });
     } catch (err) {
       console.error('[App] Generation error:', err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: `⚠️ **[L-OS Diagnostic Alert]**: ${err?.message || 'Failed to process request.'}\n\n*Tip: Check that a valid Gemini API key is configured in the **Settings** tab.*`,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
     } finally {
       setIsThinking(false);
     }

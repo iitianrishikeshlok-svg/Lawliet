@@ -423,4 +423,23 @@ class SoundEngine {
   }
 }
 
-export const audio = new SoundEngine();
+const rawAudio = new SoundEngine();
+
+export const audio = new Proxy(rawAudio, {
+  get(target, prop) {
+    if (prop in target) {
+      const val = target[prop];
+      return typeof val === 'function' ? val.bind(target) : val;
+    }
+    // Safe fallback for any unknown play* sound method to prevent runtime crashes
+    if (typeof prop === 'string' && prop.startsWith('play')) {
+      return () => {
+        try {
+          target.playClick();
+        } catch {}
+      };
+    }
+    return () => {};
+  },
+});
+

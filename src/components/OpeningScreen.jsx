@@ -681,19 +681,19 @@ export default function OpeningScreen({ onInitialize, theme }) {
         {/* Primary Instruction & Subtitle */}
         <div className="flex flex-col items-center space-y-2.5 z-30 w-full">
           <button
-            onClick={handleLogoClick}
-            disabled={isOpeningBook}
+            onClick={isOpeningBook ? () => onInitialize?.() : handleLogoClick}
             className={`brutal-btn text-xs sm:text-sm uppercase tracking-[0.2em] font-mono font-black transition-all cursor-pointer flex items-center justify-center space-x-2.5 px-8 py-3.5 rounded-none border-2 border-[#ff1e2e] bg-black text-white w-auto max-w-[90vw] ${
               isOpeningBook
-                ? 'shadow-[2px_2px_0px_#ff1e2e] bg-[#1a0004]'
+                ? 'shadow-[3px_3px_0px_#ff1e2e] bg-[#1a0004] hover:bg-[#ff1e2e] hover:text-black'
                 : 'shadow-[6px_6px_0px_#ff1e2e] hover:shadow-[8px_8px_0px_#ffffff] active:translate-x-1 active:translate-y-1 active:shadow-[1px_1px_0px_#ff1e2e]'
             }`}
+            title={isOpeningBook ? 'Click to skip straight to assistant' : 'Click to initialize'}
           >
             {isOpeningBook ? (
               <>
                 <span className="w-2.5 h-2.5 rounded-none bg-rose-500 animate-ping shadow-[0_0_10px_#ff1e2e] shrink-0" />
                 <span className="font-mono text-rose-200 tracking-wider text-[11px] sm:text-xs font-bold">
-                  [ 📖 DEATH NOTE OPENED // INITIALIZING ASSISTANT... ]
+                  [ 📖 DEATH NOTE OPENED // CLICK TO ENTER ► ]
                 </span>
               </>
             ) : (
