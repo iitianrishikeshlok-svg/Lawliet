@@ -146,7 +146,7 @@ export default function CameraTab({ onSendToChat, theme }) {
   return (
     <div className="flex flex-col w-full h-full p-4 overflow-y-auto space-y-4 select-none">
       {/* Viewfinder Window */}
-      <div className="relative w-full aspect-video rounded-none overflow-hidden bg-black border-[3px] border-[#ff1e2e] shadow-[6px_6px_0px_#000,6px_6px_0px_#ff1e2e] flex items-center justify-center">
+      <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black/80 border border-white/[0.1] shadow-2xl flex items-center justify-center">
         {snapshot ? (
           isAnnotating ? (
             <AnnotationCanvas

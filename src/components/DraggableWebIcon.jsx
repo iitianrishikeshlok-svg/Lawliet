@@ -454,26 +454,26 @@ export default function DraggableWebIcon({
 
           {/* Hover Status Tag */}
           {isHovered && !isDragging && !radialOpen && (
-            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black border-2 border-[#ff1e2e] px-2 py-0.5 rounded-none text-[9.5px] text-white whitespace-nowrap shadow-[3px_3px_0px_#000] font-mono font-bold uppercase pointer-events-none flex items-center space-x-1 z-50">
-              <span className="text-rose-400 font-black">[ CLICK ]</span>
-              <span>CIRCULAR MENU</span>
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-xl border border-white/[0.12] px-3 py-0.5 rounded-full text-[10px] text-white whitespace-nowrap shadow-xl font-sans font-medium pointer-events-none flex items-center space-x-1.5 z-50">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <span>Click for Menu</span>
             </div>
           )}
         </div>
       </div>
 
       {/* Discreet Bottom Bar Controls in Standalone Mode */}
-      <div className="absolute bottom-3 right-4 pointer-events-auto flex items-center space-x-2 text-[11px] font-mono z-40">
+      <div className="absolute bottom-4 right-5 pointer-events-auto flex items-center space-x-2.5 text-[11px] font-sans z-40">
         {onReopenIntro && (
           <button
             onClick={() => {
               audio.playClick();
               onReopenIntro();
             }}
-            className="brutal-btn rounded-none text-[10px] !py-1 !px-2.5 border-2 border-neutral-700 hover:border-[#ff1e2e] bg-black text-stone-300 shadow-[2px_2px_0px_#000] uppercase font-mono cursor-pointer"
+            className="px-3.5 py-1.5 rounded-full text-[11px] font-medium bg-black/40 hover:bg-white/[0.08] text-neutral-300 border border-white/[0.08] backdrop-blur-xl transition-all cursor-pointer flex items-center space-x-1.5 hover:text-white"
             title="Replay Cinematic Opening Screen"
           >
-            [ REPLAY INTRO ]
+            <span>Replay Intro</span>
           </button>
         )}
         <button
@@ -481,10 +481,10 @@ export default function DraggableWebIcon({
             audio.playClick();
             onExpand?.();
           }}
-          className="brutal-btn-solid rounded-none text-[10px] !py-1 !px-3 border-2 border-black shadow-[2px_2px_0px_#ffffff] flex items-center space-x-1.5 uppercase font-mono cursor-pointer"
+          className="px-4 py-1.5 rounded-full text-[11px] font-medium bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white shadow-lg shadow-rose-950/40 border border-rose-400/20 transition-all cursor-pointer flex items-center space-x-1.5"
           title="Open Full Assistant Window"
         >
-          <span className="font-black text-black">[ OPEN FULL ASSISTANT ]</span>
+          <span className="font-semibold">Open Full Assistant</span>
         </button>
       </div>
     </div>

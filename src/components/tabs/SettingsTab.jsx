@@ -55,21 +55,21 @@ export default function SettingsTab({
   };
 
   return (
-    <div className="flex flex-col w-full h-full p-4 overflow-y-auto space-y-4 select-none text-xs text-[#f1f2f4] font-mono">
+    <div className="flex flex-col w-full h-full p-4 overflow-y-auto space-y-4 select-none text-xs text-[#f1f2f4] font-sans">
       {/* 1. FLOATING ICON CONFIGURATION */}
-      <div className="flex flex-col space-y-3 p-3.5 rounded-none bg-[#090a0d] border-2 border-stone-800 shadow-[3px_3px_0px_#000]">
-        <div className="flex items-center justify-between border-b-2 border-neutral-800 pb-2">
-          <span className="font-black text-rose-400 uppercase tracking-widest text-[11px]">
-            [ FLOATING ICON PREFERENCES ]
+      <div className="flex flex-col space-y-3.5 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl shadow-lg">
+        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5">
+          <span className="font-semibold text-rose-400 uppercase tracking-wider text-[11px]">
+            Floating Icon Preferences
           </span>
-          <span className="text-[10px] text-stone-500 uppercase font-bold">[ NATIVE WINDOW ]</span>
+          <span className="text-[10px] text-white/40 uppercase font-medium">Native Window</span>
         </div>
 
         {/* State Toggle: Visible vs Disabled */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-white font-bold uppercase">[ ICON MODE ]</div>
-            <div className="text-[10px] text-stone-400">Show persistent icon on desktop</div>
+            <div className="text-white font-medium">Desktop Icon Mode</div>
+            <div className="text-[10px] text-white/50">Show persistent icon on desktop</div>
           </div>
           <button
             onClick={() => {
@@ -77,24 +77,24 @@ export default function SettingsTab({
               const next = iconState === 'disabled' ? 'visible' : 'disabled';
               onIconStateChange?.(next);
             }}
-            className={`px-3 py-1 rounded-none text-[11px] font-mono uppercase font-bold border-2 transition-all cursor-pointer ${
+            className={`px-3.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
               iconState !== 'disabled'
-                ? 'bg-[#ff1e2e] text-black border-black shadow-[2px_2px_0px_#fff] font-black'
-                : 'bg-black text-stone-400 border-neutral-800 shadow-[2px_2px_0px_#000]'
+                ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md shadow-rose-950/40 border border-rose-400/20'
+                : 'bg-white/[0.04] text-white/50 border border-white/[0.08] hover:text-white'
             }`}
           >
-            {iconState !== 'disabled' ? '[ ENABLED ]' : '[ DISABLED ]'}
+            {iconState !== 'disabled' ? 'Enabled' : 'Disabled'}
           </button>
         </div>
 
         {/* Size Selection */}
         <div className="flex items-center justify-between">
-          <span className="text-stone-300 font-bold uppercase">[ ICON SIZE ]</span>
+          <span className="text-white/80 font-medium">Icon Size</span>
           <div className="flex items-center space-x-1.5">
             {[
-              { label: '[ 44PX ]', val: 44 },
-              { label: '[ 52PX ]', val: 52 },
-              { label: '[ 60PX ]', val: 60 },
+              { label: '44px', val: 44 },
+              { label: '52px', val: 52 },
+              { label: '60px', val: 60 },
             ].map((s) => (
               <button
                 key={s.val}
@@ -102,10 +102,10 @@ export default function SettingsTab({
                   audio.playClick();
                   onIconSizeChange?.(s.val);
                 }}
-                className={`px-2 py-0.5 rounded-none text-[10px] font-mono font-bold uppercase border-2 transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-full text-[10px] font-medium border transition-all cursor-pointer ${
                   iconSize === s.val
-                    ? 'bg-[#ff1e2e] text-black border-black shadow-[2px_2px_0px_#fff]'
-                    : 'bg-black text-stone-400 border-neutral-800 shadow-[1px_1px_0px_#000]'
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                    : 'bg-white/[0.02] text-white/50 border-white/[0.08] hover:border-white/20'
                 }`}
               >
                 {s.label}
@@ -268,16 +268,16 @@ export default function SettingsTab({
       </div>
 
       {/* 3. GEMINI API CONFIGURATION */}
-      <div className="flex flex-col space-y-3 p-3.5 rounded-none bg-[#090a0d] border-2 border-stone-800 shadow-[3px_3px_0px_#000]">
-        <div className="flex items-center justify-between border-b-2 border-neutral-800 pb-2">
-          <span className="font-black text-rose-400 uppercase tracking-widest text-[11px]">
-            [ GOOGLE GEMINI API ]
+      <div className="flex flex-col space-y-3.5 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl shadow-lg">
+        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5">
+          <span className="font-semibold text-rose-400 uppercase tracking-wider text-[11px]">
+            Google Gemini API
           </span>
           <a
             href="https://aistudio.google.com/app/apikey"
             target="_blank"
             rel="noreferrer"
-            className="text-[10px] text-rose-400 hover:underline font-medium"
+            className="text-[11px] text-rose-400 hover:text-rose-300 font-medium transition-colors"
           >
             Get Free API Key ↗
           </a>

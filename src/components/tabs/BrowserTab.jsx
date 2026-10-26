@@ -458,15 +458,15 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
             {/* Presets and Channel Badges */}
             <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar pt-0.5">
-              <span className="text-[10px] text-stone-500 font-mono font-bold uppercase shrink-0">[ PRESETS: ]</span>
+              <span className="text-[10px] text-white/40 uppercase font-medium shrink-0">Presets:</span>
               {YOUTUBE_PRESETS.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => loadPresetVideo(p)}
-                  className={`px-2.5 py-0.5 rounded-none font-mono uppercase text-[10px] font-bold transition-all shrink-0 cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all shrink-0 cursor-pointer ${
                     activeYouTubeId === p.id && !searchQuery
-                      ? 'bg-[#ff1e2e] text-black border-2 border-black shadow-[2px_2px_0px_#fff]'
-                      : 'bg-black text-stone-400 border border-neutral-800 hover:border-neutral-500 hover:text-white shadow-[1px_1px_0px_#000]'
+                      ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md shadow-rose-950/40 border border-rose-400/20'
+                      : 'bg-white/[0.03] text-white/60 border border-white/[0.08] hover:border-white/20 hover:text-white'
                   }`}
                 >
                   {p.tag}
@@ -485,7 +485,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
                   else window.history.back?.();
                 }}
                 disabled={!canGoBack && isElectron}
-                className="p-1.5 rounded-none border-2 border-neutral-800 hover:border-[#ff1e2e] bg-black text-white/70 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] disabled:opacity-20 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 disabled:opacity-20 transition-colors cursor-pointer"
                 title="Go Back"
               >
                 <ArrowLeft size={13} />
@@ -498,7 +498,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
                   else window.history.forward?.();
                 }}
                 disabled={!canGoForward && isElectron}
-                className="p-1.5 rounded-none border-2 border-neutral-800 hover:border-[#ff1e2e] bg-black text-white/70 hover:text-white shadow-[2px_2px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] disabled:opacity-20 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 disabled:opacity-20 transition-colors cursor-pointer"
                 title="Go Forward"
               >
                 <ArrowRight size={13} />
@@ -566,10 +566,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
                         }
                       }
                     }}
-                    className={`px-2.5 py-1 rounded-none text-[10px] font-mono uppercase font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all shrink-0 cursor-pointer ${
                       (!isYouTube && currentUrl.includes(bm.url)) || (isYouTube && bm.isYT)
-                        ? 'bg-[#ff1e2e] text-black border-2 border-black shadow-[2px_2px_0px_#ffffff] font-black'
-                        : 'bg-black text-stone-400 border border-neutral-800 hover:border-[#ff1e2e] hover:text-white shadow-[1px_1px_0px_#000]'
+                        ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md shadow-rose-950/40 border border-rose-400/20'
+                        : 'bg-white/[0.03] text-white/60 border border-white/[0.08] hover:border-white/20 hover:text-white'
                     }`}
                   >
                     {bm.label}
@@ -579,7 +579,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
               {/* Window Opacity Slider */}
               <div className="flex items-center space-x-1.5 shrink-0 pl-2">
-                <span className="text-[9px] font-mono text-stone-500 uppercase font-bold">OPACITY:</span>
+                <span className="text-[9px] text-white/40 uppercase font-medium">Opacity:</span>
                 <input
                   type="range"
                   min="0.2"
@@ -587,10 +587,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
                   step="0.05"
                   value={pinOpacity}
                   onChange={(e) => setPinOpacity(parseFloat(e.target.value))}
-                  className="w-14 h-1 accent-[#ff1e2e] cursor-pointer"
+                  className="w-14 h-1 accent-rose-500 cursor-pointer"
                   title={`Overlay Opacity: ${Math.round(pinOpacity * 100)}%`}
                 />
-                <span className="text-[9px] font-mono text-rose-400 font-bold w-6">
+                <span className="text-[9px] font-mono text-rose-400 font-medium w-6">
                   {Math.round(pinOpacity * 100)}%
                 </span>
               </div>
@@ -601,7 +601,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
       {/* Main Viewport Container */}
       <div
-        className="flex-1 w-full h-full min-h-0 rounded-none overflow-hidden border-2 border-black bg-[#08080a] shadow-[4px_4px_0px_#000,4px_4px_0px_#ff1e2e] relative transition-opacity duration-200 flex flex-col"
+        className="flex-1 w-full h-full min-h-0 rounded-3xl overflow-hidden border border-white/[0.08] bg-[#08080a]/90 backdrop-blur-2xl shadow-2xl relative transition-opacity duration-200 flex flex-col"
         style={{ opacity: pinOpacity }}
       >
         {isYouTube ? (
@@ -623,39 +623,39 @@ export default function BrowserTab({ onSendToChat, theme }) {
               />
             </div>
 
-            {/* Complete Media Controls Bar (Maximalist Cyber-Gothic) */}
-            <div className="flex items-center justify-between px-3 py-2 bg-black border-t-2 border-[#ff1e2e] text-xs select-none">
+            {/* Modern Minimalist Media Controls Bar */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-black/60 backdrop-blur-xl border-t border-white/[0.08] text-xs select-none">
               {/* Left: Playback buttons */}
-              <div className="flex items-center space-x-1.5">
+              <div className="flex items-center space-x-2">
                 {/* Play / Pause Toggle */}
                 <button
                   onClick={togglePlayPause}
-                  className="p-1.5 rounded-none bg-[#ff1e2e] text-black font-black border border-black shadow-[2px_2px_0px_#ffffff] hover:bg-rose-400 transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-tr from-rose-500 to-rose-600 text-white shadow-md shadow-rose-950/40 border border-rose-400/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                   title={isPlaying ? 'Pause Video' : 'Play Video'}
                 >
-                  {isPlaying ? <Pause size={13} className="stroke-[3]" /> : <Play size={13} className="stroke-[3]" />}
+                  {isPlaying ? <Pause size={12} className="stroke-[2.5]" /> : <Play size={12} className="stroke-[2.5] ml-0.5" />}
                 </button>
 
                 {/* Restart */}
                 <button
                   onClick={restartVideo}
-                  className="p-1.5 rounded-none bg-black text-stone-300 border border-neutral-800 hover:border-white transition-colors cursor-pointer"
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
                   title="Restart Video from Beginning"
                 >
-                  <RotateCcw size={12} />
+                  <RotateCcw size={11} />
                 </button>
 
                 {/* Seek -10s / +10s */}
                 <button
                   onClick={() => seekRelative(-10)}
-                  className="px-2 py-1 rounded-none text-[10px] font-mono font-bold text-stone-300 hover:text-white bg-black border border-neutral-800 hover:border-[#ff1e2e] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-full text-[10px] font-medium text-white/70 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors cursor-pointer"
                   title="Rewind 10 seconds"
                 >
                   -10s
                 </button>
                 <button
                   onClick={() => seekRelative(10)}
-                  className="px-2 py-1 rounded-none text-[10px] font-mono font-bold text-stone-300 hover:text-white bg-black border border-neutral-800 hover:border-[#ff1e2e] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-full text-[10px] font-medium text-white/70 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors cursor-pointer"
                   title="Forward 10 seconds"
                 >
                   +10s
@@ -663,20 +663,20 @@ export default function BrowserTab({ onSendToChat, theme }) {
               </div>
 
               {/* Center: Video Title / Status */}
-              <div className="flex items-center space-x-2 truncate max-w-[280px] px-2 text-[11px] font-mono text-stone-300">
-                <span className="w-2 h-2 rounded-none bg-rose-500 animate-pulse shrink-0 shadow-[0_0_6px_#ff1e2e]" />
-                <span className="truncate font-bold text-white">{activeYouTubeTitle}</span>
+              <div className="flex items-center space-x-2 truncate max-w-[280px] px-2 text-[11px] text-white/80">
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0" />
+                <span className="truncate font-medium">{activeYouTubeTitle}</span>
               </div>
 
               {/* Right: Audio & Screen Controls */}
-              <div className="flex items-center space-x-2.5">
+              <div className="flex items-center space-x-2">
                 {/* Mute Button */}
                 <button
                   onClick={toggleMute}
-                  className="p-1 rounded-none bg-black text-stone-300 border border-neutral-800 hover:border-[#ff1e2e] transition-colors cursor-pointer"
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
                   title={isMuted ? 'Unmute' : 'Mute'}
                 >
-                  {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                  {isMuted ? <VolumeX size={12} /> : <Volume2 size={12} />}
                 </button>
 
                 {/* Volume Slider */}
@@ -687,10 +687,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
                     max="100"
                     value={isMuted ? 0 : volume}
                     onChange={handleVolumeChange}
-                    className="w-16 h-1 accent-[#ff1e2e] cursor-pointer"
+                    className="w-14 h-1 accent-rose-500 cursor-pointer"
                     title={`Volume: ${isMuted ? 0 : volume}%`}
                   />
-                  <span className="text-[10px] font-mono text-rose-400 font-bold w-6">
+                  <span className="text-[10px] font-mono text-white/50 w-6">
                     {isMuted ? '0%' : `${volume}%`}
                   </span>
                 </div>
@@ -699,7 +699,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
                 <select
                   value={playbackSpeed}
                   onChange={handleSpeedChange}
-                  className="bg-black text-[10px] font-mono text-white border-2 border-neutral-800 rounded-none px-1.5 py-0.5 outline-none cursor-pointer"
+                  className="bg-black/50 text-[10px] font-medium text-white border border-white/10 rounded-full px-2 py-0.5 outline-none cursor-pointer"
                   title="Playback Speed"
                 >
                   <option value="0.5">0.5x</option>
@@ -712,10 +712,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
                 {/* Fullscreen Button */}
                 <button
                   onClick={toggleFullscreen}
-                  className="p-1.5 rounded-none bg-black text-stone-300 border border-neutral-800 hover:border-white transition-colors cursor-pointer"
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
                   title="Toggle Fullscreen"
                 >
-                  <Maximize2 size={12} />
+                  <Maximize2 size={11} />
                 </button>
               </div>
             </div>
