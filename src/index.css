@@ -1,0 +1,617 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --theme-bg: #141518;
+  --theme-bg-glass: rgba(20, 21, 24, 0.92);
+  --theme-card: #1b1c21;
+  --theme-card-glass: rgba(27, 28, 33, 0.88);
+  --theme-input: #121316;
+  --theme-border: rgba(255, 255, 255, 0.08);
+  --theme-border-subtle: rgba(255, 255, 255, 0.04);
+  --theme-border-focus: rgba(255, 255, 255, 0.20);
+  --theme-text-primary: #f1f2f4;
+  --theme-text-secondary: #8b909a;
+  --theme-text-muted: #5e636e;
+  --theme-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --theme-shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --theme-accent: #3b82f6;
+  --theme-accent-glow: rgba(59, 130, 246, 0.25);
+  --theme-accent-hover: #2563eb;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #0c0d10;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--theme-text-primary);
+  letter-spacing: -0.01em;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+body.electron-transparent {
+  background-color: transparent !important;
+}
+
+/* Electron Window Drag Regions */
+.draggable {
+  -webkit-app-region: drag;
+}
+
+.non-draggable {
+  -webkit-app-region: no-drag;
+}
+
+/* Purposeful, Refined Panel Surface */
+.utility-panel {
+  background: var(--theme-bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+.utility-card {
+  background: var(--theme-card);
+  border: 1px solid var(--theme-border-subtle);
+  border-radius: 8px;
+}
+
+.utility-card-hover:hover {
+  border-color: var(--theme-border);
+  background: var(--theme-card-glass);
+}
+
+.utility-input {
+  background: var(--theme-input);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text-primary);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.utility-input:focus {
+  border-color: var(--theme-accent);
+  box-shadow: 0 0 0 1px var(--theme-accent);
+}
+
+/* ========================================================================== */
+/* BRUTALIST & NEO-BRUTALIST DESIGN SYSTEM                                     */
+/* ========================================================================== */
+.brutal-panel {
+  background: #0c0d11;
+  border: 3px solid #000000;
+  box-shadow: 6px 6px 0px #000000, 6px 6px 0px #ff1e2e;
+  border-radius: 0px;
+}
+
+.brutal-card {
+  background: #0f1015;
+  border: 2px solid #ff1e2e;
+  box-shadow: 4px 4px 0px #000000, 4px 4px 0px #ff1e2e;
+  border-radius: 0px;
+}
+
+.brutal-card-dark {
+  background: #090a0d;
+  border: 2px solid #27272a;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0px;
+}
+
+.brutal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ff1e2e;
+  box-shadow: 3px 3px 0px #ff1e2e;
+  border-radius: 0px;
+  transition: all 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.brutal-btn:hover {
+  background: rgba(255, 30, 46, 0.15);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #ff1e2e;
+}
+
+.brutal-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #ff1e2e;
+}
+
+.brutal-btn-solid {
+  background: #ff1e2e;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #ffffff;
+  font-weight: 900;
+}
+
+.brutal-btn-solid:hover {
+  background: #ff3344;
+  color: #000000;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #ffffff;
+}
+
+.brutal-btn-solid:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #ffffff;
+}
+
+.brutal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 2px solid #ff1e2e;
+  background: #000000;
+  color: #ffffff;
+  box-shadow: 3px 3px 0px #000000, 3px 3px 0px #ff1e2e;
+  border-radius: 0px;
+}
+
+.brutal-input {
+  background: #08090b;
+  border: 2px solid #27272a;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  border-radius: 0px;
+  box-shadow: 3px 3px 0px #000000;
+  transition: all 0.12s ease;
+}
+
+.brutal-input:focus {
+  border-color: #ff1e2e;
+  box-shadow: 4px 4px 0px #ff1e2e;
+  outline: none;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 145, 155, 0.2);
+  border-radius: 9999px;
+  transition: background 0.15s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 145, 155, 0.4);
+}
+
+/* CRT Scanline Effect for Vision Watcher */
+.scanline-grid {
+  background-size: 100% 4px;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.2) 50%
+  );
+}
+
+/* Capital L Monogram Display */
+.font-monogram {
+  font-family: 'Cinzel Decorative', Georgia, -apple-system, serif;
+}
+
+/* Selection and focus styling */
+input, textarea, pre, code, .selectable {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 1px;
+}
+
+/* L Logo Glow, Glitch & Entrance Animations */
+@keyframes logoBreathing {
+  0%, 100% {
+    filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.45)) drop-shadow(0 0 50px rgba(124, 58, 237, 0.35));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 40px rgba(225, 29, 72, 0.75)) drop-shadow(0 0 80px rgba(124, 58, 237, 0.55));
+    transform: scale(1.02);
+  }
+}
+
+.animate-logo-breathing {
+  animation: logoBreathing 4.5s ease-in-out infinite;
+}
+
+@keyframes logoEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-logo-entrance {
+  animation: logoEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Death Note Periodic Digital Glitch Twitch */
+@keyframes glitchTwitch {
+  0%, 82%, 100% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.5)) drop-shadow(0 0 50px rgba(124, 58, 237, 0.35));
+  }
+  83% {
+    transform: translate(-3px, 1px) skewX(-1.5deg);
+    filter: drop-shadow(-5px 0 0 rgba(255, 30, 80, 0.85)) drop-shadow(5px 0 0 rgba(0, 240, 255, 0.75));
+  }
+  84% {
+    transform: translate(4px, -2px) skewX(2deg);
+    filter: drop-shadow(5px 0 0 rgba(255, 30, 80, 0.85)) drop-shadow(-5px 0 0 rgba(0, 240, 255, 0.75));
+  }
+  85% {
+    transform: translate(-2px, 0);
+  }
+  86% {
+    transform: translate(0, 0);
+  }
+  92% {
+    transform: translate(2px, 1px);
+    filter: drop-shadow(-3px 0 0 rgba(255, 20, 80, 0.8)) drop-shadow(3px 0 0 rgba(0, 230, 255, 0.7));
+  }
+  93% {
+    transform: translate(0, 0);
+  }
+}
+
+.animate-glitch-twitch {
+  animation: glitchTwitch 3.8s ease-in-out infinite;
+}
+
+/* Intense Violent Glitch on Awakening */
+@keyframes violentGlitch {
+  0% {
+    transform: translate(0, 0) scale(1.05);
+    filter: drop-shadow(-8px 0 0 rgba(255, 0, 60, 0.9)) drop-shadow(8px 0 0 rgba(0, 255, 255, 0.85)) contrast(140%);
+  }
+  15% {
+    transform: translate(-6px, 3px) scale(1.08) skewX(-3deg);
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%, 0 70%, 100% 70%, 100% 100%, 0 100%);
+  }
+  30% {
+    transform: translate(6px, -4px) scale(1.06) skewX(4deg);
+    clip-path: polygon(0 15%, 100% 15%, 100% 50%, 0 50%, 0 85%, 100% 85%, 100% 100%, 0 100%);
+  }
+  45% {
+    transform: translate(-5px, 2px) scale(1.1);
+    filter: drop-shadow(10px 0 0 rgba(255, 0, 80, 0.95)) drop-shadow(-10px 0 0 rgba(0, 255, 230, 0.9)) brightness(130%);
+  }
+  60% {
+    transform: translate(4px, -2px) scale(1.09) skewX(-2deg);
+    clip-path: none;
+  }
+  75% {
+    transform: translate(-3px, 3px) scale(1.12);
+    filter: drop-shadow(-6px 0 0 rgba(255, 255, 255, 0.9)) drop-shadow(6px 0 0 rgba(255, 0, 60, 0.95));
+  }
+  90% {
+    transform: translate(2px, -1px) scale(1.14);
+  }
+  100% {
+    transform: translate(0, 0) scale(1.15);
+    filter: drop-shadow(0 0 60px rgba(255, 0, 60, 1)) drop-shadow(0 0 100px rgba(255, 255, 255, 0.9)) brightness(150%);
+  }
+}
+
+.animate-violent-glitch {
+  animation: violentGlitch 0.4s ease-in-out infinite alternate;
+}
+
+/* Eagle Glowing Fiery Eye Pulse */
+@keyframes eyeFlarePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+    box-shadow: 0 0 8px 3px rgba(255, 30, 60, 0.9), 0 0 20px 8px rgba(255, 0, 40, 0.6);
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+    box-shadow: 0 0 16px 6px rgba(255, 50, 80, 1), 0 0 32px 14px rgba(255, 0, 30, 0.85), 0 0 50px 20px rgba(255, 120, 0, 0.5);
+  }
+}
+
+.animate-eye-flare {
+  animation: eyeFlarePulse 2.2s ease-in-out infinite;
+}
+
+/* Wispy Crimson Eye Bleed Trail */
+@keyframes eyeBleedTrail {
+  0%, 100% {
+    transform: scaleX(1) translateX(0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scaleX(1.45) translateX(-5px);
+    opacity: 0.95;
+  }
+}
+
+.animate-eye-bleed {
+  animation: eyeBleedTrail 1.8s ease-in-out infinite;
+}
+
+/* Screen Camera Rumble During Awakening */
+@keyframes screenRumble {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-4px, 3px); }
+  20% { transform: translate(5px, -3px); }
+  30% { transform: translate(-3px, -2px); }
+  40% { transform: translate(4px, 3px); }
+  50% { transform: translate(-3px, 1px); }
+  60% { transform: translate(3px, -2px); }
+  70% { transform: translate(-2px, 3px); }
+  80% { transform: translate(2px, -1px); }
+  90% { transform: translate(-1px, 2px); }
+}
+
+.animate-screen-rumble {
+  animation: screenRumble 0.18s ease-in-out infinite;
+}
+
+/* Cybernetic Scanlines */
+.glitch-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.35) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.04),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.04)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+/* ================================================================ */
+/* 1. EAGLE WING MOTION & FLAPPING ANIMATION                         */
+/* ================================================================ */
+@keyframes wingFlapMotion {
+  0%, 100% {
+    transform: rotate(0deg) skewY(0deg) scale(1, 1);
+    transform-origin: 52% 64%;
+  }
+  25% {
+    transform: rotate(-4.2deg) skewY(-2.5deg) scale(1.035, 0.98);
+    transform-origin: 52% 64%;
+  }
+  50% {
+    transform: rotate(2.8deg) skewY(1.8deg) scale(0.98, 1.025);
+    transform-origin: 52% 64%;
+  }
+  75% {
+    transform: rotate(-1.8deg) skewY(-1.2deg) scale(1.015, 0.99);
+    transform-origin: 52% 64%;
+  }
+}
+
+.animate-wing-flap {
+  animation: wingFlapMotion 3.8s ease-in-out infinite;
+}
+
+/* Wing Feather Blade Gleam Sweep */
+@keyframes wingGleamSweep {
+  0%, 100% { opacity: 0.15; transform: translateX(-40%) skewX(-25deg); }
+  50% { opacity: 0.65; transform: translateX(50%) skewX(-25deg); }
+}
+
+.animate-wing-gleam {
+  animation: wingGleamSweep 4.2s ease-in-out infinite;
+}
+
+/* ================================================================ */
+/* 2. AFTER EFFECTS EDGE GLOW EFFECT (from 5DrAwuwFYtk)              */
+/* ================================================================ */
+@keyframes aeEdgeGlowPulse {
+  0%, 100% {
+    filter: 
+      drop-shadow(0 0 2px rgba(255, 255, 255, 0.95))
+      drop-shadow(0 0 8px rgba(255, 20, 60, 0.9))
+      drop-shadow(0 0 22px rgba(225, 29, 72, 0.7))
+      drop-shadow(0 0 45px rgba(139, 92, 246, 0.55))
+      drop-shadow(0 0 75px rgba(255, 0, 60, 0.35));
+    transform: scale(1);
+  }
+  50% {
+    filter: 
+      drop-shadow(0 0 4px rgba(255, 255, 255, 1))
+      drop-shadow(0 0 14px rgba(255, 40, 90, 1))
+      drop-shadow(0 0 35px rgba(244, 63, 94, 0.9))
+      drop-shadow(0 0 70px rgba(168, 85, 247, 0.8))
+      drop-shadow(0 0 110px rgba(255, 20, 80, 0.5));
+    transform: scale(1.015);
+  }
+}
+
+.ae-edge-glow {
+  animation: aeEdgeGlowPulse 3s ease-in-out infinite;
+}
+
+/* Traveling Electric Luminous Edge Beam */
+@keyframes electricBeamRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-edge-beam {
+  animation: electricBeamRotate 3.5s linear infinite;
+}
+
+/* ================================================================ */
+/* 3. DEATH NOTE OPEN SPREAD & RISING L ANIMATION                     */
+/* ================================================================ */
+/* 3D Death Note Open Spread (Zero Inversion - Upright & Readable) */
+@keyframes bookSpreadUnfold {
+  0% {
+    opacity: 0;
+    transform: perspective(1200px) rotateX(25deg) scale(0.75) translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
+  }
+}
+
+.animate-book-spread {
+  animation: bookSpreadUnfold 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Rising Obsidian & Brushed Silver Gothic L from the Pages */
+@keyframes letterRiseActivation {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) translateY(80px) translateZ(0);
+    filter: drop-shadow(0 0 10px rgba(225, 29, 72, 0.2));
+  }
+  40% {
+    opacity: 0.9;
+    transform: scale(0.85) translateY(10px) translateZ(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-35px) translateZ(70px);
+    filter: drop-shadow(0 0 35px rgba(244, 63, 94, 0.9)) drop-shadow(0 0 70px rgba(168, 85, 247, 0.75));
+  }
+}
+
+.animate-letter-rise {
+  animation: letterRiseActivation 1.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Rotating Magical Crimson-Violet Rune Rings */
+@keyframes runeRingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-rune-spin {
+  animation: runeRingSpin 18s linear infinite;
+}
+
+@keyframes runeRingCounterSpin {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-rune-counter-spin {
+  animation: runeRingCounterSpin 12s linear infinite;
+}
+
+/* Crackling Magical Lightning Electricity */
+@keyframes lightningSparkFlicker {
+  0%, 100% { opacity: 0.15; filter: drop-shadow(0 0 2px #fff); }
+  8% { opacity: 0.95; filter: drop-shadow(0 0 8px #ff2255) drop-shadow(0 0 16px #aa00ff); }
+  10% { opacity: 0.2; }
+  14% { opacity: 1; filter: drop-shadow(0 0 12px #fff) drop-shadow(0 0 25px #ff0055); }
+  18% { opacity: 0.1; }
+  55% { opacity: 0.85; filter: drop-shadow(0 0 6px #ff0055); }
+  58% { opacity: 0.1; }
+  72% { opacity: 0.9; filter: drop-shadow(0 0 10px #cc00ff); }
+  75% { opacity: 0.15; }
+}
+
+.animate-lightning-spark {
+  animation: lightningSparkFlicker 2.2s infinite;
+}
+
+/* Glowing Ryuk Red Eyes in Background Smoke */
+@keyframes ryukEyesGlow {
+  0%, 100% {
+    opacity: 0.65;
+    filter: drop-shadow(0 0 10px #ff0033) drop-shadow(0 0 25px #ff2200);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 20px #ff0022) drop-shadow(0 0 45px #ff4400) drop-shadow(0 0 70px #ff0066);
+    transform: scale(1.12);
+  }
+}
+
+.animate-ryuk-eyes {
+  animation: ryukEyesGlow 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-logo-breathing,
+  .animate-glitch-twitch,
+  .animate-violent-glitch,
+  .animate-eye-flare,
+  .animate-eye-bleed,
+  .animate-screen-rumble,
+  .animate-wing-flap,
+  .animate-wing-gleam,
+  .ae-edge-glow,
+  .animate-edge-beam,
+  .animate-deathnote-open,
+  .animate-deathnote-riser,
+  .animate-page-reveal,
+  .animate-book-spread,
+  .animate-letter-rise,
+  .animate-rune-spin,
+  .animate-rune-counter-spin,
+  .animate-lightning-spark,
+  .animate-ryuk-eyes {
+    animation: none !important;
+  }
+  .animate-logo-entrance {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+

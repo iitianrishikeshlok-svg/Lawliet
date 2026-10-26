@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L — Desktop Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #141518;
+      --bg-glass: rgba(20, 21, 24, 0.94);
+      --card: #1b1c21;
+      --card-glass: rgba(27, 28, 33, 0.90);
+      --input: #121316;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-subtle: rgba(255, 255, 255, 0.04);
+      --border-focus: rgba(255, 255, 255, 0.20);
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --text: #f1f2f4;
+      --text-muted: #8b909a;
+      --text-dim: #5e636e;
+      --shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0c0d0f;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+      letter-spacing: -0.01em;
+    }
+
+    input, textarea, pre, code, .selectable {
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
+
+    /* Desktop Background Simulation */
+    #desktop-backdrop {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 60% 40%, #171922 0%, #0a0b0e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .desktop-hint {
+      text-align: center;
+      opacity: 0.35;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .desktop-hint .large-l {
+      font-family: 'Cinzel Decorative', Georgia, serif;
+      font-size: 72px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.15);
+      margin-bottom: 8px;
+    }
+
+    /* ----------------------------------------------------
+       FLOATING ICON (Persistent Windows Desktop Window)
+       ---------------------------------------------------- */
+    #floating-icon-container {
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    #floating-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #16171b;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    #floating-icon:hover {
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 14px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    #floating-icon:active {
+      transform: scale(0.96);
+    }
+
+    #floating-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--text);
+      transition: fill 0.15s ease;
+    }
+
+    #floating-icon:hover svg {
+      fill: #ffffff;
+    }
+
+    /* Status indicator */
+    .icon-status-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      transition: background 0.15s ease;
+    }
+
+    #floating-icon:hover .icon-status-dot {
+      background: var(--accent);
+    }
+
+    /* First-run tooltip hint */
+    #icon-hint-toast {
+      background: #141518;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #icon-hint-toast span.shortcut {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+
+    /* Hidden state notification bar */
+    #restore-bar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #141518;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 1001;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      cursor: pointer;
+    }
+    #restore-bar:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* ----------------------------------------------------
+       ACTION MENU (7 Prioritized Quick Actions)
+       ---------------------------------------------------- */
+    #action-menu {
+      width: 230px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      position: fixed;
+      top: 92px;
+      right: 32px;
+      z-index: 1000;
+    }
+
+    .action-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: all 0.1s ease;
+    }
+
+    .action-item:hover, .action-item.selected {
+      background: rgba(255, 255, 255, 0.06);
+      border-left-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .action-item .left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-item .shortcut {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    /* ----------------------------------------------------
+       ASSISTANT PRODUCTIVITY PANEL (440x640)
+       ---------------------------------------------------- */
+    #assistant-panel {
+      width: 440px;
+      height: 640px;
+      border-radius: 14px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 900;
+    }
+
+    /* Header */
+    .assistant-header {
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.015);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-l {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Cinzel Decorative', Georgia, serif;
+      font-weight: 900;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .latency-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 5px;
+      font-size: 12px;
+      transition: all 0.15s ease;
+    }
+    .btn-icon:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Mode Selector (Tactile 3-Stage Thinking Slider) */
+    .mode-selector {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 2px 4px;
+      font-size: 11px;
+    }
+    .mode-label {
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding-left: 4px;
+    }
+    .mode-buttons {
+      display: flex;
+      gap: 2px;
+    }
+    .mode-btn {
+      background: none;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .mode-btn:hover {
+      color: var(--text);
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Navigation Dock */
+    .nav-dock {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 4px 8px;
+      background: #111215;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .dock-tab {
+      background: none;
+      border: none;
+      padding: 5px 9px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      white-space: nowrap;
+    }
+    .dock-tab:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .dock-tab.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    /* Tab Content Viewports */
+    .tab-viewport {
+      flex: 1;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+    }
+    .tab-viewport.active {
+      display: flex;
+    }
+
+    /* Chat View */
+    .chat-messages {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message-bubble {
+      max-width: 90%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .message-user {
+      align-self: flex-end;
+      background: #1e2129;
+      border: 1px solid var(--border);
+      color: #ffffff;
+    }
+    .message-assistant {
+      align-self: flex-start;
+      background: #15161b;
+      border: 1px solid var(--border-subtle);
+      color: var(--text);
+    }
+    .assistant-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+    }
+
+    /* Reasoning drawer */
+    .reasoning-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      overflow: hidden;
+    }
+    .reasoning-toggle {
+      padding: 4px 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .reasoning-content {
+      padding: 6px 8px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      border-top: 1px solid var(--border-subtle);
+      display: none;
+      white-space: pre-wrap;
+    }
+
+    /* Chat Input Bar */
+    .chat-input-bar {
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      background: #121316;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .attachment-preview {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-textarea {
+      flex: 1;
+      background: var(--input);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+      outline: none;
+      resize: none;
+      height: 34px;
+      font-family: inherit;
+    }
+    .chat-textarea:focus {
+      border-color: var(--accent);
+    }
+    .btn-send {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-send:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Standardized Tab Styles */
+    .tab-container {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 12px;
+    }
+    .tab-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .card-block {
+      background: var(--card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    /* Micro-animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeIn 0.15s ease forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Simulated Desktop Workspace Canvas -->
+  <div id="desktop-backdrop">
+    <div class="desktop-hint">
+      <div class="large-l">L</div>
+      <div><strong>L — Desktop Assistant</strong></div>
+      <div>Click the floating icon in the top right to hide. Right-click or use <kbd style="background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">Alt+L</kbd> to open.</div>
+    </div>
+  </div>
+
+  <!-- Hidden State Restore Notification -->
+  <div id="restore-bar" onclick="restoreIcon()">
+    <span>● L is currently hidden</span>
+    <span style="color:var(--accent);">Click or press Alt+L to restore</span>
+  </div>
+
+  <!-- Persistent Floating Icon Window Container -->
+  <div id="floating-icon-container">
+    <div id="floating-icon" onclick="handleIconClick(event)" oncontextmenu="handleIconContextMenu(event)" title="L — Click to hide • Right-click for Action Menu • Alt+L to restore">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 4.5 V17.5 H17.5 V15 H9.5 V4.5 Z"/>
+      </svg>
+      <div class="icon-status-dot"></div>
+    </div>
+    <div id="icon-hint-toast">
+      <span>Click icon to hide</span>
+      <span class="shortcut">Alt+L</span>
+      <span style="opacity:0.4;cursor:pointer;" onclick="this.parentElement.remove()">✕</span>
+    </div>
+  </div>
+
+  <!-- Action Menu (7 Prioritized Actions) -->
+  <div id="action-menu" class="animate-in">
+    <div class="action-menu-header">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="background:var(--accent);color:#fff;font-family:'Cinzel Decorative';padding:1px 4px;border-radius:3px;font-size:9px;">L</span>
+        <span>Actions</span>
+      </div>
+      <span style="font-family:'JetBrains Mono';font-size:9px;opacity:0.5;">Esc</span>
+    </div>
+
+    <div class="action-item selected" onclick="openAssistantTab('chat')">
+      <div class="left">
+        <span>✨</span>
+        <span>Ask L</span>
+      </div>
+      <span class="shortcut">1 / Enter</span>
+    </div>
+
+    <div class="action-item" onclick="triggerSnipAction()">
+      <div class="left">
+        <span>✂️</span>
+        <span>Screenshot</span>
+      </div>
+      <span class="shortcut">2 / Alt+S</span>
+    </div>
+
+    <div class="action-item" onclick="openAssistantTab('snip')">
+      <div class="left">
+        <span>✒️</span>
+        <span>Draw</span>
+      </div>
+      <span class="shortcut">3 / Alt+D</span>
+    </div>
+
+    <div class="action-item" onclick="openAssistantTab('camera')">
+      <div class="left">
+        <span>📷</span>
+        <span>Camera</span>
+      </div>
+      <span class="shortcut">4 / Alt+C</span>
+    </div>
+
+    <div class="action-item" onclick="openAssistantTab('browser')">
+      <div class="left">
+        <span>🌐</span>
+        <span>Browser</span>
+      </div>
+      <span class="shortcut">5 / Alt+B</span>
+    </div>
+
+    <div class="action-item" onclick="openAssistantTab('history')">
+      <div class="left">
+        <span>📜</span>
+        <span>History</span>
+      </div>
+      <span class="shortcut">6 / Alt+H</span>
+    </div>
+
+    <div class="action-item" onclick="openAssistantTab('settings')">
+      <div class="left">
+        <span>⚙️</span>
+        <span>Settings</span>
+      </div>
+      <span class="shortcut">7 / Alt+,</span>
+    </div>
+  </div>
+
+  <!-- Assistant Productivity Panel Window -->
+  <div id="assistant-panel" class="animate-in">
+    <!-- Header -->
+    <div class="assistant-header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-l">L</div>
+          <span class="brand-title">Assistant</span>
+          <span class="latency-tag" id="latency-display">⚡ 0.8s</span>
+        </div>
+        <div class="header-controls">
+          <button class="btn-icon" onclick="togglePin()" id="pin-btn" title="Always on Top">📌</button>
+          <button class="btn-icon" onclick="closeAssistant()" title="Close Panel (Leaves Icon Visible)">✕</button>
+        </div>
+      </div>
+
+      <!-- Quick / Deep Selector -->
+      <div class="mode-selector">
+        <span class="mode-label">REASONING:</span>
+        <div class="mode-buttons">
+          <button class="mode-btn" onclick="setThinking(1)" id="btn-mode-1">Flash</button>
+          <button class="mode-btn active" onclick="setThinking(2)" id="btn-mode-2">Balanced</button>
+          <button class="mode-btn" onclick="setThinking(3)" id="btn-mode-3">Deep</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Dock -->
+    <div class="nav-dock">
+      <button class="dock-tab active" onclick="switchTab('chat')" id="tab-btn-chat">Ask L</button>
+      <button class="dock-tab" onclick="switchTab('snip')" id="tab-btn-snip">Snip & Draw</button>
+      <button class="dock-tab" onclick="switchTab('watch')" id="tab-btn-watch">Screen Watch</button>
+      <button class="dock-tab" onclick="switchTab('camera')" id="tab-btn-camera">Camera</button>
+      <button class="dock-tab" onclick="switchTab('browser')" id="tab-btn-browser">Browser</button>
+      <button class="dock-tab" onclick="switchTab('history')" id="tab-btn-history">History</button>
+      <button class="dock-tab" onclick="switchTab('settings')" id="tab-btn-settings">Settings</button>
+    </div>
+
+    <!-- Tab 1: Ask L (Chat) -->
+    <div class="tab-viewport active" id="viewport-chat">
+      <div class="chat-messages" id="chat-messages">
+        <div class="message-bubble message-assistant">
+          <div class="assistant-meta">
+            <span>L • Principal Desktop Analyst</span>
+            <span>Ready</span>
+          </div>
+          <div>L is standing by. Ask a question, paste code, or capture a screen region for instant reasoning.</div>
+        </div>
+      </div>
+
+      <div class="chat-input-bar">
+        <div class="attachment-preview" id="chat-attachment-bar">
+          <span id="attachment-name">📎 Screen Region Captured</span>
+          <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="clearAttachment()">✕</button>
+        </div>
+        <div class="input-row">
+          <button class="btn-secondary" style="padding:6px 8px;" onclick="triggerSnipAction()" title="Capture Screenshot (Alt+S)">✂️</button>
+          <textarea class="chat-textarea" id="chat-input" placeholder="Ask L a question (Enter to send)..." onkeydown="handleChatKeyDown(event)"></textarea>
+          <button class="btn-send" onclick="sendChatMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Snip & Draw -->
+    <div class="tab-viewport" id="viewport-snip">
+      <div class="tab-container">
+        <div class="tab-title">Instant Screen Snip & Draw</div>
+        <div class="card-block">
+          <div style="font-size:12px;color:var(--text-muted);">
+            Capture any region of your active desktop, freeze buffer, and annotate with vector arrows, callouts, and pen marks.
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button class="btn-primary" onclick="triggerSnipAction()">Capture Screen (Alt+S)</button>
+            <button class="btn-secondary" onclick="simulateSnip()">Load Sample</button>
+          </div>
+        </div>
+        <div class="card-block" id="snip-preview-card" style="display:none;">
+          <div class="row-between">
+            <span style="font-weight:500;">Active Snip Canvas</span>
+            <button class="btn-primary" onclick="sendSnipToChat()">Ask L About This</button>
+          </div>
+          <div style="height:160px;background:#0d0e12;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);border:1px solid var(--border-subtle);" id="snip-canvas-container">
+            [Vector Annotation Canvas Active]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Screen Watch -->
+    <div class="tab-viewport" id="viewport-watch">
+      <div class="tab-container">
+        <div class="tab-title">Continuous Screen Watch</div>
+        <div class="card-block">
+          <div class="row-between">
+            <div>
+              <div style="font-weight:500;">Live Screen Watcher</div>
+              <div style="color:var(--text-muted);font-size:11px;">Monitors active work area every 10s</div>
+            </div>
+            <button class="btn-primary" onclick="toggleWatcher()" id="watcher-btn">Start Watch</button>
+          </div>
+        </div>
+        <div class="card-block" style="height:180px;display:flex;align-items:center;justify-content:center;background:#090a0d;">
+          <div style="color:var(--text-dim);font-family:'JetBrains Mono';font-size:11px;">
+            [Screen Watch Feed Offline]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Camera Lens -->
+    <div class="tab-viewport" id="viewport-camera">
+      <div class="tab-container">
+        <div class="tab-title">Optical Camera Viewfinder</div>
+        <div class="card-block">
+          <div style="height:190px;background:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);border:1px solid var(--border-subtle);position:relative;">
+            <div style="font-family:'JetBrains Mono';font-size:11px;">[Webcam Viewfinder Ready]</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button class="btn-primary" onclick="alert('Camera shutter triggered.')">Snap Photo</button>
+            <button class="btn-secondary">Switch Source</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 5: Mini Browser -->
+    <div class="tab-viewport" id="viewport-browser">
+      <div class="tab-container" style="flex:1;">
+        <div class="row-between">
+          <div class="tab-title">Mini Browser Workspace</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);">
+            <span>Opacity:</span>
+            <input type="range" min="0.3" max="1.0" step="0.1" value="0.9" style="width:70px;">
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <input type="text" id="browser-url-input" value="https://duckduckgo.com" style="flex:1;background:var(--input);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:6px;font-size:11px;">
+          <button class="btn-secondary" onclick="const u=document.getElementById('browser-url-input').value; document.getElementById('standalone-browser-iframe').src=u;">Go</button>
+          <button class="btn-secondary" onclick="const u=document.getElementById('browser-url-input').value; window.open(u, '_blank');">Open in Tab</button>
+        </div>
+        <div style="flex:1;border-radius:6px;overflow:hidden;min-height:300px;border:1px solid var(--border);">
+          <iframe id="standalone-browser-iframe" src="https://duckduckgo.com" style="width:100%;height:100%;min-height:300px;border:none;background:#fff;"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 6: History Vault -->
+    <div class="tab-viewport" id="viewport-history">
+      <div class="tab-container">
+        <div class="row-between">
+          <div class="tab-title">Conversation History Vault</div>
+          <button class="btn-secondary" onclick="exportHistory()">Export Markdown</button>
+        </div>
+        <div class="card-block" style="gap:6px;">
+          <div class="row-between" style="border-bottom:1px solid var(--border-subtle);padding-bottom:6px;">
+            <span style="font-weight:500;">Code Syntax Verification</span>
+            <span style="color:var(--text-dim);font-size:10px;">10:45 AM</span>
+          </div>
+          <div style="color:var(--text-muted);font-size:11px;line-clamp:2;">
+            "Reviewed the React concurrency hook structure and identified memory leak in unmount phase..."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 7: Settings & Themes -->
+    <div class="tab-viewport" id="viewport-settings">
+      <div class="tab-container">
+        <div class="tab-title">Floating Icon Preferences</div>
+        <div class="card-block">
+          <div class="row-between">
+            <span>Icon Size</span>
+            <select style="background:var(--input);border:1px solid var(--border);color:var(--text);padding:4px;border-radius:4px;font-size:11px;">
+              <option>Small (44px)</option>
+              <option selected>Medium (52px)</option>
+              <option>Large (60px)</option>
+            </select>
+          </div>
+          <div class="row-between">
+            <span>Accent Color</span>
+            <div style="display:flex;gap:6px;">
+              <div style="width:16px;height:16px;border-radius:50%;background:#3b82f6;cursor:pointer;outline:2px solid #fff;" onclick="setAccent('#3b82f6')"></div>
+              <div style="width:16px;height:16px;border-radius:50%;background:#6366f1;cursor:pointer;" onclick="setAccent('#6366f1')"></div>
+              <div style="width:16px;height:16px;border-radius:50%;background:#10b981;cursor:pointer;" onclick="setAccent('#10b981')"></div>
+              <div style="width:16px;height:16px;border-radius:50%;background:#e11d48;cursor:pointer;" onclick="setAccent('#e11d48')"></div>
+            </div>
+          </div>
+          <div class="row-between">
+            <span>Dock to Screen Edge</span>
+            <input type="checkbox" checked>
+          </div>
+        </div>
+
+        <div class="tab-title" style="margin-top:6px;">Theme Mode</div>
+        <div class="card-block">
+          <div class="row-between">
+            <span>Visual Theme</span>
+            <select onchange="switchTheme(this.value)" style="background:var(--input);border:1px solid var(--border);color:var(--text);padding:4px;border-radius:4px;font-size:11px;">
+              <option value="graphite">Neutral Graphite (Default)</option>
+              <option value="light">Paper Slate (Light Mode)</option>
+              <option value="obsidian">Obsidian Minimal</option>
+              <option value="noir">Death Note Noir</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let iconVisible = true;
+    let actionMenuOpen = false;
+    let assistantOpen = false;
+    let activeAttachment = null;
+    let activeThinkingLevel = 2;
+
+    // Click handler for Floating Icon: Single click opens Assistant HUD!
+    function handleIconClick(e) {
+      e.stopPropagation();
+      openAssistantTab('chat');
+    }
+
+    // Right-click opens Action Menu
+    function handleIconContextMenu(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleActionMenu();
+    }
+
+    function hideIcon() {
+      iconVisible = false;
+      document.getElementById('floating-icon-container').style.display = 'none';
+      document.getElementById('action-menu').style.display = 'none';
+      document.getElementById('restore-bar').style.display = 'flex';
+    }
+
+    function restoreIcon() {
+      iconVisible = true;
+      document.getElementById('floating-icon-container').style.display = 'flex';
+      document.getElementById('restore-bar').style.display = 'none';
+    }
+
+    function toggleActionMenu() {
+      actionMenuOpen = !actionMenuOpen;
+      document.getElementById('action-menu').style.display = actionMenuOpen ? 'flex' : 'none';
+    }
+
+    function openAssistantTab(tabId) {
+      actionMenuOpen = false;
+      document.getElementById('action-menu').style.display = 'none';
+      assistantOpen = true;
+      document.getElementById('assistant-panel').style.display = 'flex';
+      switchTab(tabId);
+    }
+
+    function closeAssistant() {
+      assistantOpen = false;
+      document.getElementById('assistant-panel').style.display = 'none';
+      // Leaves floating icon visible!
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.dock-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-viewport').forEach(v => v.classList.remove('active'));
+
+      const btn = document.getElementById(`tab-btn-${tabId}`);
+      const view = document.getElementById(`viewport-${tabId}`);
+      if (btn) btn.classList.add('active');
+      if (view) view.classList.add('active');
+    }
+
+    function setThinking(level) {
+      activeThinkingLevel = level;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-mode-${level}`).classList.add('active');
+      const badge = document.getElementById('latency-display');
+      if (level === 1) badge.innerText = '⚡ 0.8s | Flash';
+      else if (level === 2) badge.innerText = '⚖️ 2.4s | Balanced';
+      else badge.innerText = '🧠 6.2s | Deep';
+    }
+
+    function handleChatKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChatMessage();
+      }
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text && !activeAttachment) return;
+
+      const chatBox = document.getElementById('chat-messages');
+
+      // Append user bubble
+      const userBubble = document.createElement('div');
+      userBubble.className = 'message-bubble message-user';
+      userBubble.innerText = text || '[Visual Query]';
+      chatBox.appendChild(userBubble);
+
+      input.value = '';
+      clearAttachment();
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Simulated assistant response
+      setTimeout(() => {
+        const asstBubble = document.createElement('div');
+        asstBubble.className = 'message-bubble message-assistant';
+        asstBubble.innerHTML = `
+          <div class="assistant-meta">
+            <span>L • Latency: ${activeThinkingLevel === 1 ? '0.74s' : activeThinkingLevel === 2 ? '2.18s' : '5.92s'}</span>
+            <span style="cursor:pointer;" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';">Copy</span>
+          </div>
+          <div>${getSimulatedAnswer(text)}</div>
+        `;
+        chatBox.appendChild(asstBubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 700);
+    }
+
+    function getSimulatedAnswer(prompt) {
+      if (prompt.toLowerCase().includes('error') || prompt.toLowerCase().includes('bug')) {
+        return "I've analyzed the stack trace. The issue originates from an unhandled null pointer during asynchronous dispatch. Ensure the bounds reference is checked before invoking getDisplayMatching().";
+      }
+      return "Direct deduction: The system architecture adheres to clean separation of window lifecycles. All 7 actions are available with sub-second responsiveness.";
+    }
+
+    function triggerSnipAction() {
+      actionMenuOpen = false;
+      document.getElementById('action-menu').style.display = 'none';
+      alert('Screen Snip Overlay triggered. Click and drag to crop a screen region.');
+      simulateSnip();
+      openAssistantTab('chat');
+    }
+
+    function simulateSnip() {
+      activeAttachment = 'sample-snip';
+      document.getElementById('chat-attachment-bar').style.display = 'flex';
+      document.getElementById('snip-preview-card').style.display = 'flex';
+    }
+
+    function clearAttachment() {
+      activeAttachment = null;
+      document.getElementById('chat-attachment-bar').style.display = 'none';
+    }
+
+    function sendSnipToChat() {
+      openAssistantTab('chat');
+    }
+
+    function toggleWatcher() {
+      const btn = document.getElementById('watcher-btn');
+      if (btn.innerText.includes('Start')) {
+        btn.innerText = 'Stop Watch';
+        btn.style.background = '#e11d48';
+      } else {
+        btn.innerText = 'Start Watch';
+        btn.style.background = 'var(--accent)';
+      }
+    }
+
+    function togglePin() {
+      const btn = document.getElementById('pin-btn');
+      btn.style.color = btn.style.color === 'rgb(59, 130, 246)' ? 'var(--text-muted)' : '#3b82f6';
+    }
+
+    function setAccent(color) {
+      document.documentElement.style.setProperty('--accent', color);
+      document.documentElement.style.setProperty('--accent-glow', color + '40');
+    }
+
+    function switchTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.style.setProperty('--bg-glass', 'rgba(248, 250, 252, 0.96)');
+        document.documentElement.style.setProperty('--card', '#ffffff');
+        document.documentElement.style.setProperty('--input', '#f1f5f9');
+        document.documentElement.style.setProperty('--text', '#0f172a');
+        document.documentElement.style.setProperty('--text-muted', '#64748b');
+        document.documentElement.style.setProperty('--border', 'rgba(0,0,0,0.08)');
+      } else if (theme === 'noir') {
+        document.documentElement.style.setProperty('--bg-glass', 'rgba(6, 6, 8, 0.95)');
+        document.documentElement.style.setProperty('--card', '#0e0e12');
+        document.documentElement.style.setProperty('--input', '#08080a');
+        document.documentElement.style.setProperty('--text', '#ffffff');
+        document.documentElement.style.setProperty('--text-muted', '#a1a1aa');
+        document.documentElement.style.setProperty('--border', 'rgba(255,255,255,0.12)');
+      } else {
+        document.documentElement.style.setProperty('--bg-glass', 'rgba(20, 21, 24, 0.94)');
+        document.documentElement.style.setProperty('--card', '#1b1c21');
+        document.documentElement.style.setProperty('--input', '#121316');
+        document.documentElement.style.setProperty('--text', '#f1f2f4');
+        document.documentElement.style.setProperty('--text-muted', '#8b909a');
+        document.documentElement.style.setProperty('--border', 'rgba(255,255,255,0.08)');
+      }
+    }
+
+    // Global Key Bindings
+    window.addEventListener('keydown', (e) => {
+      if (e.altKey && (e.key === 'l' || e.key === 'L')) {
+        e.preventDefault();
+        if (!iconVisible) restoreIcon();
+        else toggleActionMenu();
+      }
+      if (e.altKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        triggerSnipAction();
+      }
+      if (e.key === 'Escape') {
+        if (actionMenuOpen) {
+          actionMenuOpen = false;
+          document.getElementById('action-menu').style.display = 'none';
+        } else if (assistantOpen) {
+          closeAssistant();
+        }
+      }
+    });
+
+    // Close action menu when clicking outside
+    window.addEventListener('click', (e) => {
+      const menu = document.getElementById('action-menu');
+      const icon = document.getElementById('floating-icon');
+      if (actionMenuOpen && !menu.contains(e.target) && !icon.contains(e.target)) {
+        actionMenuOpen = false;
+        menu.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

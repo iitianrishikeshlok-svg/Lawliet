@@ -1,0 +1,387 @@
+import React, { useState } from 'react';
+import { THEMES, ACCENT_COLORS } from '../../themes/themeConfig';
+import { testGeminiConnection } from '../../services/gemini';
+import { Settings, Eye, EyeOff, Volume2, VolumeX, Check, RefreshCw, Sparkles, Sliders } from '../../common/Icons';
+import { audio } from '../../common/AudioEngine';
+
+export default function SettingsTab({
+  currentThemeId = 'graphite',
+  onThemeSelect,
+  currentAccentId = 'cobalt',
+  onAccentSelect,
+  iconState = 'visible',
+  onIconStateChange,
+  iconSize = 52,
+  onIconSizeChange,
+  iconOpacity = 0.95,
+  onIconOpacityChange,
+  iconShadow = 'subtle',
+  onIconShadowChange,
+  iconBackground = 'graphite',
+  onIconBackgroundChange,
+  dockingEnabled = true,
+  onToggleDocking,
+  apiKey = '',
+  onSaveApiKey,
+  selectedModel = 'gemini-2.5-flash',
+  onSelectModel,
+  audioEnabled = true,
+  onToggleAudio,
+  theme,
+}) {
+  const [keyInput, setKeyInput] = useState(apiKey || '');
+  const [showKey, setShowKey] = useState(false);
+  const [testingKey, setTestingKey] = useState(false);
+  const [testResult, setTestResult] = useState(null);
+  const [savedSuccess, setSavedSuccess] = useState(false);
+
+  const handleSaveKey = () => {
+    audio.playClick();
+    onSaveApiKey?.(keyInput.trim());
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 2000);
+  };
+
+  const handleTestKey = async () => {
+    audio.playClick();
+    setTestingKey(true);
+    setTestResult(null);
+    const result = await testGeminiConnection(keyInput || apiKey, selectedModel);
+    setTestingKey(false);
+    setTestResult(result);
+    if (result.success) {
+      audio.playSuccess();
+    }
+  };
+
+  return (
+    <div className="flex flex-col w-full h-full p-4 overflow-y-auto space-y-4 select-none text-xs text-[#f1f2f4] font-mono">
+      {/* 1. FLOATING ICON CONFIGURATION */}
+      <div className="flex flex-col space-y-3 p-3.5 rounded-none bg-[#090a0d] border-2 border-stone-800 shadow-[3px_3px_0px_#000]">
+        <div className="flex items-center justify-between border-b-2 border-neutral-800 pb-2">
+          <span className="font-black text-rose-400 uppercase tracking-widest text-[11px]">
+            [ FLOATING ICON PREFERENCES ]
+          </span>
+          <span className="text-[10px] text-stone-500 uppercase font-bold">[ NATIVE WINDOW ]</span>
+        </div>
+
+        {/* State Toggle: Visible vs Disabled */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-white font-bold uppercase">[ ICON MODE ]</div>
+            <div className="text-[10px] text-stone-400">Show persistent icon on desktop</div>
+          </div>
+          <button
+            onClick={() => {
+              audio.playClick();
+              const next = iconState === 'disabled' ? 'visible' : 'disabled';
+              onIconStateChange?.(next);
+            }}
+            className={`px-3 py-1 rounded-none text-[11px] font-mono uppercase font-bold border-2 transition-all cursor-pointer ${
+              iconState !== 'disabled'
+                ? 'bg-[#ff1e2e] text-black border-black shadow-[2px_2px_0px_#fff] font-black'
+                : 'bg-black text-stone-400 border-neutral-800 shadow-[2px_2px_0px_#000]'
+            }`}
+          >
+            {iconState !== 'disabled' ? '[ ENABLED ]' : '[ DISABLED ]'}
+          </button>
+        </div>
+
+        {/* Size Selection */}
+        <div className="flex items-center justify-between">
+          <span className="text-stone-300 font-bold uppercase">[ ICON SIZE ]</span>
+          <div className="flex items-center space-x-1.5">
+            {[
+              { label: '[ 44PX ]', val: 44 },
+              { label: '[ 52PX ]', val: 52 },
+              { label: '[ 60PX ]', val: 60 },
+            ].map((s) => (
+              <button
+                key={s.val}
+                onClick={() => {
+                  audio.playClick();
+                  onIconSizeChange?.(s.val);
+                }}
+                className={`px-2 py-0.5 rounded-none text-[10px] font-mono font-bold uppercase border-2 transition-all cursor-pointer ${
+                  iconSize === s.val
+                    ? 'bg-[#ff1e2e] text-black border-black shadow-[2px_2px_0px_#fff]'
+                    : 'bg-black text-stone-400 border-neutral-800 shadow-[1px_1px_0px_#000]'
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Background Style */}
+        <div className="flex items-center justify-between">
+          <span className="text-stone-300 font-bold uppercase">[ BACKGROUND STYLE ]</span>
+          <div className="flex items-center space-x-1.5">
+            {[
+              { id: 'graphite', label: 'Graphite' },
+              { id: 'glass', label: 'Glass' },
+              { id: 'outline', label: 'Outline' },
+            ].map((bg) => (
+              <button
+                key={bg.id}
+                onClick={() => {
+                  audio.playClick();
+                  onIconBackgroundChange?.(bg.id);
+                }}
+                className={`px-2 py-0.5 rounded text-[11px] border transition-colors ${
+                  iconBackground === bg.id
+                    ? 'bg-white/[0.12] text-white border-white/30'
+                    : 'bg-white/[0.02] text-white/50 border-white/5 hover:border-white/10'
+                }`}
+              >
+                {bg.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Shadow Intensity */}
+        <div className="flex items-center justify-between">
+          <span className="text-white/80">Shadow Intensity</span>
+          <div className="flex items-center space-x-1">
+            {['none', 'subtle', 'medium', 'deep'].map((sh) => (
+              <button
+                key={sh}
+                onClick={() => {
+                  audio.playClick();
+                  onIconShadowChange?.(sh);
+                }}
+                className={`px-2 py-0.5 rounded text-[11px] capitalize border transition-colors ${
+                  iconShadow === sh
+                    ? 'bg-white/[0.12] text-white border-white/30'
+                    : 'bg-white/[0.02] text-white/50 border-white/5 hover:border-white/10'
+                }`}
+              >
+                {sh}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Opacity Slider */}
+        <div className="flex flex-col space-y-1">
+          <div className="flex justify-between text-white/80">
+            <span>Icon Opacity</span>
+            <span className="font-mono text-[10px] text-white/50">{Math.round(iconOpacity * 100)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0.3"
+            max="1.0"
+            step="0.05"
+            value={iconOpacity}
+            onChange={(e) => onIconOpacityChange?.(parseFloat(e.target.value))}
+            className="w-full accent-blue-500 cursor-pointer h-1 bg-white/10 rounded"
+          />
+        </div>
+
+        {/* Screen Edge Docking Toggle */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-white font-medium">Screen-Edge Docking</div>
+            <div className="text-[10px] text-white/50">Snap to screen margins automatically</div>
+          </div>
+          <button
+            onClick={() => {
+              audio.playClick();
+              onToggleDocking?.(!dockingEnabled);
+            }}
+            className={`px-2.5 py-1 rounded text-[11px] font-medium border transition-colors ${
+              dockingEnabled
+                ? 'bg-blue-600/30 text-blue-300 border-blue-500/40'
+                : 'bg-white/[0.04] text-white/40 border-white/10'
+            }`}
+          >
+            {dockingEnabled ? 'Active' : 'Off'}
+          </button>
+        </div>
+      </div>
+
+      {/* 2. THEMES & COLOR SYSTEM */}
+      <div className="flex flex-col space-y-3 p-3 rounded-lg utility-card border border-white/[0.08]">
+        <span className="font-semibold text-white uppercase tracking-wider text-[11px]">
+          Visual Themes & Mode
+        </span>
+
+        {/* Theme Cards (Supports Dark and Light Mode) */}
+        <div className="grid grid-cols-2 gap-2">
+          {Object.values(THEMES).map((th) => {
+            const isSelected = currentThemeId === th.id;
+            return (
+              <button
+                key={th.id}
+                onClick={() => {
+                  audio.playClick();
+                  onThemeSelect?.(th.id);
+                }}
+                className={`flex flex-col text-left p-2 rounded-lg border transition-all ${
+                  isSelected
+                    ? 'border-white/40 bg-white/[0.08] shadow-sm'
+                    : 'border-white/[0.06] bg-black/20 hover:border-white/20'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-[11px] font-medium text-white">{th.name}</span>
+                  <span className="text-[9px] font-mono px-1 rounded bg-white/10 text-white/60">
+                    {th.mode}
+                  </span>
+                </div>
+                <span className="text-[10px] text-white/40 mt-1 line-clamp-1">
+                  {th.tagline}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Configurable Accent Colors */}
+        <div className="flex flex-col space-y-1.5 pt-1 border-t border-white/[0.06]">
+          <span className="text-white/80">Accent Color</span>
+          <div className="flex items-center space-x-2">
+            {Object.values(ACCENT_COLORS).map((acc) => {
+              const isSelected = currentAccentId === acc.id;
+              return (
+                <button
+                  key={acc.id}
+                  onClick={() => {
+                    audio.playClick();
+                    onAccentSelect?.(acc.id);
+                  }}
+                  title={acc.name}
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-transform ${
+                    isSelected ? 'scale-110 ring-2 ring-white/60' : 'opacity-70 hover:opacity-100'
+                  }`}
+                  style={{ backgroundColor: acc.color }}
+                >
+                  {isSelected && <Check size={12} className="text-white" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* 3. GEMINI API CONFIGURATION */}
+      <div className="flex flex-col space-y-3 p-3.5 rounded-none bg-[#090a0d] border-2 border-stone-800 shadow-[3px_3px_0px_#000]">
+        <div className="flex items-center justify-between border-b-2 border-neutral-800 pb-2">
+          <span className="font-black text-rose-400 uppercase tracking-widest text-[11px]">
+            [ GOOGLE GEMINI API ]
+          </span>
+          <a
+            href="https://aistudio.google.com/app/apikey"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[10px] text-cyan-400 hover:underline uppercase font-bold"
+          >
+            [ GET FREE API KEY ↗ ]
+          </a>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <div className="relative flex-1">
+            <input
+              type={showKey ? 'text' : 'password'}
+              value={keyInput}
+              onChange={(e) => setKeyInput(e.target.value)}
+              placeholder="Paste AI Studio API Key..."
+              className="w-full brutal-input px-3 py-1.5 text-xs text-white placeholder-stone-600 font-mono rounded-none border-2 border-neutral-700 focus:border-[#ff1e2e] shadow-[2px_2px_0px_#000]"
+            />
+            <button
+              onClick={() => setShowKey(!showKey)}
+              className="absolute right-2 top-2 text-stone-400 hover:text-white"
+            >
+              {showKey ? <EyeOff size={13} /> : <Eye size={13} />}
+            </button>
+          </div>
+          <button
+            onClick={handleSaveKey}
+            className="brutal-btn-solid rounded-none !text-xs !py-1.5 !px-3.5 border-2 border-black shadow-[2px_2px_0px_#ffffff] font-mono font-black uppercase cursor-pointer shrink-0"
+          >
+            {savedSuccess ? '[ SAVED! ]' : '[ SAVE ]'}
+          </button>
+          <button
+            onClick={handleTestKey}
+            disabled={testingKey}
+            className="brutal-btn rounded-none !text-xs !py-1.5 !px-3.5 border-2 border-[#ff1e2e] bg-black text-white shadow-[2px_2px_0px_#ff1e2e] font-mono font-bold uppercase cursor-pointer shrink-0"
+            title="Test Connection"
+          >
+            {testingKey ? <RefreshCw size={12} className="animate-spin" /> : '[ PING ]'}
+          </button>
+        </div>
+
+        {testResult && (
+          <div
+            className={`text-[10px] px-2.5 py-1.5 rounded-none border-2 font-mono uppercase font-bold shadow-[2px_2px_0px_#000] ${
+              testResult.success
+                ? 'bg-black text-emerald-400 border-emerald-500'
+                : 'bg-black text-rose-400 border-rose-500'
+            }`}
+          >
+            {testResult.message}
+          </div>
+        )}
+
+        {/* Model Selection */}
+        <div className="flex items-center justify-between pt-1">
+          <span className="text-stone-300 font-bold uppercase">[ AI MODEL ]</span>
+          <select
+            value={selectedModel}
+            onChange={(e) => onSelectModel?.(e.target.value)}
+            className="brutal-input px-2 py-1 text-xs text-white bg-black border-2 border-neutral-700 rounded-none shadow-[2px_2px_0px_#000] outline-none"
+          >
+            <option value="gemini-3.5-flash">gemini-3.5-flash (Fast & Live Reasoning)</option>
+            <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Ultra Fast)</option>
+            <option value="gemini-3.8-flash">gemini-3.8-flash (High Performance)</option>
+            <option value="gemini-flash-latest">gemini-flash-latest</option>
+            <option value="gemini-pro-latest">gemini-pro-latest</option>
+          </select>
+        </div>
+      </div>
+
+      {/* 4. KEYBOARD SHORTCUTS & AUDIO */}
+      <div className="flex flex-col space-y-2.5 p-3 rounded-lg utility-card border border-white/[0.08]">
+        <div className="flex items-center justify-between">
+          <span className="font-semibold text-white uppercase tracking-wider text-[11px]">
+            Audio & Shortcuts
+          </span>
+          <button
+            onClick={() => {
+              const next = !audioEnabled;
+              onToggleAudio?.(next);
+              audio.setEnabled(next);
+            }}
+            className="text-white/60 hover:text-white flex items-center space-x-1"
+          >
+            {audioEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
+            <span className="text-[10px]">{audioEnabled ? 'Sound On' : 'Muted'}</span>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-white/[0.06]">
+          <div className="flex justify-between py-0.5">
+            <span className="text-white/50">Restore / Toggle Icon</span>
+            <kbd className="font-mono text-white/80 bg-white/10 px-1 rounded">Alt + L</kbd>
+          </div>
+          <div className="flex justify-between py-0.5">
+            <span className="text-white/50">Take Screenshot</span>
+            <kbd className="font-mono text-white/80 bg-white/10 px-1 rounded">Alt + S</kbd>
+          </div>
+          <div className="flex justify-between py-0.5">
+            <span className="text-white/50">Close Open Panel</span>
+            <kbd className="font-mono text-white/80 bg-white/10 px-1 rounded">Esc</kbd>
+          </div>
+          <div className="flex justify-between py-0.5">
+            <span className="text-white/50">Send Prompt</span>
+            <kbd className="font-mono text-white/80 bg-white/10 px-1 rounded">Enter</kbd>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,44 @@
+{
+  "name": "l-desktop-hud",
+  "version": "1.0.0",
+  "description": "L — Multimodal Floating AI HUD & Desktop Overlay inspired by Apple, Linear, and Microsoft Game Bar",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron": "electron .",
+    "start": "concurrently \"vite\" \"wait-on tcp:5173 && electron .\"",
+    "electron:prod": "vite build && electron ."
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "gemini",
+    "ai-hud",
+    "desktop-overlay",
+    "multimodal",
+    "screen-snip",
+    "vision"
+  ],
+  "author": "L Systems Architect",
+  "license": "MIT",
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "vite": "^6.0.3",
+    "wait-on": "^8.0.1"
+  }
+}
