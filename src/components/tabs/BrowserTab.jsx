@@ -24,8 +24,9 @@ const BOOKMARKS = [
   { label: '📓 Death Note Theme', url: 'https://youtu.be/C65oaIHsdYM', isYT: true, ytId: 'C65oaIHsdYM', ytTitle: 'Death Note — Official Video & Visuals' },
 ];
 
-// Verified 100% playable evergreen video presets with Death Note as top option
+// Verified 100% playable evergreen video presets with user ambient video as top option
 const YOUTUBE_PRESETS = [
+  { id: 'P2uypwLUfmE', title: 'Atmospheric Visuals & Theme', tag: '✨ Ambient Video (40s)' },
   { id: 'UMLhx2ExDm8', title: 'Death Note — Atmospheric Visuals & Ambience', tag: '🎬 Death Note Ambient' },
   { id: 'C65oaIHsdYM', title: 'Death Note — Official Video & Visuals', tag: '📓 Death Note Theme' },
   { id: 'LXb3EKWsInQ', title: 'Costa Rica in 4K 60FPS (Nature & Wildlife)', tag: '🌿 4K Nature' },
@@ -112,8 +113,8 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
   // Dedicated YouTube Cinema & Controls State
   const [isYouTube, setIsYouTube] = useState(true); // Default to YouTube search & cinema
-  const [activeYouTubeId, setActiveYouTubeId] = useState('C65oaIHsdYM'); // User's Death Note video
-  const [activeYouTubeTitle, setActiveYouTubeTitle] = useState('Death Note — Official Video & Visuals');
+  const [activeYouTubeId, setActiveYouTubeId] = useState('P2uypwLUfmE'); // Atmospheric video playing from 40s
+  const [activeYouTubeTitle, setActiveYouTubeTitle] = useState('Atmospheric Visuals & Theme');
   const [videoSearchInput, setVideoSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -318,8 +319,8 @@ export default function BrowserTab({ onSendToChat, theme }) {
   };
 
   const getYouTubeEmbedSrc = () => {
-    const baseParams = 'autoplay=1&enablejsapi=1&rel=0&playsinline=1&modestbranding=1';
     let targetId = activeYouTubeId;
+    const baseParams = `autoplay=1&mute=1&controls=0&start=40&loop=1&playlist=${targetId}&enablejsapi=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0`;
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase().trim();
@@ -623,102 +624,6 @@ export default function BrowserTab({ onSendToChat, theme }) {
               />
             </div>
 
-            {/* Modern Minimalist Media Controls Bar */}
-            <div className="flex items-center justify-between px-4 py-2.5 bg-black/60 backdrop-blur-xl border-t border-white/[0.08] text-xs select-none">
-              {/* Left: Playback buttons */}
-              <div className="flex items-center space-x-2">
-                {/* Play / Pause Toggle */}
-                <button
-                  onClick={togglePlayPause}
-                  className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-tr from-rose-500 to-rose-600 text-white shadow-md shadow-rose-950/40 border border-rose-400/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-                  title={isPlaying ? 'Pause Video' : 'Play Video'}
-                >
-                  {isPlaying ? <Pause size={12} className="stroke-[2.5]" /> : <Play size={12} className="stroke-[2.5] ml-0.5" />}
-                </button>
-
-                {/* Restart */}
-                <button
-                  onClick={restartVideo}
-                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                  title="Restart Video from Beginning"
-                >
-                  <RotateCcw size={11} />
-                </button>
-
-                {/* Seek -10s / +10s */}
-                <button
-                  onClick={() => seekRelative(-10)}
-                  className="px-2.5 py-1 rounded-full text-[10px] font-medium text-white/70 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors cursor-pointer"
-                  title="Rewind 10 seconds"
-                >
-                  -10s
-                </button>
-                <button
-                  onClick={() => seekRelative(10)}
-                  className="px-2.5 py-1 rounded-full text-[10px] font-medium text-white/70 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors cursor-pointer"
-                  title="Forward 10 seconds"
-                >
-                  +10s
-                </button>
-              </div>
-
-              {/* Center: Video Title / Status */}
-              <div className="flex items-center space-x-2 truncate max-w-[280px] px-2 text-[11px] text-white/80">
-                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0" />
-                <span className="truncate font-medium">{activeYouTubeTitle}</span>
-              </div>
-
-              {/* Right: Audio & Screen Controls */}
-              <div className="flex items-center space-x-2">
-                {/* Mute Button */}
-                <button
-                  onClick={toggleMute}
-                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                  title={isMuted ? 'Unmute' : 'Mute'}
-                >
-                  {isMuted ? <VolumeX size={12} /> : <Volume2 size={12} />}
-                </button>
-
-                {/* Volume Slider */}
-                <div className="flex items-center space-x-1">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={isMuted ? 0 : volume}
-                    onChange={handleVolumeChange}
-                    className="w-14 h-1 accent-rose-500 cursor-pointer"
-                    title={`Volume: ${isMuted ? 0 : volume}%`}
-                  />
-                  <span className="text-[10px] font-mono text-white/50 w-6">
-                    {isMuted ? '0%' : `${volume}%`}
-                  </span>
-                </div>
-
-                {/* Playback Speed */}
-                <select
-                  value={playbackSpeed}
-                  onChange={handleSpeedChange}
-                  className="bg-black/50 text-[10px] font-medium text-white border border-white/10 rounded-full px-2 py-0.5 outline-none cursor-pointer"
-                  title="Playback Speed"
-                >
-                  <option value="0.5">0.5x</option>
-                  <option value="1">1.0x</option>
-                  <option value="1.25">1.25x</option>
-                  <option value="1.5">1.5x</option>
-                  <option value="2">2.0x</option>
-                </select>
-
-                {/* Fullscreen Button */}
-                <button
-                  onClick={toggleFullscreen}
-                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                  title="Toggle Fullscreen"
-                >
-                  <Maximize2 size={11} />
-                </button>
-              </div>
-            </div>
           </div>
         ) : isElectron ? (
           /* Native Electron Webview Tag */
@@ -730,20 +635,17 @@ export default function BrowserTab({ onSendToChat, theme }) {
             webpreferences="contextIsolation=yes"
           />
         ) : (
-          /* Web Browser Viewport with Atmospheric Death Note Video in the Background */
+          /* Web Browser Viewport with Atmospheric Video in the Background */
           <div className="w-full h-full flex-1 min-h-0 flex flex-col relative bg-[#0c0d10] overflow-hidden">
-            {/* Atmospheric Death Note Video Playing in the Background (Native 100% clean video) */}
+            {/* Atmospheric Video Playing in the Background (Zero Controls, 40s) */}
             <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
-              <video
-                src="/videos/l-intro.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover pointer-events-none transition-opacity duration-300 select-none"
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/P2uypwLUfmE?autoplay=1&mute=1&controls=0&start=40&loop=1&playlist=P2uypwLUfmE&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
+                title="Ambient Web Backdrop"
+                className="w-full h-full object-cover pointer-events-none border-none select-none scale-105"
                 style={{ opacity: deathNoteBgOpacity }}
               />
-              {/* Gothic Dark Vignette Overlay */}
+              {/* Dark Vignette Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#0c0d10] via-black/40 to-black/70 pointer-events-none" />
             </div>
 

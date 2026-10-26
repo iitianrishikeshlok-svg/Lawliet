@@ -200,10 +200,10 @@ export default function ScreenWatchTab({
 
           <button
             onClick={handleToggle}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer ${
+            className={`relative overflow-hidden flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${
               isStreaming
                 ? 'bg-rose-500/15 border border-rose-500/40 text-rose-300 hover:bg-rose-500/25'
-                : 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-[0_2px_15px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95'
+                : 'color-cycle-pill text-white shadow-[0_2px_15px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95 border border-white/20'
             }`}
           >
             {isStreaming ? <EyeOff size={13} /> : <Eye size={13} />}
@@ -244,7 +244,7 @@ export default function ScreenWatchTab({
               </div>
               <button
                 onClick={startStream}
-                className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_2px_15px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 cursor-pointer"
+                className="relative overflow-hidden px-5 py-2.5 rounded-full text-xs font-semibold text-white color-cycle-pill shadow-[0_4px_20px_rgba(244,63,94,0.45)] hover:scale-105 active:scale-95 transition-all flex items-center space-x-2 cursor-pointer border border-white/20"
               >
                 <Eye size={13} />
                 <span>Select Screen to Share</span>

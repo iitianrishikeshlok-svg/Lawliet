@@ -80,7 +80,7 @@ export default function Header({
       <div className="flex items-center justify-between w-full">
         {/* L Identity Mark, Status & Latency */}
         <div className="flex items-center space-x-3">
-          <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-rose-600/25 to-black border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.3)] p-1.5 transition-transform hover:scale-105">
+          <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-rose-600/30 to-purple-600/25 border border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.35)] p-1.5 transition-transform hover:scale-110 color-cycle-flow">
             <img
               src="/l-triangle-logo.svg"
               alt="L"
@@ -113,7 +113,7 @@ export default function Header({
           {!isSecure && !isElectron && (
             <button
               onClick={() => setShowSecurityModal(true)}
-              className="flex items-center space-x-1.5 px-3 py-1 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer shadow-sm"
+              className="flex items-center space-x-1.5 px-3 py-1 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95"
               title="Camera & Screen Share blocked on HTTP IP by Chrome. Click for 1-click fix."
             >
               <ShieldAlert size={12} className="text-amber-400" />
@@ -125,9 +125,9 @@ export default function Header({
           <button
             onClick={handleFloatPiPClick}
             title="Pop out Floating Icon & Circular Menu on Real Home Page"
-            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${
+            className={`relative overflow-hidden flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
               pipActive
-                ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
+                ? 'color-cycle-pill text-white border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.45)]'
                 : 'bg-white/[0.04] text-white/80 hover:text-white border-white/[0.1] hover:border-white/[0.2] hover:bg-white/[0.08]'
             }`}
           >
@@ -142,9 +142,9 @@ export default function Header({
               onTogglePin?.();
             }}
             title={isPinned ? 'Always on Top: Active' : 'Always on Top: Inactive'}
-            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer ${
+            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer hover:scale-110 active:scale-95 ${
               isPinned
-                ? 'bg-rose-500 text-white border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
+                ? 'color-cycle-pill text-white border-white/20 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
                 : 'bg-white/[0.04] text-white/60 hover:text-white border-white/[0.08] hover:bg-white/[0.08]'
             }`}
           >
@@ -158,7 +158,7 @@ export default function Header({
               onClose?.();
             }}
             title="Minimize to Floating Icon (Esc)"
-            className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] text-white/60 hover:text-white border border-white/[0.08] hover:bg-white/[0.1] transition-all cursor-pointer"
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] text-white/60 hover:text-white border border-white/[0.08] hover:bg-white/[0.1] hover:border-rose-500/30 transition-all cursor-pointer hover:scale-110 active:scale-95"
           >
             <X size={13} />
           </button>
@@ -185,9 +185,9 @@ export default function Header({
                   onThinkingLevelChange?.(lvl);
                 }}
                 title={config.desc}
-                className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all duration-200 flex items-center space-x-1.5 cursor-pointer ${
+                className={`relative overflow-hidden px-3 py-1 rounded-full text-[11px] font-medium transition-all duration-200 flex items-center space-x-1.5 cursor-pointer hover:scale-105 active:scale-95 ${
                   isActive
-                    ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-[0_2px_12px_rgba(244,63,94,0.35)] font-semibold'
+                    ? 'color-cycle-pill text-white shadow-[0_2px_15px_rgba(244,63,94,0.4)] font-semibold'
                     : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >

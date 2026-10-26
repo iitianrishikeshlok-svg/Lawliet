@@ -229,7 +229,7 @@ export default function CameraTab({ onSendToChat, theme }) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full py-2.5 rounded-full text-white font-semibold text-xs bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_4px_16px_rgba(244,63,94,0.4)] transition-all cursor-pointer flex items-center justify-center space-x-2"
+                className="relative overflow-hidden w-full py-2.5 rounded-full text-white font-semibold text-xs color-cycle-pill shadow-[0_4px_18px_rgba(244,63,94,0.45)] transition-all cursor-pointer flex items-center justify-center space-x-2 border border-white/20 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>📸 Snap Photo with Camera</span>
               </button>
@@ -325,7 +325,7 @@ export default function CameraTab({ onSendToChat, theme }) {
               <button
                 onClick={handleCapture}
                 title="Capture Frame from Live Video"
-                className="w-10 h-10 rounded-full border-2 border-white/30 bg-gradient-to-tr from-rose-500 to-rose-600 shadow-[0_0_16px_rgba(244,63,94,0.4)] flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all"
+                className="w-10 h-10 rounded-full border-2 border-white/40 color-cycle-pill shadow-[0_0_20px_rgba(244,63,94,0.45)] flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-all"
               >
                 <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm" />
               </button>

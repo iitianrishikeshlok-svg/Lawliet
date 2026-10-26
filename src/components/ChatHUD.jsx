@@ -281,7 +281,7 @@ export default function ChatHUD({
                     setInputText(prompt);
                     textareaRef.current?.focus();
                   }}
-                  className="px-3.5 py-1.5 rounded-full text-[11px] font-medium bg-white/[0.03] hover:bg-rose-500/15 text-white/70 hover:text-white border border-white/[0.08] hover:border-rose-500/40 shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
+                  className="relative overflow-hidden px-3.5 py-1.5 rounded-full text-[11px] font-medium bg-white/[0.03] hover:bg-white/[0.08] text-white/75 hover:text-white border border-white/[0.08] hover:border-white/25 shadow-sm transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(244,63,94,0.25)]"
                 >
                   {prompt}
                 </button>
@@ -480,9 +480,9 @@ export default function ChatHUD({
               type="submit"
               disabled={!inputText.trim() && !attachedImage}
               title="Send query"
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0 ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
                 inputText.trim() || attachedImage
-                  ? 'bg-gradient-to-tr from-rose-500 to-rose-600 text-white shadow-[0_2px_12px_rgba(244,63,94,0.45)] hover:scale-105 active:scale-95 cursor-pointer'
+                  ? 'color-cycle-pill text-white shadow-[0_2px_15px_rgba(244,63,94,0.45)] hover:scale-110 active:scale-95 cursor-pointer border border-white/20'
                   : 'bg-white/[0.06] text-white/20 cursor-not-allowed'
               }`}
             >

@@ -27,10 +27,10 @@ export default function NavigationDock({ activeTab, onSelectTab, theme }) {
                 audio.playClick();
                 onSelectTab(tab.id);
               }}
-              className={`relative flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-medium shrink-0 cursor-pointer transition-all duration-200 active:scale-95 ${
+              className={`relative overflow-hidden flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-medium shrink-0 cursor-pointer transition-all duration-300 hover:scale-[1.04] active:scale-95 ${
                 isActive
-                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-[0_2px_15px_rgba(244,63,94,0.45)]'
-                  : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
+                  ? 'color-cycle-pill text-white shadow-[0_4px_22px_rgba(244,63,94,0.45)] font-semibold border border-white/20'
+                  : 'text-white/65 hover:text-white hover:bg-white/[0.07]'
               }`}
             >
               <Icon

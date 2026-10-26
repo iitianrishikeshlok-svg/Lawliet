@@ -17,6 +17,7 @@ import { THEMES, ACCENT_COLORS, applyTheme } from './themes/themeConfig';
 import { queryGemini } from './services/gemini';
 import { storageService } from './services/storage';
 import { audio } from './common/AudioEngine';
+import YouTubeBackground from './components/YouTubeBackground';
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -471,22 +472,8 @@ export default function App() {
   if (!window.electronAPI && isInitialized && !standaloneExpanded) {
     return (
       <div className="relative w-screen h-screen overflow-hidden bg-[#07080a] select-none">
-        {/* Real Native Video Backdrop */}
-        <div className="fixed inset-0 w-full h-full pointer-events-none -z-10 select-none overflow-hidden bg-black">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-40 select-none pointer-events-none"
-            style={{
-              filter: 'brightness(110%) contrast(110%) saturate(105%)',
-            }}
-          >
-            <source src="/videos/l-intro.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/80 pointer-events-none" />
-        </div>
+        {/* Atmospheric YouTube Video Backdrop (Zero Controls, Starts at 40s) */}
+        <YouTubeBackground videoId="P2uypwLUfmE" startTime={40} opacity={0.42} />
 
         {/* Persistent Floating Draggable L Icon Widget with Circular Action Layout */}
         <DraggableWebIcon
@@ -526,30 +513,16 @@ export default function App() {
   // C. Render Full Assistant Productivity Panel
   return (
     <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col font-sans text-xs text-[#f1f2f4]">
-      {/* Real Background Video (Native Hardware-Accelerated Local Video) */}
-      <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none -z-10 select-none bg-black">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none select-none"
-          style={{
-            filter: 'brightness(110%) contrast(110%) saturate(105%)',
-          }}
-        >
-          <source src="/videos/l-intro.mp4" type="video/mp4" />
-        </video>
-        {/* Subtle Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/75 pointer-events-none" />
-      </div>
+      {/* Atmospheric YouTube Video Backdrop (Zero Controls, Starts at 40s) */}
+      <YouTubeBackground videoId="P2uypwLUfmE" startTime={40} opacity={0.35} />
 
       <div
         className="w-full h-screen min-h-screen flex flex-col flex-1 overflow-hidden relative bg-[#07080d]/85 backdrop-blur-3xl"
       >
-        {/* Subtle Ambient Radial Lighting Orbs */}
-        <div className="ambient-glow-orb -top-24 -left-24 w-96 h-96 bg-rose-600/15" />
-        <div className="ambient-glow-orb -bottom-24 -right-24 w-96 h-96 bg-purple-600/12" />
+        {/* Continuous Dynamic Chromatic Ambient Lighting Orbs */}
+        <div className="ambient-glow-orb -top-24 -left-24 w-96 h-96 bg-rose-600/20 color-cycle-flow" />
+        <div className="ambient-glow-orb -bottom-24 -right-24 w-96 h-96 bg-purple-600/18 color-cycle-flow" />
+        <div className="ambient-glow-orb top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 color-cycle-flow" />
 
         {/* Refined Header with Mode Selector and Close Button */}
         <Header

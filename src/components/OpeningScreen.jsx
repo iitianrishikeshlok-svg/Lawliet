@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { audio } from '../common/AudioEngine';
+import YouTubeBackground from './YouTubeBackground';
 
 /**
  * OpeningScreen — Fullscreen Maximalist Cyber-Gothic Entrance for L.
@@ -301,38 +302,22 @@ export default function OpeningScreen({ onInitialize, theme }) {
       />
 
       {/* ================================================================ */}
-      {/* LAYER 1: NATIVE BACKGROUND VIDEO (ZERO YOUTUBE CONTROLS)         */}
-      {/* Guaranteed instant 60fps hardware-accelerated playback           */}
+      {/* LAYER 1: ATMOSPHERIC YOUTUBE VIDEO BACKDROP (ZERO CONTROLS, 40s) */}
       {/* ================================================================ */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0 select-none bg-black">
-        <video
-          ref={videoRef}
-          src="/videos/l-intro.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className={`absolute inset-0 w-full h-full object-cover select-none pointer-events-none transition-opacity duration-1000 ${
-            videoLoaded ? 'opacity-95' : 'opacity-80'
-          }`}
-          style={{
-            filter: 'brightness(112%) contrast(110%) saturate(108%)',
-          }}
-          onCanPlay={() => setVideoLoaded(true)}
-          onError={(e) => {
-            console.warn('Local video fallback active:', e);
-            setVideoLoaded(true);
-          }}
-        />
+      <YouTubeBackground
+        videoId="P2uypwLUfmE"
+        startTime={40}
+        opacity={0.75}
+        overlayGradient="from-black/85 via-black/35 to-black/75"
+      />
 
-        {/* Pure Native Background Audio Track */}
-        <audio
-          ref={bgAudioRef}
-          src="/videos/l-bg-audio.m4a"
-          loop
-          preload="auto"
-        />
-      </div>
+      {/* Pure Native Background Audio Track */}
+      <audio
+        ref={bgAudioRef}
+        src="/videos/l-bg-audio.m4a"
+        loop
+        preload="auto"
+      />
 
       {/* ================================================================ */}
       {/* LAYER 2: CINEMATIC VIGNETTE & CONTRAST GRADIENT                  */}
@@ -652,10 +637,10 @@ export default function OpeningScreen({ onInitialize, theme }) {
         <div className="flex flex-col items-center space-y-3 z-30 w-full">
           <button
             onClick={isOpeningBook ? () => onInitialize?.() : handleLogoClick}
-            className={`px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 cursor-pointer flex items-center justify-center space-x-2.5 shadow-xl hover:scale-105 active:scale-95 ${
+            className={`relative overflow-hidden px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 cursor-pointer flex items-center justify-center space-x-2.5 shadow-2xl hover:scale-105 active:scale-95 ${
               isOpeningBook
-                ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-[0_4px_25px_rgba(244,63,94,0.4)]'
-                : 'bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/[0.15] backdrop-blur-xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]'
+                ? 'color-cycle-pill text-white shadow-[0_4px_25px_rgba(244,63,94,0.5)] border border-white/25'
+                : 'minimal-btn-solid text-white border border-white/25 shadow-2xl'
             }`}
             title={isOpeningBook ? 'Click to skip straight to assistant' : 'Click to initialize'}
           >

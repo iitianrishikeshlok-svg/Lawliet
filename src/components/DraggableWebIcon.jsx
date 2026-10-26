@@ -481,7 +481,7 @@ export default function DraggableWebIcon({
             audio.playClick();
             onExpand?.();
           }}
-          className="px-4 py-1.5 rounded-full text-[11px] font-medium bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white shadow-lg shadow-rose-950/40 border border-rose-400/20 transition-all cursor-pointer flex items-center space-x-1.5"
+          className="relative overflow-hidden px-4 py-1.5 rounded-full text-[11px] font-medium color-cycle-pill text-white shadow-lg shadow-rose-950/40 border border-white/25 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center space-x-1.5"
           title="Open Full Assistant Window"
         >
           <span className="font-semibold">Open Full Assistant</span>

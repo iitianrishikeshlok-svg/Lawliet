@@ -122,7 +122,7 @@ export default function SnipTab({
         <div className="flex flex-wrap items-center justify-center gap-2.5">
           <button
             onClick={handleLaunchSnip}
-            className="flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_4px_20px_rgba(244,63,94,0.4)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="relative overflow-hidden flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs font-semibold text-white color-cycle-pill shadow-[0_4px_22px_rgba(244,63,94,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/20"
           >
             <Crosshair size={14} className="text-white" />
             <span>Freeze & Snip (Alt+S)</span>
