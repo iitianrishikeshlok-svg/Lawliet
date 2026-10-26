@@ -3,6 +3,34 @@
  * Supports gemini-2.5-flash, gemini-2.0-flash, and gemini-1.5-flash with dynamic thinking_budget.
  */
 
+export const GEMINI_MODELS = {
+  'gemini-3.5-flash': {
+    id: 'gemini-3.5-flash',
+    label: 'gemini-3.5-flash (Fast & Live)',
+    tag: '⚡ Fast',
+  },
+  'gemini-3.5-flash-lite': {
+    id: 'gemini-3.5-flash-lite',
+    label: 'gemini-3.5-flash-lite (Ultra Fast)',
+    tag: '🚀 Ultra Fast',
+  },
+  'gemini-2.5-flash': {
+    id: 'gemini-2.5-flash',
+    label: 'gemini-2.5-flash (Balanced)',
+    tag: '⚖️ Balanced',
+  },
+  'gemini-2.5-pro': {
+    id: 'gemini-2.5-pro',
+    label: 'gemini-2.5-pro (Deep Reasoning)',
+    tag: '🧠 Deep',
+  },
+  'gemini-1.5-flash': {
+    id: 'gemini-1.5-flash',
+    label: 'gemini-1.5-flash (Standard)',
+    tag: '⚡ Standard',
+  },
+};
+
 export const THINKING_LEVELS = {
   1: {
     level: 1,

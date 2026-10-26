@@ -15,6 +15,14 @@ import {
 import { audio } from '../common/AudioEngine';
 import { GEMINI_MODELS, THINKING_LEVELS } from '../services/gemini';
 
+const SAFE_MODELS = GEMINI_MODELS || {
+  'gemini-3.5-flash': { id: 'gemini-3.5-flash', label: 'gemini-3.5-flash (Fast & Live)' },
+  'gemini-3.5-flash-lite': { id: 'gemini-3.5-flash-lite', label: 'gemini-3.5-flash-lite (Ultra Fast)' },
+  'gemini-2.5-flash': { id: 'gemini-2.5-flash', label: 'gemini-2.5-flash (Balanced)' },
+  'gemini-2.5-pro': { id: 'gemini-2.5-pro', label: 'gemini-2.5-pro (Deep Reasoning)' },
+  'gemini-1.5-flash': { id: 'gemini-1.5-flash', label: 'gemini-1.5-flash (Standard)' },
+};
+
 /**
  * DraggableWebIcon — Persistent Floating L Icon with Circular Layout Menu.
  *
@@ -321,7 +329,7 @@ export default function DraggableWebIcon({
               {/* Model Picker Dropdown Menu */}
               {showModelPicker && (
                 <div className="mt-1 w-full bg-black border-2 border-[#ff1e2e] shadow-[4px_4px_0px_#000] p-1 flex flex-col space-y-1 text-left z-50">
-                  {Object.entries(GEMINI_MODELS).map(([mId, mInfo]) => (
+                  {Object.entries(SAFE_MODELS).map(([mId, mInfo]) => (
                     <button
                       key={mId}
                       type="button"
