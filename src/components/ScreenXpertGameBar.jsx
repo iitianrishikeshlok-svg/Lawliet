@@ -158,7 +158,7 @@ export default function ScreenXpertGameBar({
 
   return (
     <div
-      className="w-[360px] sm:w-[390px] max-w-[94vw] bg-[#0f1013]/95 backdrop-blur-2xl border border-white/[0.09] rounded-2xl p-4 shadow-2xl text-[#f1f2f4] select-none flex flex-col space-y-3 font-sans animate-fadeIn relative z-50 overflow-hidden"
+      className="w-[360px] sm:w-[390px] max-w-[94vw] max-h-[92vh] overflow-y-auto overflow-x-hidden bg-[#0f1013]/95 backdrop-blur-2xl border border-white/[0.09] rounded-2xl p-4 shadow-2xl text-[#f1f2f4] select-none flex flex-col space-y-3 font-sans animate-fadeIn relative z-50"
       style={{
         boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
       }}

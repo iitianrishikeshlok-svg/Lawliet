@@ -306,7 +306,7 @@ export default function OpeningScreen({ onInitialize, theme }) {
 
   return (
     <div
-      className={`relative w-screen h-screen h-[100dvh] overflow-hidden flex items-center justify-center bg-[#050608] select-none touch-manipulation ${
+      className={`relative w-screen min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto flex items-center justify-center bg-[#050608] select-none touch-manipulation ${
         isOpeningBook ? 'animate-screen-rumble' : ''
       }`}
     >

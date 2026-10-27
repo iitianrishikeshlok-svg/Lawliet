@@ -59,7 +59,7 @@ export default function HistoryTab({ onRestoreChat, theme }) {
   });
 
   return (
-    <div className="flex flex-col w-full h-full p-4 overflow-hidden select-none space-y-3.5">
+    <div className="flex flex-col w-full min-h-full p-4 overflow-x-hidden overflow-y-auto select-none space-y-3.5">
       {/* Search & Export Header */}
       <div className="flex flex-col space-y-2.5 p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-lg">
         <div className="flex items-center space-x-2">

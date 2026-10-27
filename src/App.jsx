@@ -473,9 +473,9 @@ export default function App() {
   // B. Initialized Desktop View: Native 60fps Background Video + ASUS ScreenXpert Game Bar & Edge Handle
   if (!window.electronAPI && isInitialized && !standaloneExpanded) {
     return (
-      <div className="relative w-screen h-screen overflow-hidden bg-[#07080a] select-none flex items-center justify-center">
+      <div className="relative w-screen min-h-screen overflow-x-hidden overflow-y-auto bg-[#07080a] select-none flex items-center justify-center">
         {/* 100% Guaranteed Native Local Background Video without YouTube embed errors */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
+        <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
           <video
             src="/videos/l-intro.mp4"
             autoPlay
@@ -520,7 +520,7 @@ export default function App() {
 
         {/* Floating ScreenXpert Game Bar Overlay (Screenshot 1) */}
         {isScreenXpertOpen && (
-          <div className="absolute right-6 sm:right-16 top-1/2 -translate-y-1/2 z-40 animate-fadeIn">
+          <div className="fixed right-6 sm:right-16 top-1/2 -translate-y-1/2 z-40 animate-fadeIn">
             <ScreenXpertGameBar
               onSelectAction={(actionId) => {
                 if (actionId === 'snip') {
@@ -564,7 +564,7 @@ export default function App() {
             setIsScreenXpertOpen((prev) => !prev);
           }}
           title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ScreenXpert Game Bar'}
-          className={`absolute right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
+          className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
             isScreenXpertOpen
               ? 'translate-x-1 opacity-90'
               : 'translate-x-0 hover:-translate-x-1 opacity-95 hover:opacity-100'
@@ -630,7 +630,7 @@ export default function App() {
 
   // C. Render Full Assistant Productivity Panel
   return (
-    <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col font-sans text-xs text-[#f1f2f4]">
+    <div className="relative w-full min-h-screen overflow-x-hidden overflow-y-auto flex flex-col font-sans text-xs text-[#f1f2f4]">
       {/* 100% Reliable Native Local Background Video */}
       <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none select-none -z-10">
         <video
@@ -646,7 +646,7 @@ export default function App() {
       </div>
 
       <div
-        className="w-full h-screen min-h-screen flex flex-col flex-1 overflow-hidden relative bg-transparent"
+        className="w-full min-h-screen flex flex-col flex-1 overflow-x-hidden overflow-y-auto relative bg-transparent"
       >
         {/* Continuous Dynamic Chromatic Ambient Lighting Orbs */}
         <div className="ambient-glow-orb -top-24 -left-24 w-96 h-96 bg-rose-600/20 color-cycle-flow" />
@@ -691,8 +691,8 @@ export default function App() {
         theme={activeTheme}
       />
 
-      {/* Active Tab Viewport — Full Fit */}
-      <main className="flex-1 w-full h-full min-h-0 overflow-hidden flex flex-col relative bg-transparent">
+      {/* Active Tab Viewport — Full Fit & Smooth Scrolling */}
+      <main className="flex-1 w-full min-h-0 overflow-x-hidden overflow-y-auto flex flex-col relative bg-transparent">
         {activeTab === 'chat' && (
           <ChatHUD
             messages={messages}
@@ -800,7 +800,7 @@ export default function App() {
 
       {/* Floating ScreenXpert Game Bar Overlay in Main Workspace */}
       {isScreenXpertOpen && (
-        <div className="absolute right-6 sm:right-16 top-1/2 -translate-y-1/2 z-50 animate-fadeIn">
+        <div className="fixed right-6 sm:right-16 top-1/2 -translate-y-1/2 z-50 animate-fadeIn">
           <ScreenXpertGameBar
             onSelectAction={(actionId) => {
               if (actionId === 'snip') {
@@ -842,7 +842,7 @@ export default function App() {
           setIsScreenXpertOpen((prev) => !prev);
         }}
         title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ASUS ScreenXpert Game Bar'}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
+        className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
           isScreenXpertOpen
             ? 'translate-x-1 opacity-90'
             : 'translate-x-0 hover:-translate-x-1 opacity-95 hover:opacity-100'

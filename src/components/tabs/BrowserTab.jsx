@@ -411,7 +411,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
   };
 
   return (
-    <div className="flex flex-col w-full h-full flex-1 min-h-0 p-2.5 overflow-hidden select-none space-y-2">
+    <div className="flex flex-col w-full min-h-full flex-1 p-2.5 overflow-x-hidden overflow-y-auto select-none space-y-2">
       {/* Top Address & Mode Switcher Header */}
       <div className="flex flex-col space-y-2.5 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-lg">
         {/* Mode Selector Tabs */}
@@ -662,16 +662,16 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
       {/* Main Viewport Container */}
       <div
-        className="flex-1 w-full h-full min-h-0 rounded-3xl overflow-hidden border border-white/[0.08] bg-[#08080a]/90 backdrop-blur-2xl shadow-2xl relative transition-opacity duration-200 flex flex-col"
+        className="flex-1 w-full min-h-[500px] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#08080a]/90 backdrop-blur-2xl shadow-2xl relative transition-opacity duration-200 flex flex-col"
         style={{ opacity: pinOpacity }}
       >
         {isYouTube ? (
           /* Dedicated YouTube Cinema Experience with Suggested Videos Shelf */
-          <div className="w-full h-full flex-1 min-h-0 flex flex-col bg-[#08080a] relative overflow-hidden">
+          <div className="w-full flex-1 flex flex-col bg-[#08080a] relative overflow-y-auto overflow-x-hidden">
             {/* Video Player Display Container */}
             <div
               ref={playerContainerRef}
-              className="flex-1 w-full h-full min-h-[50%] relative bg-black flex items-center justify-center overflow-hidden"
+              className="w-full aspect-video min-h-[260px] max-h-[58vh] relative bg-black flex items-center justify-center shrink-0 overflow-hidden"
             >
               <iframe
                 ref={playerIframeRef}
@@ -685,7 +685,7 @@ export default function BrowserTab({ onSendToChat, theme }) {
             </div>
 
             {/* Suggested Videos Section */}
-            <div className="h-44 sm:h-48 shrink-0 bg-[#0c0d12]/98 border-t border-white/[0.08] p-3 flex flex-col space-y-2 overflow-hidden z-10">
+            <div className="shrink-0 bg-[#0c0d12]/98 border-t border-white/[0.08] p-3 flex flex-col space-y-2 z-10">
               <div className="flex items-center justify-between text-xs font-medium text-white/90">
                 <div className="flex items-center space-x-2">
                   <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
