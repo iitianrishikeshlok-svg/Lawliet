@@ -302,14 +302,25 @@ export default function OpeningScreen({ onInitialize, theme }) {
       />
 
       {/* ================================================================ */}
-      {/* LAYER 1: ATMOSPHERIC YOUTUBE VIDEO BACKDROP (ZERO CONTROLS, 40s) */}
+      {/* LAYER 1: 100% NATIVE LOCAL HIGH-DEFINITION BACKGROUND VIDEO      */}
       {/* ================================================================ */}
-      <YouTubeBackground
-        videoId="P2uypwLUfmE"
-        startTime={40}
-        opacity={0.75}
-        overlayGradient="from-black/85 via-black/35 to-black/75"
-      />
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
+        <video
+          ref={videoRef}
+          src="/videos/l-intro.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-1000 ${
+            videoLoaded ? 'opacity-80' : 'opacity-40'
+          }`}
+          style={{
+            filter: 'brightness(95%) contrast(108%) saturate(110%)',
+          }}
+        />
+      </div>
 
       {/* Pure Native Background Audio Track */}
       <audio

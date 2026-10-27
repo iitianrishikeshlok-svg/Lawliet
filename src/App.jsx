@@ -13,11 +13,11 @@ import SettingsTab from './components/tabs/SettingsTab';
 import SnippingOverlay from './components/canvas/SnippingOverlay';
 import OpeningScreen from './components/OpeningScreen';
 import DraggableWebIcon from './components/DraggableWebIcon';
+import ScreenXpertGameBar from './components/ScreenXpertGameBar';
 import { THEMES, ACCENT_COLORS, applyTheme } from './themes/themeConfig';
 import { queryGemini } from './services/gemini';
 import { storageService } from './services/storage';
 import { audio } from './common/AudioEngine';
-import YouTubeBackground from './components/YouTubeBackground';
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -39,6 +39,7 @@ export default function App() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [standaloneExpanded, setStandaloneExpanded] = useState(false);
   const [standaloneActionMenuOpen, setStandaloneActionMenuOpen] = useState(false);
+  const [isScreenXpertOpen, setIsScreenXpertOpen] = useState(true);
 
   // Assistant HUD State
   const [thinkingLevel, setThinkingLevel] = useState(2);
@@ -461,21 +462,135 @@ export default function App() {
       <OpeningScreen
         onInitialize={() => {
           setIsInitialized(true);
-          setStandaloneExpanded(true);
+          setStandaloneExpanded(false); // Retain user on Desktop with ScreenXpert Game Bar
+          setIsScreenXpertOpen(true);
         }}
         theme={activeTheme}
       />
     );
   }
 
-  // B. Initialized, but Assistant Closed: Persistent Floating Draggable L Icon on Desktop
+  // B. Initialized Desktop View: Native 60fps Background Video + ASUS ScreenXpert Game Bar & Edge Handle
   if (!window.electronAPI && isInitialized && !standaloneExpanded) {
     return (
-      <div className="relative w-screen h-screen overflow-hidden bg-[#07080a] select-none">
-        {/* Atmospheric YouTube Video Backdrop (Zero Controls, Starts at 40s) */}
-        <YouTubeBackground videoId="P2uypwLUfmE" startTime={40} opacity={0.42} />
+      <div className="relative w-screen h-screen overflow-hidden bg-[#07080a] select-none flex items-center justify-center">
+        {/* 100% Guaranteed Native Local Background Video without YouTube embed errors */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
+          <video
+            src="/videos/l-intro.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover transition-opacity duration-1000 opacity-80"
+            style={{ filter: 'brightness(90%) contrast(105%)' }}
+          />
+          {/* Subtle Cinematic Contrast Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/70 pointer-events-none" />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.4) 70%, rgba(0, 0, 0, 0.85) 100%)',
+            }}
+          />
+        </div>
 
-        {/* Persistent Floating Draggable L Icon Widget with Circular Action Layout */}
+        {/* Top Minimalist Telemetry Bar */}
+        <div className="absolute top-4 left-6 z-20 flex items-center space-x-3 pointer-events-auto">
+          <div className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-white/80 text-xs shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+            <span className="font-semibold tracking-wider font-mono text-[11px]">SCREENXPERT L-OS</span>
+            <span className="text-white/30">•</span>
+            <span className="text-white/50 text-[10px]">Desktop Ready</span>
+          </div>
+
+          <button
+            onClick={() => {
+              audio.playClick();
+              setIsInitialized(false);
+            }}
+            className="px-3 py-1.5 rounded-full bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/20 text-white/50 hover:text-white text-xs transition-all cursor-pointer"
+            title="Replay Opening Cinematic"
+          >
+            ↺ Intro
+          </button>
+        </div>
+
+        {/* Floating ScreenXpert Game Bar Overlay (Screenshot 1) */}
+        {isScreenXpertOpen && (
+          <div className="absolute right-6 sm:right-16 top-1/2 -translate-y-1/2 z-40 animate-fadeIn">
+            <ScreenXpertGameBar
+              onSelectAction={(actionId) => {
+                if (actionId === 'snip') {
+                  handleTriggerSnip();
+                } else {
+                  setActiveTab(actionId === 'draw' ? 'snip' : actionId);
+                  setStandaloneExpanded(true);
+                  setIsScreenXpertOpen(false);
+                }
+              }}
+              onOpenFullAssistant={() => {
+                setStandaloneExpanded(true);
+                setIsScreenXpertOpen(false);
+              }}
+              onClose={() => setIsScreenXpertOpen(false)}
+              thinkingLevel={thinkingLevel}
+              onThinkingLevelChange={(lvl) => {
+                setThinkingLevel(lvl);
+                storageService.set('thinkingLevel', lvl);
+              }}
+              selectedModel={selectedModel}
+              onSelectModel={(m) => {
+                setSelectedModel(m);
+                storageService.set('model', m);
+              }}
+              onTriggerSnip={handleTriggerSnip}
+              audioEnabled={audioEnabled}
+              onToggleAudio={(val) => {
+                setAudioEnabled(val);
+                storageService.set('audioFeedback', val);
+              }}
+              theme={activeTheme}
+            />
+          </div>
+        )}
+
+        {/* Floating ASUS ScreenXpert Edge Handle / Pill (Screenshot 2) */}
+        <button
+          onClick={() => {
+            audio.playClick();
+            setIsScreenXpertOpen((prev) => !prev);
+          }}
+          title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ScreenXpert Game Bar'}
+          className={`absolute right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
+            isScreenXpertOpen
+              ? 'translate-x-1 opacity-90'
+              : 'translate-x-0 hover:-translate-x-1 opacity-95 hover:opacity-100'
+          }`}
+          style={{ filter: 'drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8))' }}
+        >
+          {/* Exact pill handle matching Image 2 */}
+          <div className="w-12 h-16 rounded-l-2xl bg-gradient-to-l from-[#111216] to-[#1e1f26] border-y border-l border-white/[0.18] group-hover:border-rose-500/50 flex flex-col items-center justify-center shadow-2xl transition-all relative overflow-hidden">
+            {/* Gloss reflection line */}
+            <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
+
+            {/* ASUS ScreenXpert Icon (Double parallel diagonal slash bars) */}
+            <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1 transform -rotate-12 group-hover:scale-110 transition-transform">
+              <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-white to-neutral-300 shadow-sm shadow-white/30" />
+              <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-rose-400 to-rose-600 shadow-sm shadow-rose-950/60" />
+            </div>
+
+            {/* Indicator status dot */}
+            <span
+              className={`w-1.5 h-1.5 rounded-full mt-1.5 transition-all ${
+                isScreenXpertOpen ? 'bg-rose-500 animate-pulse' : 'bg-white/40 group-hover:bg-rose-400'
+              }`}
+            />
+          </div>
+        </button>
+
+        {/* Persistent Floating Draggable L Icon Widget */}
         <DraggableWebIcon
           theme={activeTheme}
           iconSize={iconSize}
@@ -499,12 +614,14 @@ export default function App() {
             setStandaloneExpanded(true);
           }}
           onTriggerSnip={handleTriggerSnip}
-          onExpand={() => setStandaloneExpanded(true)}
+          onExpand={() => {
+            setIsScreenXpertOpen((prev) => !prev);
+          }}
           onReopenIntro={() => {
             setIsInitialized(false);
             setStandaloneExpanded(false);
           }}
-          initialRadialOpen={true}
+          initialRadialOpen={false}
         />
       </div>
     );
@@ -513,11 +630,22 @@ export default function App() {
   // C. Render Full Assistant Productivity Panel
   return (
     <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col font-sans text-xs text-[#f1f2f4]">
-      {/* Atmospheric YouTube Video Backdrop (Zero Controls, Starts at 40s) */}
-      <YouTubeBackground videoId="P2uypwLUfmE" startTime={40} opacity={0.35} />
+      {/* 100% Reliable Native Local Background Video */}
+      <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none select-none -z-10">
+        <video
+          src="/videos/l-intro.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-25"
+          style={{ filter: 'brightness(85%) contrast(105%)' }}
+        />
+        <div className="absolute inset-0 bg-[#07080d]/85 backdrop-blur-3xl" />
+      </div>
 
       <div
-        className="w-full h-screen min-h-screen flex flex-col flex-1 overflow-hidden relative bg-[#07080d]/85 backdrop-blur-3xl"
+        className="w-full h-screen min-h-screen flex flex-col flex-1 overflow-hidden relative bg-transparent"
       >
         {/* Continuous Dynamic Chromatic Ambient Lighting Orbs */}
         <div className="ambient-glow-orb -top-24 -left-24 w-96 h-96 bg-rose-600/20 color-cycle-flow" />

@@ -22,19 +22,75 @@ const BOOKMARKS = [
   { label: '📖 Wikipedia', url: 'https://en.wikipedia.org' },
   { label: '🎬 Death Note Cinematic', url: 'https://youtu.be/UMLhx2ExDm8', isYT: true, ytId: 'UMLhx2ExDm8', ytTitle: 'Death Note — Atmospheric Visuals & Ambience' },
   { label: '📓 Death Note Theme', url: 'https://youtu.be/C65oaIHsdYM', isYT: true, ytId: 'C65oaIHsdYM', ytTitle: 'Death Note — Official Video & Visuals' },
+  { label: '🐙 GitHub', url: 'https://github.com' },
 ];
 
-// Verified 100% playable evergreen video presets with user ambient video as top option
-const YOUTUBE_PRESETS = [
-  { id: 'P2uypwLUfmE', title: 'Atmospheric Visuals & Theme', tag: '✨ Ambient Video (40s)' },
-  { id: 'UMLhx2ExDm8', title: 'Death Note — Atmospheric Visuals & Ambience', tag: '🎬 Death Note Ambient' },
-  { id: 'C65oaIHsdYM', title: 'Death Note — Official Video & Visuals', tag: '📓 Death Note Theme' },
-  { id: 'LXb3EKWsInQ', title: 'Costa Rica in 4K 60FPS (Nature & Wildlife)', tag: '🌿 4K Nature' },
-  { id: '5yx6BWlEVcY', title: 'Chillhop Radio — Lofi & Chill Study Beats', tag: '🎧 Lo-Fi Beats' },
-  { id: '21X5lGlDOfg', title: 'NASA Live — Views of Earth from Space Station', tag: '🚀 Space Live' },
-  { id: 'f02mOEt11OQ', title: 'Deep Work — Coding & Study Ambient Beats', tag: '💻 Coding Beats' },
-  { id: 'aqz-KE-bpKQ', title: 'Big Buck Bunny (4K 60FPS Open Movie Animation)', tag: '🎬 4K Animation' },
-  { id: 'dQw4w9WgXcQ', title: 'Rick Astley — Never Gonna Give You Up', tag: '🎵 Retro Classic' },
+// Rich Suggested Videos list with thumbnails, channels, and badges
+const SUGGESTED_VIDEOS = [
+  {
+    id: 'P2uypwLUfmE',
+    title: 'Death Note Opening 1 — The World (Nightmare)',
+    channel: 'VAP Anime',
+    tag: '✨ User Requested',
+    badge: '40s Ambient',
+    start: 40,
+  },
+  {
+    id: 'C65oaIHsdYM',
+    title: "Death Note — L's Theme A (Original Soundtrack)",
+    channel: 'Hideki Taniuchi',
+    tag: '📓 Detective OST',
+    badge: 'HQ Audio',
+    start: 0,
+  },
+  {
+    id: 'UMLhx2ExDm8',
+    title: "L's Theme — Rainy Ambience & Detective Beats",
+    channel: 'Ambience L-OS',
+    tag: '🌧️ Rain Ambience',
+    badge: 'Lo-Fi Chill',
+    start: 0,
+  },
+  {
+    id: '5yx6BWlEVcY',
+    title: 'Chillhop Radio — Lofi Hip Hop Beats to Relax/Study',
+    channel: 'Lofi Girl',
+    tag: '🎧 Lo-Fi Beats',
+    badge: '24/7 Stream',
+    start: 0,
+  },
+  {
+    id: 'f02mOEt11OQ',
+    title: 'Cyberpunk Synthwave — Deep Focus Coding Beats',
+    channel: 'Night Drive',
+    tag: '💻 Coding Beats',
+    badge: 'Synthwave',
+    start: 0,
+  },
+  {
+    id: 'LXb3EKWsInQ',
+    title: 'Tokyo Cyberpunk Night Walk in 4K 60FPS Rain Tour',
+    channel: 'Nomadic Tour',
+    tag: '🌆 4K Cyberpunk',
+    badge: '4K 60FPS',
+    start: 0,
+  },
+  {
+    id: '21X5lGlDOfg',
+    title: 'NASA Live — Views of Earth from Space Station',
+    channel: 'NASA',
+    tag: '🚀 Space Live',
+    badge: 'Earth View',
+    start: 0,
+  },
+  {
+    id: 'aqz-KE-bpKQ',
+    title: 'Big Buck Bunny (4K 60FPS Animation Film)',
+    channel: 'Blender Studio',
+    tag: '🎬 4K Film',
+    badge: 'Ultra HD',
+    start: 0,
+  },
 ];
 
 /**
@@ -319,8 +375,11 @@ export default function BrowserTab({ onSendToChat, theme }) {
   };
 
   const getYouTubeEmbedSrc = () => {
-    let targetId = activeYouTubeId;
-    const baseParams = `autoplay=1&mute=1&controls=0&start=40&loop=1&playlist=${targetId}&enablejsapi=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0`;
+    let targetId = activeYouTubeId || 'P2uypwLUfmE';
+    let startParam = '';
+    if (targetId === 'P2uypwLUfmE') {
+      startParam = '&start=40';
+    }
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase().trim();
@@ -334,7 +393,8 @@ export default function BrowserTab({ onSendToChat, theme }) {
       else if (q.includes('rick') || q.includes('classic')) targetId = 'dQw4w9WgXcQ';
     }
 
-    return `https://www.youtube.com/embed/${targetId}?${baseParams}`;
+    // Enable standard controls=1 so the user can pause, adjust volume, see the scrubber and toggle full screen
+    return `https://www.youtube.com/embed/${targetId}?autoplay=1&controls=1&enablejsapi=1&rel=0&playsinline=1&modestbranding=1${startParam}`;
   };
 
   const getWebIframeSrc = () => {
@@ -606,12 +666,12 @@ export default function BrowserTab({ onSendToChat, theme }) {
         style={{ opacity: pinOpacity }}
       >
         {isYouTube ? (
-          /* Dedicated YouTube Cinema Experience & Complete Controls */
-          <div className="w-full h-full flex-1 min-h-0 flex flex-col bg-[#08080a] relative">
+          /* Dedicated YouTube Cinema Experience with Suggested Videos Shelf */
+          <div className="w-full h-full flex-1 min-h-0 flex flex-col bg-[#08080a] relative overflow-hidden">
             {/* Video Player Display Container */}
             <div
               ref={playerContainerRef}
-              className="flex-1 w-full h-full min-h-0 relative bg-black flex items-center justify-center overflow-hidden"
+              className="flex-1 w-full h-full min-h-[50%] relative bg-black flex items-center justify-center overflow-hidden"
             >
               <iframe
                 ref={playerIframeRef}
@@ -624,6 +684,86 @@ export default function BrowserTab({ onSendToChat, theme }) {
               />
             </div>
 
+            {/* Suggested Videos Section */}
+            <div className="h-44 sm:h-48 shrink-0 bg-[#0c0d12]/98 border-t border-white/[0.08] p-3 flex flex-col space-y-2 overflow-hidden z-10">
+              <div className="flex items-center justify-between text-xs font-medium text-white/90">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                  <span className="font-semibold tracking-wide uppercase text-[11px] text-white/80">
+                    Suggested Videos
+                  </span>
+                  <span className="text-[10px] text-white/40">
+                    ({SUGGESTED_VIDEOS.length} recommendations)
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 text-[10px] text-white/50">
+                  <span>Click video to play</span>
+                </div>
+              </div>
+
+              {/* Horizontal Scrollable Video Cards */}
+              <div className="flex-1 w-full overflow-x-auto overflow-y-hidden flex space-x-3 pb-1 no-scrollbar">
+                {SUGGESTED_VIDEOS.map((vid) => {
+                  const isCurrent = activeYouTubeId === vid.id;
+                  return (
+                    <button
+                      key={vid.id}
+                      onClick={() => {
+                        audio.playClick();
+                        setActiveYouTubeId(vid.id);
+                        setActiveYouTubeTitle(vid.title);
+                        setSearchQuery('');
+                        setIsPlaying(true);
+                        setInputUrl(`https://www.youtube.com/watch?v=${vid.id}`);
+                        setVideoSearchInput(`https://www.youtube.com/watch?v=${vid.id}`);
+                      }}
+                      className={`group relative shrink-0 w-44 sm:w-48 h-full rounded-xl overflow-hidden border text-left flex flex-col justify-between transition-all duration-200 cursor-pointer ${
+                        isCurrent
+                          ? 'border-rose-500 bg-rose-950/20 shadow-lg shadow-rose-950/40 ring-1 ring-rose-500'
+                          : 'border-white/[0.08] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05]'
+                      }`}
+                    >
+                      {/* Thumbnail Container with Play Overlay */}
+                      <div className="relative w-full h-24 overflow-hidden bg-black/60">
+                        <img
+                          src={`https://img.youtube.com/vi/${vid.id}/mqdefault.jpg`}
+                          alt={vid.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                        <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded text-[8.5px] font-mono bg-black/70 text-white border border-white/10">
+                          {vid.badge}
+                        </span>
+                        {/* Play button overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+                          <div className="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <Play size={13} fill="white" className="ml-0.5" />
+                          </div>
+                        </div>
+                        {isCurrent && (
+                          <div className="absolute bottom-1 left-1.5 flex items-center space-x-1 px-1.5 py-0.5 rounded bg-rose-600 text-white text-[8px] font-semibold uppercase tracking-wider">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                            <span>Playing</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Video Title & Channel */}
+                      <div className="p-2 flex flex-col justify-between flex-1 min-w-0">
+                        <div className="text-[11px] font-medium text-white/90 line-clamp-2 leading-tight group-hover:text-rose-300 transition-colors">
+                          {vid.title}
+                        </div>
+                        <div className="flex items-center justify-between text-[9px] text-white/40 mt-1">
+                          <span className="truncate">{vid.channel}</span>
+                          <span className="text-rose-400 font-mono text-[8.5px]">{vid.tag}</span>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         ) : isElectron ? (
           /* Native Electron Webview Tag */
@@ -635,14 +775,17 @@ export default function BrowserTab({ onSendToChat, theme }) {
             webpreferences="contextIsolation=yes"
           />
         ) : (
-          /* Web Browser Viewport with Atmospheric Video in the Background */
+          /* Web Browser Viewport with Native Video in the Background */
           <div className="w-full h-full flex-1 min-h-0 flex flex-col relative bg-[#0c0d10] overflow-hidden">
-            {/* Atmospheric Video Playing in the Background (Zero Controls, 40s) */}
+            {/* Atmospheric 100% Native Video Playing in the Background */}
             <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/P2uypwLUfmE?autoplay=1&mute=1&controls=0&start=40&loop=1&playlist=P2uypwLUfmE&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
-                title="Ambient Web Backdrop"
-                className="w-full h-full object-cover pointer-events-none border-none select-none scale-105"
+              <video
+                src="/videos/l-intro.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover pointer-events-none scale-105"
                 style={{ opacity: deathNoteBgOpacity }}
               />
               {/* Dark Vignette Overlay */}
