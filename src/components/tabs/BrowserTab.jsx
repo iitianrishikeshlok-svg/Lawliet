@@ -93,6 +93,8 @@ const SUGGESTED_VIDEOS = [
   },
 ];
 
+const YOUTUBE_PRESETS = SUGGESTED_VIDEOS;
+
 /**
  * Robustly extract YouTube 11-char Video ID from ANY format:
  * - youtube.com/watch?v=ID
@@ -523,7 +525,15 @@ export default function BrowserTab({ onSendToChat, theme }) {
               {YOUTUBE_PRESETS.map((p) => (
                 <button
                   key={p.id}
-                  onClick={() => loadPresetVideo(p)}
+                  onClick={() => {
+                    audio.playClick();
+                    setActiveYouTubeId(p.id);
+                    setActiveYouTubeTitle(p.title);
+                    setSearchQuery('');
+                    setIsPlaying(true);
+                    setInputUrl(`https://www.youtube.com/watch?v=${p.id}`);
+                    setVideoSearchInput(`https://www.youtube.com/watch?v=${p.id}`);
+                  }}
                   className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all shrink-0 cursor-pointer ${
                     activeYouTubeId === p.id && !searchQuery
                       ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md shadow-rose-950/40 border border-rose-400/20'

@@ -14,6 +14,7 @@ import SnippingOverlay from './components/canvas/SnippingOverlay';
 import OpeningScreen from './components/OpeningScreen';
 import DraggableWebIcon from './components/DraggableWebIcon';
 import ScreenXpertGameBar from './components/ScreenXpertGameBar';
+import ScreenXpertEdgeHandle from './components/ScreenXpertEdgeHandle';
 import { THEMES, ACCENT_COLORS, applyTheme } from './themes/themeConfig';
 import { queryGemini } from './services/gemini';
 import { storageService } from './services/storage';
@@ -40,6 +41,13 @@ export default function App() {
   const [standaloneExpanded, setStandaloneExpanded] = useState(false);
   const [standaloneActionMenuOpen, setStandaloneActionMenuOpen] = useState(false);
   const [isScreenXpertOpen, setIsScreenXpertOpen] = useState(true);
+  const [edgeHandlePos, setEdgeHandlePos] = useState(() => {
+    try {
+      const saved = localStorage.getItem('l_screenxpert_handle_pos');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return { y: 50, side: 'right' };
+  });
 
   // Assistant HUD State
   const [thinkingLevel, setThinkingLevel] = useState(2);
@@ -520,7 +528,15 @@ export default function App() {
 
         {/* Floating ScreenXpert Game Bar Overlay (Screenshot 1) */}
         {isScreenXpertOpen && (
-          <div className="fixed right-6 sm:right-16 top-1/2 -translate-y-1/2 z-40 animate-fadeIn">
+          <div
+            style={{
+              top: `${Math.max(12, Math.min(84, edgeHandlePos.y))}%`,
+              transform: 'translateY(-50%)',
+            }}
+            className={`fixed ${
+              edgeHandlePos.side === 'left' ? 'left-14 sm:left-18' : 'right-14 sm:right-18'
+            } z-40 animate-fadeIn`}
+          >
             <ScreenXpertGameBar
               onSelectAction={(actionId) => {
                 if (actionId === 'snip') {
@@ -557,39 +573,12 @@ export default function App() {
           </div>
         )}
 
-        {/* Floating ASUS ScreenXpert Edge Handle / Pill (Screenshot 2) */}
-        <button
-          onClick={() => {
-            audio.playClick();
-            setIsScreenXpertOpen((prev) => !prev);
-          }}
-          title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ScreenXpert Game Bar'}
-          className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
-            isScreenXpertOpen
-              ? 'translate-x-1 opacity-90'
-              : 'translate-x-0 hover:-translate-x-1 opacity-95 hover:opacity-100'
-          }`}
-          style={{ filter: 'drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8))' }}
-        >
-          {/* Exact pill handle matching Image 2 */}
-          <div className="w-12 h-16 rounded-l-2xl bg-gradient-to-l from-[#111216] to-[#1e1f26] border-y border-l border-white/[0.18] group-hover:border-rose-500/50 flex flex-col items-center justify-center shadow-2xl transition-all relative overflow-hidden">
-            {/* Gloss reflection line */}
-            <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
-
-            {/* ASUS ScreenXpert Icon (Double parallel diagonal slash bars) */}
-            <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1 transform -rotate-12 group-hover:scale-110 transition-transform">
-              <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-white to-neutral-300 shadow-sm shadow-white/30" />
-              <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-rose-400 to-rose-600 shadow-sm shadow-rose-950/60" />
-            </div>
-
-            {/* Indicator status dot */}
-            <span
-              className={`w-1.5 h-1.5 rounded-full mt-1.5 transition-all ${
-                isScreenXpertOpen ? 'bg-rose-500 animate-pulse' : 'bg-white/40 group-hover:bg-rose-400'
-              }`}
-            />
-          </div>
-        </button>
+        {/* Movable & Draggable ASUS ScreenXpert Edge Handle (Screenshot 2) */}
+        <ScreenXpertEdgeHandle
+          isOpen={isScreenXpertOpen}
+          onToggle={() => setIsScreenXpertOpen((prev) => !prev)}
+          onPositionChange={setEdgeHandlePos}
+        />
 
         {/* Persistent Floating Draggable L Icon Widget */}
         <DraggableWebIcon
@@ -800,7 +789,15 @@ export default function App() {
 
       {/* Floating ScreenXpert Game Bar Overlay in Main Workspace */}
       {isScreenXpertOpen && (
-        <div className="fixed right-6 sm:right-16 top-1/2 -translate-y-1/2 z-50 animate-fadeIn">
+        <div
+          style={{
+            top: `${Math.max(12, Math.min(84, edgeHandlePos.y))}%`,
+            transform: 'translateY(-50%)',
+          }}
+          className={`fixed ${
+            edgeHandlePos.side === 'left' ? 'left-14 sm:left-18' : 'right-14 sm:right-18'
+          } z-50 animate-fadeIn`}
+        >
           <ScreenXpertGameBar
             onSelectAction={(actionId) => {
               if (actionId === 'snip') {
@@ -835,33 +832,12 @@ export default function App() {
         </div>
       )}
 
-      {/* Floating ASUS ScreenXpert Edge Handle docked on right edge */}
-      <button
-        onClick={() => {
-          audio.playClick();
-          setIsScreenXpertOpen((prev) => !prev);
-        }}
-        title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ASUS ScreenXpert Game Bar'}
-        className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
-          isScreenXpertOpen
-            ? 'translate-x-1 opacity-90'
-            : 'translate-x-0 hover:-translate-x-1 opacity-95 hover:opacity-100'
-        }`}
-        style={{ filter: 'drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8))' }}
-      >
-        <div className="w-12 h-16 rounded-l-2xl bg-gradient-to-l from-[#111216] to-[#1e1f26] border-y border-l border-white/[0.18] group-hover:border-rose-500/50 flex flex-col items-center justify-center shadow-2xl transition-all relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
-          <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1 transform -rotate-12 group-hover:scale-110 transition-transform">
-            <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-white to-neutral-300 shadow-sm shadow-white/30" />
-            <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-rose-400 to-rose-600 shadow-sm shadow-rose-950/60" />
-          </div>
-          <span
-            className={`w-1.5 h-1.5 rounded-full mt-1.5 transition-all ${
-              isScreenXpertOpen ? 'bg-rose-500 animate-pulse' : 'bg-white/40 group-hover:bg-rose-400'
-            }`}
-          />
-        </div>
-      </button>
+      {/* Movable & Draggable ASUS ScreenXpert Edge Handle */}
+      <ScreenXpertEdgeHandle
+        isOpen={isScreenXpertOpen}
+        onToggle={() => setIsScreenXpertOpen((prev) => !prev)}
+        onPositionChange={setEdgeHandlePos}
+      />
     </div>
   </div>
   );

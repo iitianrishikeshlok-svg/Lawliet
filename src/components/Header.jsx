@@ -32,47 +32,116 @@ export default function Header({
   };
 
   // Launch Always-on-top Floating Desktop Icon via Document Picture-in-Picture
+  // Launch Always-on-top Floating Desktop Icon & ScreenXpert via Document Picture-in-Picture
   const launchFloatingDesktopPiP = async () => {
     audio.playClick();
     if (!('documentPictureInPicture' in window)) {
       alert(
-        'Document Picture-in-Picture is supported in modern Chrome & Edge. To use a permanent always-on-top icon across all windows, run: npm run electron'
+        'Document Picture-in-Picture is supported in modern Chrome & Edge.\n\nTo keep L & ASUS ScreenXpert floating permanently on top of all windows, tabs, and apps:\n1. Open in Google Chrome or Microsoft Edge\n2. Or run: launch.bat (Native Desktop Overlay)!'
       );
       return;
     }
 
     try {
       const pipWin = await window.documentPictureInPicture.requestWindow({
-        width: 120,
-        height: 120,
+        width: 380,
+        height: 620,
       });
 
       setPipActive(true);
       pipWin.addEventListener('pagehide', () => setPipActive(false));
 
       // Style PiP document
-      pipWin.document.title = 'L Assistant Floating Icon';
+      pipWin.document.title = 'ASUS ScreenXpert — Floating Overlay';
       pipWin.document.body.style.margin = '0';
-      pipWin.document.body.style.padding = '0';
-      pipWin.document.body.style.background = '#0a0a0c';
-      pipWin.document.body.style.display = 'flex';
-      pipWin.document.body.style.alignItems = 'center';
-      pipWin.document.body.style.justifyContent = 'center';
-      pipWin.document.body.style.height = '100vh';
-      pipWin.document.body.style.cursor = 'pointer';
+      pipWin.document.body.style.padding = '12px';
+      pipWin.document.body.style.background = '#0d0e12';
+      pipWin.document.body.style.color = '#f1f2f4';
+      pipWin.document.body.style.fontFamily = 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif';
+      pipWin.document.body.style.boxSizing = 'border-box';
       pipWin.document.body.style.userSelect = 'none';
-      pipWin.document.body.style.overflow = 'hidden';
+      pipWin.document.body.style.overflowY = 'auto';
 
       pipWin.document.body.innerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:radial-gradient(circle,rgba(255,30,46,0.3) 0%,transparent 70%);">
-          <img src="/l-triangle-logo.svg" style="width:68px;height:68px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,30,46,0.7));transition:transform 0.2s;" />
-          <span style="font-family:monospace;font-size:9px;color:#ff4b5c;font-weight:bold;letter-spacing:1px;margin-top:2px;">L-HUD • CLICK</span>
+        <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
+          <!-- Header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#f43f5e,#be123c);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(244,63,94,0.4);">
+                <img src="/l-triangle-logo.svg" style="width:20px;height:20px;object-fit:contain;" />
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px;">
+                  <span>ScreenXpert</span>
+                  <span style="font-size:9px;font-family:monospace;padding:1px 5px;border-radius:4px;background:rgba(244,63,94,0.2);color:#fda4af;border:1px solid rgba(244,63,94,0.3);">FLOAT</span>
+                </div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.45);">Always-on-Top Across All Tabs</div>
+              </div>
+            </div>
+            <span style="font-size:10px;font-family:monospace;color:#10b981;display:flex;align-items:center;gap:4px;">
+              <span style="width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;"></span>
+              Active
+            </span>
+          </div>
+
+          <!-- Quick Action Tiles Grid -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <button id="pip-chat" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#fff;cursor:pointer;transition:all 0.15s;">
+              <span style="font-size:18px;">💬</span>
+              <span style="font-size:11px;font-weight:600;">Ask L (Chat)</span>
+              <span style="font-size:9px;color:rgba(255,255,255,0.4);">Gemini Core</span>
+            </button>
+            <button id="pip-snip" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#fff;cursor:pointer;transition:all 0.15s;">
+              <span style="font-size:18px;">✂️</span>
+              <span style="font-size:11px;font-weight:600;">OCR Snip</span>
+              <span style="font-size:9px;color:rgba(255,255,255,0.4);">Screen Grab</span>
+            </button>
+            <button id="pip-browser" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#fff;cursor:pointer;transition:all 0.15s;">
+              <span style="font-size:18px;">🌐</span>
+              <span style="font-size:11px;font-weight:600;">YouTube</span>
+              <span style="font-size:9px;color:rgba(255,255,255,0.4);">Cinema Video</span>
+            </button>
+            <button id="pip-watch" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#fff;cursor:pointer;transition:all 0.15s;">
+              <span style="font-size:18px;">👁️</span>
+              <span style="font-size:11px;font-weight:600;">Screen Watch</span>
+              <span style="font-size:9px;color:rgba(255,255,255,0.4);">Live Stream</span>
+            </button>
+            <button id="pip-camera" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#fff;cursor:pointer;transition:all 0.15s;">
+              <span style="font-size:18px;">📷</span>
+              <span style="font-size:11px;font-weight:600;">Camera</span>
+              <span style="font-size:9px;color:rgba(255,255,255,0.4);">Optical Vision</span>
+            </button>
+            <button id="pip-focus" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:14px;background:linear-gradient(135deg,rgba(244,63,94,0.2),rgba(244,63,94,0.3));border:1px solid rgba(244,63,94,0.4);color:#fda4af;cursor:pointer;transition:all 0.15s;">
+              <span style="font-size:18px;">⚡</span>
+              <span style="font-size:11px;font-weight:700;">Open Hub</span>
+              <span style="font-size:9px;color:#fda4af;">Main Window</span>
+            </button>
+          </div>
+
+          <!-- Bottom Telemetry Banner -->
+          <div style="margin-top:auto;padding:10px;border-radius:12px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:between;font-size:10px;color:rgba(255,255,255,0.6);">
+            <span>🔒 ASUS ScreenXpert Running</span>
+            <span style="font-family:monospace;color:#f43f5e;">L-OS v2.5</span>
+          </div>
         </div>
       `;
 
-      pipWin.document.body.addEventListener('click', () => {
-        window.focus();
-      });
+      const wireButton = (id, action) => {
+        const btn = pipWin.document.getElementById(id);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            window.focus();
+            action();
+          });
+        }
+      };
+
+      wireButton('pip-chat', () => onFloatPiP?.());
+      wireButton('pip-snip', () => window.focus());
+      wireButton('pip-browser', () => window.focus());
+      wireButton('pip-watch', () => window.focus());
+      wireButton('pip-camera', () => window.focus());
+      wireButton('pip-focus', () => window.focus());
     } catch (err) {
       console.warn('PiP launch error:', err);
     }
