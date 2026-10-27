@@ -462,8 +462,8 @@ export default function App() {
       <OpeningScreen
         onInitialize={() => {
           setIsInitialized(true);
-          setStandaloneExpanded(false); // Retain user on Desktop with ScreenXpert Game Bar
-          setIsScreenXpertOpen(true);
+          setStandaloneExpanded(true); // Directly open the previous complete main workspace (chat, browser, models)
+          setIsScreenXpertOpen(false); // Floating ScreenXpert edge handle remains docked and ready
         }}
         theme={activeTheme}
       />
@@ -653,29 +653,36 @@ export default function App() {
         <div className="ambient-glow-orb -bottom-24 -right-24 w-96 h-96 bg-purple-600/18 color-cycle-flow" />
         <div className="ambient-glow-orb top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 color-cycle-flow" />
 
-        {/* Refined Header with Mode Selector and Close Button */}
+        {/* Refined Header with Mode Selector, Model Pill and ScreenXpert Button */}
         <Header
-        thinkingLevel={thinkingLevel}
-        onThinkingLevelChange={(lvl) => {
-          setThinkingLevel(lvl);
-          storageService.set('thinkingLevel', lvl);
-        }}
-        isPinned={isPinned}
-        onTogglePin={handleTogglePin}
-        onFloatPiP={() => {
-          setStandaloneExpanded(false);
-          audio.playExpand();
-        }}
-        onClose={() => {
-          if (window.electronAPI?.closeAssistant) {
-            window.electronAPI.closeAssistant();
-          } else {
+          thinkingLevel={thinkingLevel}
+          onThinkingLevelChange={(lvl) => {
+            setThinkingLevel(lvl);
+            storageService.set('thinkingLevel', lvl);
+          }}
+          isPinned={isPinned}
+          onTogglePin={handleTogglePin}
+          onFloatPiP={() => {
             setStandaloneExpanded(false);
-          }
-        }}
-        lastLatency={lastLatency}
-        theme={activeTheme}
-      />
+            audio.playExpand();
+          }}
+          onClose={() => {
+            if (window.electronAPI?.closeAssistant) {
+              window.electronAPI.closeAssistant();
+            } else {
+              setStandaloneExpanded(false);
+            }
+          }}
+          lastLatency={lastLatency}
+          theme={activeTheme}
+          selectedModel={selectedModel}
+          onSelectModel={(m) => {
+            setSelectedModel(m);
+            storageService.set('model', m);
+          }}
+          onToggleScreenXpert={() => setIsScreenXpertOpen((prev) => !prev)}
+          isScreenXpertOpen={isScreenXpertOpen}
+        />
 
       {/* Navigation Dock */}
       <NavigationDock
@@ -790,6 +797,71 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* Floating ScreenXpert Game Bar Overlay in Main Workspace */}
+      {isScreenXpertOpen && (
+        <div className="absolute right-6 sm:right-16 top-1/2 -translate-y-1/2 z-50 animate-fadeIn">
+          <ScreenXpertGameBar
+            onSelectAction={(actionId) => {
+              if (actionId === 'snip') {
+                handleTriggerSnip();
+              } else {
+                setActiveTab(actionId === 'draw' ? 'snip' : actionId);
+                setIsScreenXpertOpen(false);
+              }
+            }}
+            onOpenFullAssistant={() => {
+              setIsScreenXpertOpen(false);
+            }}
+            onClose={() => setIsScreenXpertOpen(false)}
+            thinkingLevel={thinkingLevel}
+            onThinkingLevelChange={(lvl) => {
+              setThinkingLevel(lvl);
+              storageService.set('thinkingLevel', lvl);
+            }}
+            selectedModel={selectedModel}
+            onSelectModel={(m) => {
+              setSelectedModel(m);
+              storageService.set('model', m);
+            }}
+            onTriggerSnip={handleTriggerSnip}
+            audioEnabled={audioEnabled}
+            onToggleAudio={(val) => {
+              setAudioEnabled(val);
+              storageService.set('audioFeedback', val);
+            }}
+            theme={activeTheme}
+          />
+        </div>
+      )}
+
+      {/* Floating ASUS ScreenXpert Edge Handle docked on right edge */}
+      <button
+        onClick={() => {
+          audio.playClick();
+          setIsScreenXpertOpen((prev) => !prev);
+        }}
+        title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ASUS ScreenXpert Game Bar'}
+        className={`absolute right-0 top-1/2 -translate-y-1/2 z-50 flex items-center justify-center cursor-pointer transition-all duration-300 group ${
+          isScreenXpertOpen
+            ? 'translate-x-1 opacity-90'
+            : 'translate-x-0 hover:-translate-x-1 opacity-95 hover:opacity-100'
+        }`}
+        style={{ filter: 'drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8))' }}
+      >
+        <div className="w-12 h-16 rounded-l-2xl bg-gradient-to-l from-[#111216] to-[#1e1f26] border-y border-l border-white/[0.18] group-hover:border-rose-500/50 flex flex-col items-center justify-center shadow-2xl transition-all relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
+          <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1 transform -rotate-12 group-hover:scale-110 transition-transform">
+            <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-white to-neutral-300 shadow-sm shadow-white/30" />
+            <span className="w-4 h-1.5 rounded-full bg-gradient-to-r from-rose-400 to-rose-600 shadow-sm shadow-rose-950/60" />
+          </div>
+          <span
+            className={`w-1.5 h-1.5 rounded-full mt-1.5 transition-all ${
+              isScreenXpertOpen ? 'bg-rose-500 animate-pulse' : 'bg-white/40 group-hover:bg-rose-400'
+            }`}
+          />
+        </div>
+      </button>
     </div>
   </div>
   );

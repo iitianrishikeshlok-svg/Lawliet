@@ -12,6 +12,10 @@ export default function Header({
   lastLatency = null,
   theme,
   onFloatPiP,
+  selectedModel = 'gemini-3.5-flash',
+  onSelectModel,
+  onToggleScreenXpert,
+  isScreenXpertOpen = false,
 }) {
   const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [pipActive, setPipActive] = useState(false);
@@ -95,6 +99,11 @@ export default function Header({
               <span className="text-xs font-semibold tracking-wide text-white font-sans">
                 L Intelligence
               </span>
+              {/* Active Model Pill */}
+              <div className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-[10px] font-mono text-rose-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
+                <span>{selectedModel}</span>
+              </div>
               {lastLatency && (
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   {lastLatency}
@@ -109,6 +118,23 @@ export default function Header({
 
         {/* Window Controls & Floating PiP Button */}
         <div className="non-draggable flex items-center space-x-2">
+          {/* Toggle ScreenXpert Game Bar Overlay */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              onToggleScreenXpert?.();
+            }}
+            title={isScreenXpertOpen ? 'Collapse ScreenXpert Game Bar' : 'Open ASUS ScreenXpert Game Bar'}
+            className={`relative overflow-hidden flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+              isScreenXpertOpen
+                ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
+                : 'bg-white/[0.04] text-white/80 hover:text-white border-white/[0.1] hover:bg-white/[0.08]'
+            }`}
+          >
+            <span className="text-rose-400">⚡</span>
+            <span>ScreenXpert</span>
+          </button>
+
           {/* Insecure Origin HTTP Warning Pill */}
           {!isSecure && !isElectron && (
             <button
@@ -132,7 +158,7 @@ export default function Header({
             }`}
           >
             <Monitor size={12} className={pipActive ? 'text-white' : 'text-rose-400'} />
-            <span className="hidden sm:inline">Float HUD</span>
+            <span className="hidden sm:inline">Desktop Video</span>
           </button>
 
           {/* Always on Top Pin */}
