@@ -558,9 +558,10 @@ export default function BrowserTab({ onSendToChat, theme }) {
   const [isSearching, setIsSearching] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchBoxRef = useRef(null);
+  const [isMaximized, setIsMaximized] = useState(false);
 
-  // Death Note Atmospheric Web Background Clip State
-  const [deathNoteBgOpacity, setDeathNoteBgOpacity] = useState(0.45);
+  // Death Note Atmospheric Web Background Clip State (0 by default for crisp 100% full-contrast web browsing)
+  const [deathNoteBgOpacity, setDeathNoteBgOpacity] = useState(0);
 
   // Player Controls State
   const [isPlaying, setIsPlaying] = useState(true);
@@ -587,11 +588,20 @@ export default function BrowserTab({ onSendToChat, theme }) {
       }
     };
 
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsMaximized(false);
+        setShowSuggestions(false);
+      }
+    };
+
     window.addEventListener('message', handleProxyMessage);
     document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('message', handleProxyMessage);
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -1276,7 +1286,13 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
       {/* Main Viewport Container */}
       <div
-        className="flex-1 w-full min-h-[500px] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#08080a]/90 backdrop-blur-2xl shadow-2xl relative transition-opacity duration-200 flex flex-col"
+        className={`${
+          isMaximized
+            ? 'fixed inset-2 z-50 rounded-2xl bg-[#08080a] border border-rose-500/40 shadow-[0_0_80px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden'
+            : isYouTube
+            ? 'flex-1 w-full min-h-[500px] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#08080a]/90 backdrop-blur-2xl shadow-2xl relative transition-all duration-200 flex flex-col'
+            : 'flex-1 w-full min-h-[650px] h-[calc(100vh-210px)] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#08080a]/90 backdrop-blur-2xl shadow-2xl relative transition-all duration-200 flex flex-col'
+        }`}
         style={{ opacity: pinOpacity }}
       >
         {isYouTube ? (
@@ -1406,34 +1422,46 @@ export default function BrowserTab({ onSendToChat, theme }) {
             webpreferences="contextIsolation=yes"
           />
         ) : (
-          /* Web Browser Viewport with Native Video in the Background */
+          /* Web Browser Viewport */
           <div className="w-full h-full flex-1 min-h-0 flex flex-col relative bg-[#0c0d10] overflow-hidden">
-            {/* Atmospheric 100% Native Video Playing in the Background */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
-              <video
-                src="/videos/l-intro.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover pointer-events-none scale-105"
-                style={{ opacity: deathNoteBgOpacity }}
-              />
-              {/* Dark Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0d10] via-black/40 to-black/70 pointer-events-none" />
-            </div>
+            {/* Atmospheric Video (only subtle background when enabled) */}
+            {deathNoteBgOpacity > 0.05 && (
+              <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
+                <video
+                  src="/videos/l-intro.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover pointer-events-none scale-105"
+                  style={{ opacity: deathNoteBgOpacity }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0d10] via-black/40 to-black/70 pointer-events-none" />
+              </div>
+            )}
 
-            {/* Quick Web Helper Bar with Death Note Backdrop Controls */}
-            <div className="flex items-center justify-between px-3 py-1.5 bg-black/70 backdrop-blur-md border-b border-white/[0.08] text-[11px] text-white/80 z-10 shrink-0">
+            {/* Quick Web Helper Bar with Full Size & Backdrop Controls */}
+            <div className="flex items-center justify-between px-3 py-1.5 bg-black/85 backdrop-blur-md border-b border-white/[0.08] text-[11px] text-white/80 z-20 shrink-0">
               <div className="flex items-center space-x-2 min-w-0">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
-                <span className="truncate max-w-[280px] font-mono text-[10px] text-white/90">{currentUrl}</span>
+                <span className="truncate max-w-[280px] sm:max-w-md font-mono text-[10px] text-white/90">{currentUrl}</span>
               </div>
 
-              <div className="flex items-center space-x-2.5">
+              <div className="flex items-center space-x-2">
+                {/* Full Size / Restore Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsMaximized(!isMaximized)}
+                  className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 transition-all text-[10px] font-semibold cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                  title={isMaximized ? "Restore normal size (Esc)" : "Expand web page to full size"}
+                >
+                  <Maximize2 size={11} />
+                  <span>{isMaximized ? "Restore Size" : "Full Size"}</span>
+                </button>
+
                 {/* Death Note Backdrop Opacity Slider */}
                 <div className="flex items-center space-x-1.5 bg-white/[0.05] px-2 py-0.5 rounded border border-white/10">
-                  <span className="text-[9px] font-mono text-white/60">📓 Death Note Clip:</span>
+                  <span className="text-[9px] font-mono text-white/60">📓 Clip:</span>
                   <input
                     type="range"
                     min="0"
@@ -1451,8 +1479,9 @@ export default function BrowserTab({ onSendToChat, theme }) {
 
                 {/* Proxy Unblock Toggle */}
                 <button
+                  type="button"
                   onClick={() => setUseProxy(!useProxy)}
-                  className={`text-[9px] px-2 py-0.5 rounded border transition-colors ${
+                  className={`text-[9px] px-2 py-0.5 rounded border transition-colors cursor-pointer ${
                     useProxy
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300 font-medium'
                       : 'border-white/10 bg-white/5 text-white/40'
@@ -1461,17 +1490,27 @@ export default function BrowserTab({ onSendToChat, theme }) {
                 >
                   {useProxy ? '🛡️ Unblock ON' : '⚡ Direct'}
                 </button>
+
+                {/* Open in full external tab */}
+                <button
+                  type="button"
+                  onClick={handleOpenExternal}
+                  className="p-1.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
+                  title="Open in new external browser tab"
+                >
+                  <ExternalLink size={12} />
+                </button>
               </div>
             </div>
 
-            {/* Web Frame Display */}
-            <div className="flex-1 w-full h-full min-h-0 relative z-10">
+            {/* Web Frame Display — Absolute Inset-0 Stretches 100% Full Width and Height */}
+            <div className="flex-1 w-full min-h-[550px] relative z-10 bg-[#121318]">
               <iframe
                 ref={iframeRef}
                 src={getWebIframeSrc()}
                 title="Mini Browser Viewport"
-                className="w-full h-full border-none transition-opacity duration-300"
-                style={{ opacity: 1 - deathNoteBgOpacity * 0.4 }}
+                className="absolute inset-0 w-full h-full border-none bg-[#121318] transition-opacity duration-300"
+                style={{ opacity: deathNoteBgOpacity > 0.05 ? 1 - deathNoteBgOpacity * 0.35 : 1 }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
               />
