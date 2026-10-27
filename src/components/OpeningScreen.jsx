@@ -61,17 +61,27 @@ export default function OpeningScreen({ onInitialize, theme }) {
     return () => mq.removeEventListener?.('change', handler);
   }, []);
 
-  // Ensure native video autoplays smoothly
+  // Ensure native video autoplays smoothly with bulletproof browser policy compliance
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Autoplay policy fallback: muted play is always allowed
-        if (videoRef.current) {
-          videoRef.current.muted = true;
-          videoRef.current.play().catch((err) => console.warn('Video play deferred:', err));
-        }
-      });
-    }
+    const playVideo = () => {
+      if (videoRef.current) {
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+        videoRef.current.playsInline = true;
+        videoRef.current.play().catch((err) => {
+          console.warn('Video play deferred until user interaction:', err);
+        });
+      }
+    };
+
+    playVideo();
+    window.addEventListener('pointerdown', playVideo, { once: true });
+    window.addEventListener('keydown', playVideo, { once: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', playVideo);
+      window.removeEventListener('keydown', playVideo);
+    };
   }, []);
 
   // Sound Toggle: Direct native audio controls (No YouTube iframe)
@@ -245,7 +255,14 @@ export default function OpeningScreen({ onInitialize, theme }) {
   // Logo Click: Mute background audio immediately + Trigger 3D Death Note Book
   // --------------------------------------------------------------------------
   const handleLogoClick = () => {
-    if (isOpeningBook) return;
+    // If already in transition, clicking again immediately enters desktop
+    if (isOpeningBook) {
+      try {
+        if (bgAudioRef.current) bgAudioRef.current.pause();
+      } catch {}
+      onInitialize?.();
+      return;
+    }
 
     // 1. MUST MUTE background video audio immediately when clicking icon
     try {
@@ -260,25 +277,25 @@ export default function OpeningScreen({ onInitialize, theme }) {
       audio.playRyukTheme?.();
     } catch {}
 
-    // 3. Trigger 3D Physical Death Note book opening sequence (NO logo shown over book)
+    // 3. Trigger 3D Physical Death Note book opening sequence
     setIsOpeningBook(true);
     setAnimStage(1);
 
-    // Timeline duration (~5.0 seconds):
-    // Stage 1 (0ms - 1200ms): 3D Death Note book uncurls and rises with page thickness
+    // Fast, crisp animation timeline (~2.0 seconds total):
+    // Stage 1 (0ms - 600ms): 3D Death Note book uncurls and rises
     const t1 = setTimeout(() => {
-      setAnimStage(2); // Rules fully displayed
-    }, 1200);
+      setAnimStage(2); // Rules displayed
+    }, 600);
 
-    // Stage 2 (1200ms - 4400ms): Rules visible, user reads
+    // Stage 2 (600ms - 1800ms): Rules visible
     const t2 = setTimeout(() => {
-      setAnimStage(3); // Cinematic white/crimson flash
-    }, 4400);
+      setAnimStage(3); // Cinematic flash
+    }, 1800);
 
-    // Final Stage (5000ms): Open Main Desktop Assistant
+    // Final Stage (2200ms): Open Main Desktop Assistant & ScreenXpert Game Bar
     const tFinal = setTimeout(() => {
       onInitialize?.();
-    }, 5000);
+    }, 2200);
 
     return () => {
       clearTimeout(t1);
@@ -311,11 +328,10 @@ export default function OpeningScreen({ onInitialize, theme }) {
           autoPlay
           loop
           muted
+          defaultMuted
           playsInline
           onLoadedData={() => setVideoLoaded(true)}
-          className={`w-full h-full object-cover transition-opacity duration-1000 ${
-            videoLoaded ? 'opacity-80' : 'opacity-40'
-          }`}
+          className="w-full h-full object-cover opacity-90 transition-opacity duration-700"
           style={{
             filter: 'brightness(95%) contrast(108%) saturate(110%)',
           }}

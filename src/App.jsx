@@ -481,9 +481,10 @@ export default function App() {
             autoPlay
             loop
             muted
+            defaultMuted
             playsInline
-            className="w-full h-full object-cover transition-opacity duration-1000 opacity-80"
-            style={{ filter: 'brightness(90%) contrast(105%)' }}
+            className="w-full h-full object-cover opacity-90 transition-opacity duration-700"
+            style={{ filter: 'brightness(92%) contrast(106%)' }}
           />
           {/* Subtle Cinematic Contrast Gradients */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/70 pointer-events-none" />
