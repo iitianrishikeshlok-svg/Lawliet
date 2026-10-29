@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Sparkles,
   Scissors,
@@ -46,6 +46,56 @@ export default function ScreenXpertGameBar({
   theme,
 }) {
   const [activeTaskGroup, setActiveTaskGroup] = useState('Task Group 1');
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isBarDragging, setIsBarDragging] = useState(false);
+  const barDragRef = useRef({
+    isDown: false,
+    startX: 0,
+    startY: 0,
+    initialOffsetX: 0,
+    initialOffsetY: 0,
+    pointerId: null,
+  });
+
+  const handleHeaderPointerDown = (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    if (e.target.closest('button')) return;
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    barDragRef.current = {
+      isDown: true,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialOffsetX: dragOffset.x,
+      initialOffsetY: dragOffset.y,
+      pointerId: e.pointerId,
+    };
+    setIsBarDragging(true);
+  };
+
+  const handleHeaderPointerMove = (e) => {
+    if (!barDragRef.current.isDown) return;
+    const dx = e.clientX - barDragRef.current.startX;
+    const dy = e.clientY - barDragRef.current.startY;
+    setDragOffset({
+      x: barDragRef.current.initialOffsetX + dx,
+      y: barDragRef.current.initialOffsetY + dy,
+    });
+  };
+
+  const handleHeaderPointerUp = (e) => {
+    if (!barDragRef.current.isDown) return;
+    barDragRef.current.isDown = false;
+    setIsBarDragging(false);
+    try {
+      if (barDragRef.current.pointerId !== null) {
+        e.currentTarget.releasePointerCapture(barDragRef.current.pointerId);
+      }
+    } catch {}
+  };
 
   // 12 Exact ASUS ScreenXpert Layout Tiles matching screenshot
   const TILES = [
@@ -157,14 +207,29 @@ export default function ScreenXpertGameBar({
   ];
 
   return (
-    <div
-      className="w-[360px] sm:w-[390px] max-w-[94vw] max-h-[92vh] overflow-y-auto overflow-x-hidden bg-[#0f1013]/95 backdrop-blur-2xl border border-white/[0.09] rounded-2xl p-4 shadow-2xl text-[#f1f2f4] select-none flex flex-col space-y-3 font-sans animate-fadeIn relative z-50"
-      style={{
-        boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
-      }}
-    >
-      {/* 1. TOP HEADER (ScreenXpert Branded) */}
-      <div className="flex items-center justify-between px-1.5 pb-2.5 border-b border-white/[0.08]">
+    <>
+      {isBarDragging && (
+        <div className="fixed inset-0 z-[9998] cursor-grabbing select-none bg-transparent pointer-events-auto" />
+      )}
+      <div
+        className="w-[360px] sm:w-[390px] max-w-[94vw] max-h-[92vh] overflow-y-auto overflow-x-hidden bg-[#0f1013]/95 backdrop-blur-2xl border border-white/[0.09] rounded-2xl p-4 shadow-2xl text-[#f1f2f4] select-none flex flex-col space-y-3 font-sans animate-fadeIn relative z-50 transition-shadow"
+        style={{
+          transform: `translate3d(${dragOffset.x}px, ${dragOffset.y}px, 0)`,
+          boxShadow: isBarDragging
+            ? '0 30px 70px -10px rgba(244, 63, 94, 0.35), 0 0 35px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.15)'
+            : '0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
+        }}
+      >
+        {/* 1. TOP HEADER (ScreenXpert Branded, Draggable) */}
+        <div
+          onPointerDown={handleHeaderPointerDown}
+          onPointerMove={handleHeaderPointerMove}
+          onPointerUp={handleHeaderPointerUp}
+          onPointerCancel={handleHeaderPointerUp}
+          onDoubleClick={() => setDragOffset({ x: 0, y: 0 })}
+          title="Drag header to move ScreenXpert Game Bar • Double-click to reset position"
+          className="flex items-center justify-between px-1.5 pb-2.5 border-b border-white/[0.08] cursor-grab active:cursor-grabbing select-none touch-none group"
+        >
         <div className="flex items-center space-x-2.5">
           <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 flex items-center justify-center p-1 shadow-md shadow-rose-950/50">
             <img
@@ -349,5 +414,6 @@ export default function ScreenXpertGameBar({
         </button>
       </div>
     </div>
+  </>
   );
 }

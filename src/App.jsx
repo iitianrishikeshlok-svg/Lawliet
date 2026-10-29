@@ -49,6 +49,45 @@ export default function App() {
     return { y: 50, side: 'right' };
   });
 
+  const getGameBarPosition = (handlePos) => {
+    const winW = typeof window !== 'undefined' ? window.innerWidth : 1280;
+    const winH = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const barW = Math.min(390, winW - 32);
+    const barH = 550;
+
+    let hX = handlePos?.x;
+    let hY = handlePos?.y;
+
+    if (typeof hX !== 'number') {
+      hX = handlePos?.side === 'left' ? 0 : winW - 48;
+    }
+    if (typeof hY !== 'number') {
+      hY = winH * 0.45;
+    } else if (hY <= 100 && handlePos?.isPixel !== true) {
+      hY = (hY / 100) * winH;
+    }
+
+    let left;
+    const spaceRight = winW - (hX + 54);
+    const spaceLeft = hX;
+
+    if (spaceRight >= barW + 16) {
+      left = hX + 56;
+    } else if (spaceLeft >= barW + 16) {
+      left = hX - barW - 12;
+    } else {
+      left = Math.max(16, (winW - barW) / 2);
+    }
+
+    let top = hY - barH / 2;
+    top = Math.max(16, Math.min(winH - barH - 16, top));
+
+    return {
+      left: `${Math.round(left)}px`,
+      top: `${Math.round(top)}px`,
+    };
+  };
+
   // Assistant HUD State
   const [thinkingLevel, setThinkingLevel] = useState(2);
   const [isPinned, setIsPinned] = useState(true);
@@ -529,13 +568,8 @@ export default function App() {
         {/* Floating ScreenXpert Game Bar Overlay (Screenshot 1) */}
         {isScreenXpertOpen && (
           <div
-            style={{
-              top: `${Math.max(12, Math.min(84, edgeHandlePos.y))}%`,
-              transform: 'translateY(-50%)',
-            }}
-            className={`fixed ${
-              edgeHandlePos.side === 'left' ? 'left-14 sm:left-18' : 'right-14 sm:right-18'
-            } z-40 animate-fadeIn`}
+            style={getGameBarPosition(edgeHandlePos)}
+            className="fixed z-40 animate-fadeIn"
           >
             <ScreenXpertGameBar
               onSelectAction={(actionId) => {
@@ -790,13 +824,8 @@ export default function App() {
       {/* Floating ScreenXpert Game Bar Overlay in Main Workspace */}
       {isScreenXpertOpen && (
         <div
-          style={{
-            top: `${Math.max(12, Math.min(84, edgeHandlePos.y))}%`,
-            transform: 'translateY(-50%)',
-          }}
-          className={`fixed ${
-            edgeHandlePos.side === 'left' ? 'left-14 sm:left-18' : 'right-14 sm:right-18'
-          } z-50 animate-fadeIn`}
+          style={getGameBarPosition(edgeHandlePos)}
+          className="fixed z-50 animate-fadeIn"
         >
           <ScreenXpertGameBar
             onSelectAction={(actionId) => {
